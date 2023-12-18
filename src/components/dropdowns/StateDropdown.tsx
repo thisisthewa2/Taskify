@@ -52,7 +52,7 @@ function StateDropdown() {
         <div
           className={` flex h-48 w-full items-center justify-between rounded-md p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
-          }`}
+          } cursor-pointer`}
           onClick={handleClickDiv}
         >
           <span>{todoName}</span>
@@ -66,7 +66,7 @@ function StateDropdown() {
           {todoList.todoState.map((todo) => {
             return (
               <li
-                className='flex w-full items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
+                className='flex w-full cursor-pointer items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
                 key={todo.id}
                 onClick={(e) => handleClickList(e, todo.id)}
               >
