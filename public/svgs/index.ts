@@ -14,7 +14,7 @@ import IconMainLogo from './main-logo.svg';
 import IconSearch from './search.svg';
 import IconSettings from './settings.svg';
 import IconSmallLogo from './small-logo.svg';
-import IconUnsubscribe from './unsuscribe.svg';
+import IconUnsubscribe from './unsubscribe.svg';
 
 export {
   IconAddBox,
