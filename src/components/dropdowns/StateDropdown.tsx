@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IconArrowDown, IconCheck } from '@/public/svgs';
 
 function StateDropdown() {
-  /* 컴포넌트 합칠 때 지워거나 수정해도됩니다.*/
+  /* 컴포넌트 합칠 때 수정해도됩니다.*/
   const [todoList, setTodoList] = useState({
     todoState: [
       { id: 1, state: 'TODO', isDone: true },
@@ -19,7 +19,7 @@ function StateDropdown() {
 
   const handleClickList = (e: React.MouseEvent<HTMLLIElement>, id: number) => {
     setIsDrip(!isDrop);
-    console.dir(e.currentTarget);
+
     const { textContent } = e.currentTarget;
     if (textContent) {
       setTodoName(textContent);
