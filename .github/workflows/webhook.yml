@@ -14,3 +14,5 @@ jobs:
         with:
           webhook_url: ${{ secrets.WEBHOOK_URL }}
           webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          webhook_type: json
+          INPUT_DATA: '{"event": "pull_request_created", "repository": "${{ github.repository }}", "commit": "${{ github.sha }}", "ref": "${{ github.ref }}"}'
