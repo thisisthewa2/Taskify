@@ -1,4 +1,5 @@
 import IconAddBox from './add-box.svg';
+import IconArrowBackward from './arrow-backward.svg';
 import IconArrowForward from './arrow-forward.svg';
 import IconCalendar from './calendar.svg';
 import IconClose from './close.svg';
@@ -19,6 +20,7 @@ import IconUnsubscribe from './unsubscribe.svg';
 export {
   IconAddBox,
   IconArrowForward,
+  IconArrowBackward,
   IconCalendar,
   IconClose,
   IconCrown,
