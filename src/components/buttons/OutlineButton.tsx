@@ -11,7 +11,7 @@ function OutlineButton({ children, onClick, disabled, size = 'md' }: Props) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`button flex-center bg-gray-1 text-primary ${BUTTON_SIZE[size]} border-solid-gray disabled:bg-gray-4 disabled:text-white`}
+      className={`button flex-center border-solid-gray bg-gray-1 disabled:bg-gray-4 disabled:text-white ${BUTTON_SIZE[size]} `}
     >
       {children}
     </button>

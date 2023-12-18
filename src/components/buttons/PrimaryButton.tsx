@@ -11,7 +11,7 @@ function PrimaryButton({ children, onClick, disabled, size = 'md' }: Props) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`button flex-center bg-primary text-white ${BUTTON_SIZE[size]} disabled:bg-gray-4`}
+      className={`button bg-primary text-white disabled:bg-gray-4 ${BUTTON_SIZE[size]}`}
     >
       {children}
     </button>

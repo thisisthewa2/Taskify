@@ -11,7 +11,7 @@ function SecondaryButton({ children, onClick, disabled, size = 'md' }: Props) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`button flex-center bg-white text-primary ${BUTTON_SIZE[size]} border-solid-gray disabled:bg-gray-4 disabled:text-white`}
+      className={`button bg-white text-primary ${BUTTON_SIZE[size]} border-solid-gray disabled:bg-gray-4 disabled:text-white`}
     >
       {children}
     </button>
