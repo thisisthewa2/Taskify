@@ -1,13 +1,13 @@
 import { DashboardProps, Mock_1_6_dashboards } from '@/pages/api/mock';
-import { AddBox, CrownIcon } from '@/public/svgs';
+import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
-import { Logo } from './Header';
+import Logo from './Logo';
 
 function SideMenu() {
   const data = Mock_1_6_dashboards.dashboards;
 
   return (
-    <div className='border-r-1 h-screen w-67 border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
+    <div className='h-screen w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
       <div className='py-20'>
         <DashBoards />
@@ -43,7 +43,7 @@ function DashBoards() {
       <p className='caption-bold hidden text-gray-5 tablet:inline'>
         Dash Boards
       </p>
-      <AddBox />
+      <IconAddBox />
     </div>
   );
 }
@@ -56,7 +56,7 @@ function Card({ title, color, createdByMe }: DashboardProps) {
         <p className='heading3-normal pc:heading2-normal px-6 text-gray-5'>
           {title}
         </p>
-        <CrownIcon
+        <IconCrown
           className={createdByMe ? 'inline flex-shrink-0' : 'hidden'}
         />
       </div>

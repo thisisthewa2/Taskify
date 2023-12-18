@@ -1,4 +1,4 @@
-import { LOGO_LARGE, LOGO_SMALL } from '@/public/svgs';
+import Logo from './Logo';
 
 function Header() {
   return (
@@ -15,15 +15,6 @@ function Header() {
 }
 
 export default Header;
-
-export function Logo() {
-  return (
-    <>
-      <LOGO_LARGE className='hidden fill-primary tablet:inline' />
-      <LOGO_SMALL className='fill-primary tablet:hidden' />
-    </>
-  );
-}
 
 function Button({ children }: { children: string }) {
   return (
