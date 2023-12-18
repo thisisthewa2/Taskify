@@ -4,7 +4,7 @@ import DashBoardColorDot from './DashBoardColorDot';
 import Logo from './logos/Logo';
 
 function SideMenu() {
-  const data = Mock_1_6_dashboards.dashboards;
+  const data: DashboardProps[] = Mock_1_6_dashboards.dashboards;
 
   return (
     <div className='h-screen w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
@@ -50,7 +50,7 @@ function DashBoards() {
 
 function Card({ title, color, createdByMe }: DashboardProps) {
   return (
-    <div className='flex w-full items-center justify-center py-12 tablet:justify-start'>
+    <div className='flex-center w-full py-12 tablet:justify-start'>
       <DashBoardColorDot color={color} />
       <div className='hidden items-center pr-12 tablet:flex'>
         <p className='heading3-normal pc:heading2-normal px-6 text-gray-5'>
