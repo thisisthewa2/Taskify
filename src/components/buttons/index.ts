@@ -1,3 +1,5 @@
+import ArrowButton from './ArrowButton';
+import OutlineButton from './OutlineButton';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from './SecondaryButton';
 
@@ -10,4 +12,6 @@ export const BUTTON_SIZE = {
 
 export const Button = Object.assign(PrimaryButton, {
   Secondary: SecondaryButton,
+  Outline: OutlineButton,
+  Arrow: ArrowButton,
 });

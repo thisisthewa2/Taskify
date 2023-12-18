@@ -17,6 +17,7 @@ function Home() {
       <Button.Secondary size='full' disabled>
         disabled 버튼
       </Button.Secondary>
+      <Button.Arrow leftDisabled />
     </div>
   );
 }
