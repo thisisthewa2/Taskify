@@ -1,7 +1,7 @@
 import { DashboardProps, Mock_1_6_dashboards } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
-import Logo from './Logo';
+import Logo from './logos/Logo';
 
 function SideMenu() {
   const data = Mock_1_6_dashboards.dashboards;

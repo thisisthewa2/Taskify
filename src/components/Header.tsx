@@ -1,4 +1,4 @@
-import Logo from './Logo';
+import Logo from './logos/Logo';
 
 function Header() {
   return (
