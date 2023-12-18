@@ -1,4 +1,5 @@
 import IconAddBox from './add-box.svg';
+import IconArrowDropDown from './arrow-drop-down.svg';
 import IconArrowForward from './arrow-forward.svg';
 import IconCalendar from './calendar.svg';
 import IconClose from './close.svg';
@@ -14,7 +15,7 @@ import IconMainLogo from './main-logo.svg';
 import IconSearch from './search.svg';
 import IconSettings from './settings.svg';
 import IconSmallLogo from './small-logo.svg';
-import IconUnsubscribe from './unsuscribe.svg';
+import IconUnsubscribe from './unsubscribe.svg';
 
 export {
   IconAddBox,
@@ -34,4 +35,5 @@ export {
   IconSettings,
   IconSmallLogo,
   IconUnsubscribe,
+  IconArrowDropDown,
 };
