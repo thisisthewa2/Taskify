@@ -4,10 +4,10 @@ import DashBoardColorDot from './DashBoardColorDot';
 import { Logo } from './Header';
 
 function SideMenu() {
-  const data = Mock_1_6_dashboards.dashboards;
+  const data: DashboardProps[] = Mock_1_6_dashboards.dashboards;
 
   return (
-    <div className='border-r-1 h-screen w-67 border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
+    <div className='h-screen w-67 border-r-[1px] border-r-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
       <div className='py-20'>
         <DashBoards />
