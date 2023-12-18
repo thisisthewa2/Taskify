@@ -50,7 +50,7 @@ function DashBoards() {
 
 function Card({ title, color, createdByMe }: DashboardProps) {
   return (
-    <div className='flex w-full items-center justify-center py-12 tablet:justify-start'>
+    <div className='flex-center w-full py-12 tablet:justify-start'>
       <DashBoardColorDot color={color} />
       <div className='hidden items-center pr-12 tablet:flex'>
         <p className='heading3-normal pc:heading2-normal px-6 text-gray-5'>
