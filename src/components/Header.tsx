@@ -19,8 +19,8 @@ export default Header;
 export function Logo() {
   return (
     <>
-      <LOGO_LARGE className='hidden fill-primary dark:fill-white tablet:inline' />
-      <LOGO_SMALL className='fill-primary dark:fill-white tablet:hidden' />
+      <LOGO_LARGE className='hidden fill-primary tablet:inline' />
+      <LOGO_SMALL className='fill-primary tablet:hidden' />
     </>
   );
 }
