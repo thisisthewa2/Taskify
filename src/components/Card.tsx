@@ -6,12 +6,17 @@ import { IconCalendar } from '@/public/svgs';
 
 function Card() {
   const data: CardProps = Mock_1_6_Cards.cards[0];
+
   return (
-    <div className='card flex flex-col gap-6'>
+    <div className='card flex flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10'>
       {data.imageUrl && <CardImage src={data.imageUrl} />}
-      <p className='body1-normal'>{data.title}</p>
-      <Tags tags={data.tags} />
-      <CardInfo date={data.dueDate} assignee={data.assignee} />
+      <div className='flex w-full flex-col gap-6 pc:gap-10'>
+        <p className='body1-normal'>{data.title}</p>
+        <div className='flex flex-col gap-6 tablet:flex-row tablet:gap-16 pc:flex-col pc:gap-10'>
+          <Tags tags={data.tags} />
+          <CardInfo date={data.dueDate} assignee={data.assignee} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -20,7 +25,7 @@ export default Card;
 
 function CardImage({ src }: { src: string }) {
   return (
-    <div className='flex-center relative mb-4 h-152 w-[100%]'>
+    <div className='flex-center relative mb-4 h-152 w-full tablet:h-53 tablet:w-91 pc:h-160 pc:w-274'>
       <Image
         layout='fill'
         objectFit='cover'
@@ -34,11 +39,14 @@ function CardImage({ src }: { src: string }) {
 
 function Tags({ tags }: { tags: string[] }) {
   return (
-    <div className='flex gap-6'>
+    <div className='flex shrink-0 gap-6'>
       {tags.map((tag, key: number) => {
         //태그 컴포넌트 들어가면 됨. 지금은 내가 임의로 만든거..
         return (
-          <div className='flex-center rounded-sm bg-[#E7F7DB] px-6 py-3'>
+          <div
+            key={key}
+            className='flex-center rounded-sm bg-[#E7F7DB] px-6 py-3'
+          >
             <p className='caption-normal text-green'>{tag}</p>
           </div>
         );
@@ -61,7 +69,7 @@ interface CardInfoProps {
 // 색상 기준을 모르겠다...............알파벳에 따라 달라지나? 사용자 이미지 컴포넌트 들어가야 됨.
 function CardInfo({ date, assignee }: CardInfoProps) {
   return (
-    <div className='flex items-center justify-between'>
+    <div className='flex w-full items-center justify-between'>
       <div className='flex items-center gap-4'>
         <IconCalendar />
         <p className='caption-normal h-13 text-gray-5 tablet:h-15'>{date}</p>
