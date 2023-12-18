@@ -3,7 +3,7 @@ name: Build, Lint, and Deploy Workflow
 on:
   push:
     branches:
-      - dev 
+      - develop
 
 jobs:
   lint:
