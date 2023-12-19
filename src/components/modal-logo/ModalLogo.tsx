@@ -1,32 +1,29 @@
 import Image from 'next/image';
-import { useState } from 'react';
-import { defaultInstance } from '@/services/config/default';
+import useRequest from '@/hooks/useRequest';
 import { IconAddLogo, IconEditLogo } from '@/public/svgs';
 
+interface cardLogoImgType {
+  imageUrl: string;
+}
+
 function ModalLogo() {
-  const [cardLogoImg, setCardLogoImg] = useState({ imageUrl: '' });
+  const imageFormData = new FormData();
+  const { data: image, fetch } = useRequest<cardLogoImgType>({
+    skip: true,
+    options: {
+      url: 'columns/47/card-image',
+      method: 'post',
+      data: imageFormData,
+    },
+  });
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFormData = new FormData();
-
     if (e.target.files && e.target.files[0]) {
       imageFormData.append('image', e.target.files[0]);
-      defaultInstance
-        .post('columns/47/card-image', imageFormData, {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsInRlYW1JZCI6IjEtNiIsImlhdCI6MTcwMjk2MzQ1OSwiaXNzIjoic3AtdGFza2lmeSJ9.TD0YgCYyaldT0f581DNyyrvrlb1WRvTgPTj_iG9FUHQ',
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((res) => {
-          setCardLogoImg({
-            ...cardLogoImg,
-            imageUrl: res.data.imageUrl,
-          });
-        });
+      fetch();
     }
   };
+
   return (
     <div className='w-76'>
       <label>
@@ -37,13 +34,13 @@ function ModalLogo() {
           onChange={handleChangeImage}
         />
         <figure className='group relative'>
-          {cardLogoImg.imageUrl && (
+          {image?.imageUrl && (
             <>
               <Image
                 className='absolute-center z-base h-76 w-76 rounded-md group-hover:brightness-75'
                 width={76}
                 height={76}
-                src={cardLogoImg.imageUrl}
+                src={image.imageUrl}
                 alt='cardBannerImage'
               />
               <IconEditLogo className='absolute-center invisible z-nav group-hover:visible ' />

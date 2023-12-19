@@ -8,6 +8,7 @@ export const defaultInstance = axios.create({
 
 defaultInstance.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
+
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
