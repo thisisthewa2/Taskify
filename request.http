@@ -1,0 +1,27 @@
+###로그인
+POST https://sp-taskify-api.vercel.app/3-6/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@naver.com",
+    "password": "asdf1234"
+}
+
+###내 대시보드 조회
+GET https://sp-taskify-api.vercel.app/3-6/columns?dashboardId=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInRlYW1JZCI6IjMtNiIsImlhdCI6MTcwMjkyMzIzMSwiaXNzIjoic3AtdGFza2lmeSJ9.0TPOJukSsSTg_8C7zltIt_2GXI6Yk3OENf2dj2XtTmY
+
+
+###카드 이미지 올리기
+
+POST https://sp-taskify-api.vercel.app/3-6/columns/22/card-image
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInRlYW1JZCI6IjMtNiIsImlhdCI6MTcwMjkyMzIzMSwiaXNzIjoic3AtdGFza2lmeSJ9.0TPOJukSsSTg_8C7zltIt_2GXI6Yk3OENf2dj2XtTmY
+
+
+
+
+### 내정보조회
+
+GET https://sp-taskify-api.vercel.app/3-6/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInRlYW1JZCI6IjMtNiIsImlhdCI6MTcwMjkyMzIzMSwiaXNzIjoic3AtdGFza2lmeSJ9.0TPOJukSsSTg_8C7zltIt_2GXI6Yk3OENf2dj2XtTmY
