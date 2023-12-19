@@ -1,59 +1,62 @@
 import axios from 'axios';
+import Image from 'next/image';
 import { useState } from 'react';
 import { IconAddLogo, IconEditLogo } from '@/public/svgs';
 
 function ModalLogo() {
-  const background =
-    "bg-[url('/img/hero-pattern.svg')] bg-center bg-cover bg-no-repeat";
-  const [logoImg, setLogoImg] = useState(null);
+  const [cardLogoImg, setCardLogoImg] = useState({ imageUrl: '' });
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
     const imageFormData = new FormData();
     if (e.target.files && e.target.files[0]) {
       imageFormData.append('image', e.target.files[0]);
       axios
         .post(
-          'https://sp-taskify-api.vercel.app/3-6/columns/25/card-image',
+          'https://sp-taskify-api.vercel.app/1-6/columns/47/card-image', //나중에 export된 변수로 변경
           imageFormData,
           {
             headers: {
               Authorization:
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInRlYW1JZCI6IjMtNiIsImlhdCI6MTcwMjkyMzIzMSwiaXNzIjoic3AtdGFza2lmeSJ9.0TPOJukSsSTg_8C7zltIt_2GXI6Yk3OENf2dj2XtTmY ',
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsInRlYW1JZCI6IjEtNiIsImlhdCI6MTcwMjk2MzQ1OSwiaXNzIjoic3AtdGFza2lmeSJ9.TD0YgCYyaldT0f581DNyyrvrlb1WRvTgPTj_iG9FUHQ',
               'Content-Type': 'multipart/form-data',
             },
           },
         )
         .then((res) => {
-          console.log(res);
+          setCardLogoImg({
+            ...cardLogoImg,
+            imageUrl: res.data.imageUrl,
+          });
         });
     }
   };
-  /*  https://sp-taskify-api.vercel.app/docs/#/Members/Find */
   return (
-    <div className='h-76 w-76'>
-      <form>
-        <label className='relative'>
-          <input
-            /* className='hidden' */
-            name='modalLogo'
-            type='file'
-            onChange={handleChangeImage}
-          />
-          <figure>
-            {/* <img
-            className='absolute-center z-base rounded-md'
-            src='https://avatars1.githubusercontent.com/u/11435231?s=460&v=4'
-            alt='avatar'
-          /> */}
-            <figcaption
-              className={`relative h-76 rounded-md bg-[#f5f5f5] ${background}`}
-            >
-              <IconAddLogo className='absolute-center' />
-            </figcaption>
-          </figure>
-        </label>
-      </form>
+    <div className='w-76'>
+      <label>
+        <input
+          className='hidden'
+          name='modalLogo'
+          type='file'
+          onChange={handleChangeImage}
+        />
+        <figure className='group relative'>
+          {cardLogoImg.imageUrl && (
+            <>
+              <Image
+                className='absolute-center z-base h-76 w-76 rounded-md group-hover:brightness-75'
+                width={76}
+                height={76}
+                src={cardLogoImg.imageUrl}
+                alt='cardBannerImage'
+              />
+              <IconEditLogo className='absolute-center invisible z-nav group-hover:visible ' />
+            </>
+          )}
+          <figcaption className={`relative h-76 rounded-md bg-[#f5f5f5]`}>
+            <IconAddLogo className='absolute-center' />
+          </figcaption>
+        </figure>
+      </label>
     </div>
   );
 }
