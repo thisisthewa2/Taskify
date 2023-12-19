@@ -42,7 +42,7 @@ export const Mock_1_6_dashboards: DashboardsProps = {
 export interface CardsProps {
   cursorId: number;
   totalCount: number;
-  dashboards: CardProps[];
+  cards: CardProps[];
 }
 
 export interface CardProps {
@@ -57,7 +57,7 @@ export interface CardProps {
     id: number;
   };
   imageUrl?: string;
-  teamId: string; //'1-6'
+  teamId: string; //'3-6'
   columnId: number;
   createdAt: string;
   updatedAt: string;
@@ -82,7 +82,25 @@ export const Mock_1_6_Cards = {
       },
       imageUrl:
         'https://cdn.imweb.me/upload/S202207202685e30f16e24/d2ca3aad13ed9.jpg',
-      teamId: '1-6',
+      teamId: '3-6',
+      columnId: 1, //to-do같은 거
+      createdAt: '2023-12-18T13:48:49.656Z',
+      updatedAt: '2023-12-18T13:48:49.656Z',
+    },
+    {
+      id: 2,
+      title: '새로운 일정 관리 Taskify',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum finibus nibh arcu, quis consequat ante cursus eget. Cras mattis, nulla non laoreet porttitor, diam justo laoreet eros, vel aliquet diam elit at leo.',
+      tags: ['프로젝트', '일반', '백엔드', '상'],
+      dueDate: '2022.12.30',
+      assignee: {
+        profileImageUrl:
+          'https://cdn2.colley.kr/item_76566_1_0_title_0.jpeg?d=550x550',
+        nickname: '김다은',
+        id: 0,
+      },
+      teamId: '3-6',
       columnId: 1, //to-do같은 거
       createdAt: '2023-12-18T13:48:49.656Z',
       updatedAt: '2023-12-18T13:48:49.656Z',
@@ -98,7 +116,7 @@ export interface ColumnsProps {
 export interface ColumnProps {
   id: number;
   title: string;
-  teamId: '1-6';
+  teamId: '3-6';
   createdAt: string;
   updatedAt: string;
 }
@@ -109,14 +127,14 @@ export const Mock_1_6_Columns = {
     {
       id: 0,
       title: 'TO-DO',
-      teamId: '1-6',
+      teamId: '3-6',
       createdAt: '2023-12-18T14:17:03.397Z',
       updatedAt: '2023-12-18T14:17:03.397Z',
     },
     {
       id: 1,
       title: 'On Progress',
-      teamId: '1-6',
+      teamId: '3-6',
       createdAt: '2023-12-18T14:17:03.397Z',
       updatedAt: '2023-12-18T14:17:03.397Z',
     },

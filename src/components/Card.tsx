@@ -4,9 +4,7 @@ import { IconCalendar } from '@/public/svgs';
 
 //날짜 타입 그냥 내가 맘대로 씀.. 아마 실제로는 함수 써서 바꿔야 될 듯?
 
-function Card() {
-  const data: CardProps = Mock_1_6_Cards.cards[0];
-
+function Card({ data }: { data: CardProps }) {
   return (
     <div className='card flex flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10'>
       {data.imageUrl && <CardImage src={data.imageUrl} />}
@@ -27,11 +25,12 @@ function CardImage({ src }: { src: string }) {
   return (
     <div className='flex-center relative mb-4 h-152 w-full tablet:h-53 tablet:w-91 pc:h-160 pc:w-274'>
       <Image
-        layout='fill'
-        objectFit='cover'
-        className='rounded-md'
+        fill
+        className='rounded-md object-cover'
+        sizes='100%'
         src={src}
         alt='카드 이미지'
+        priority={true}
       />
     </div>
   );
@@ -76,11 +75,12 @@ function CardInfo({ date, assignee }: CardInfoProps) {
       </div>
       <div className='relative h-22 w-22'>
         <Image
-          layout='fill'
-          objectFit='cover'
+          fill
           src={assignee.profileImageUrl}
-          className='rounded-full'
+          sizes='100%'
+          className='rounded-full object-cover'
           alt='작성자 이미지'
+          priority={true}
         />
       </div>
     </div>
