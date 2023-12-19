@@ -1,16 +1,14 @@
-import { InvitationProps, Mock_1_6_Invitations } from '@/pages/api/mock';
+import { InvitationProps } from '@/pages/api/mock';
 import { IconSearch } from '@/public/svgs';
 import { Button } from '../buttons';
 
-function InvitedDashboardsTable() {
-  const invitations = Mock_1_6_Invitations.invitations;
-
+function InvitedDashboardsTable({ data }: { data: InvitationProps[] }) {
   return (
     <div className='rounded-lg bg-white px-16 pt-24'>
       <p className='heading1-bold'>초대받은 대시보드</p>
       <Search />
       <TabletTitleUI />
-      {invitations.map((invitation, key) => {
+      {data.map((invitation: InvitationProps, key: number) => {
         if (invitation.inviteAccepted) return; //이미 수락한 경우
         return <InvitedDashboard data={invitation} key={key} />;
       })}

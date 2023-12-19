@@ -1,4 +1,8 @@
-import { DashboardsInvitationProps, MemberProps } from '@/pages/api/mock';
+import {
+  DashboardsInvitationProps,
+  InvitationProps,
+  MemberProps,
+} from '@/pages/api/mock';
 import DashboardInfoTable from './DashboardInfoTable';
 import InvitedDashboardsTable from './InvitedDashboardsTable';
 
@@ -10,6 +14,7 @@ interface DashboardInfoProps {
 
 interface InvitedDashboardsProps {
   type: 'dashboard';
+  data: InvitationProps[];
 }
 
 type Props = DashboardInfoProps | InvitedDashboardsProps;
@@ -22,7 +27,7 @@ function Table(props: Props) {
       data={(props as DashboardInfoProps).data}
     />
   ) : (
-    <InvitedDashboardsTable />
+    <InvitedDashboardsTable data={(props as InvitedDashboardsProps).data} />
   );
 }
 

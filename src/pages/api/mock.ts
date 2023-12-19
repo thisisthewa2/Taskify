@@ -57,7 +57,7 @@ export const Mock_1_6_dashboards: DashboardsProps = {
   ],
 };
 
-interface InvitationsProps {
+export interface InvitationsProps {
   cursorId: number;
   invitations: InvitationProps[];
 }
@@ -207,7 +207,7 @@ export const Mock_members: MembersProps = {
 
 export interface DashboardsInvitationsProps {
   totalCount: number;
-  invitations: InvitationProps[];
+  invitations: DashboardsInvitationProps[];
 }
 export interface DashboardsInvitationProps {
   id: number;
