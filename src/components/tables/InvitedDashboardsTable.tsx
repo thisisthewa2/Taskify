@@ -2,7 +2,7 @@ import { InvitationProps, Mock_1_6_Invitations } from '@/pages/api/mock';
 import { IconSearch } from '@/public/svgs';
 import { Button } from '../buttons';
 
-function DashboardsTable() {
+function InvitedDashboardsTable() {
   const invitations = Mock_1_6_Invitations.invitations;
 
   return (
@@ -18,7 +18,7 @@ function DashboardsTable() {
   );
 }
 
-export default DashboardsTable;
+export default InvitedDashboardsTable;
 
 function Search() {
   return (

@@ -14,7 +14,7 @@ interface Props {
   data: MemberProps[] | DashboardsInvitationProps[];
 }
 
-function Table({ type, totalCount, data }: Props) {
+function DashboardInfoTable({ type, totalCount, data }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   // const data = get /1-6/members page=currentPage size=5 해서 MemberList로 넘겨주기(dep = currentPage)
 
@@ -33,7 +33,7 @@ function Table({ type, totalCount, data }: Props) {
   );
 }
 
-export default Table;
+export default DashboardInfoTable;
 
 interface HeaderProps {
   type: string;
@@ -78,7 +78,7 @@ function TableHeader({
 function InvitingButton() {
   return (
     <div className='absolute right-0 top-61 tablet:static'>
-      <Button size='md'>
+      <Button size='sm'>
         <div className='h-14 w-19 pr-5'>
           <IconAddBox
             width='100%'
@@ -104,13 +104,15 @@ function AccountInfo({
   else text = data.invitee.nickname;
 
   return (
-    <div className='flex items-center justify-between border-b border-gray-3 py-12 last:border-b-0 tablet:py-16'>
+    <div className='flex shrink-0 items-center justify-between border-b border-gray-3 py-12 last:border-b-0 tablet:py-16'>
       <div className='flex items-center gap-8'>
         <div className='h-34 w-34 rounded-full bg-primary' />
         {/* 사용자프로필..? */}
         <p className='body1-light'>{text}</p>
       </div>
-      <Button.Secondary size='md'>취소</Button.Secondary>
+      <div className='shrink-0'>
+        <Button.Secondary size='sm'>취소</Button.Secondary>
+      </div>
     </div>
   );
 }
