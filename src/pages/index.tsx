@@ -1,4 +1,3 @@
-import Header from '@/components/Header';
 import SideMenu from '@/components/SideMenu';
 import ModalLogo from '@/components/modal-logo/ModalLogo';
 
