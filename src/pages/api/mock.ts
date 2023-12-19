@@ -36,6 +36,24 @@ export const Mock_1_6_dashboards: DashboardsProps = {
       createdByMe: true,
       userId: 2,
     },
+    {
+      id: 3,
+      title: '프로덕트 디자인',
+      color: 'green',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: false,
+      userId: 2,
+    },
+    {
+      id: 4,
+      title: '새로운 기획 문서',
+      color: 'primary',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: true,
+      userId: 2,
+    },
   ],
 };
 
@@ -70,7 +88,7 @@ export const Mock_1_6_Invitations = {
       teamId: '1-6',
       dashboard: {
         title: '프로덕트 디자인',
-        id: 1,
+        id: 3,
       },
       invitee: {
         nickname: '임건우',
@@ -86,7 +104,7 @@ export const Mock_1_6_Invitations = {
       teamId: '1-6',
       dashboard: {
         title: '새로운 기획 문서',
-        id: 1,
+        id: 4,
       },
       invitee: {
         nickname: '윤진',
@@ -101,7 +119,7 @@ export const Mock_1_6_Invitations = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '유닛 A',
+        title: '핏치핏치',
         id: 1,
       },
       invitee: {
@@ -117,8 +135,8 @@ export const Mock_1_6_Invitations = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '유닛 B',
-        id: 1,
+        title: '김다은과 아이들',
+        id: 2,
       },
       invitee: {
         nickname: '남민섭',

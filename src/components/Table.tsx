@@ -6,7 +6,7 @@ function Table() {
   const invitations = Mock_1_6_Invitations.invitations;
 
   return (
-    <div className='mx-16 mt-24 rounded-lg'>
+    <div className='rounded-lg bg-white px-16 pt-24'>
       <p className='heading1-bold'>초대받은 대시보드</p>
       <Search />
       <div className='mb-8 mt-20 hidden grid-cols-10 gap-10 tablet:grid'>
@@ -47,7 +47,7 @@ function InvitationCard({ data }: { data: InvitationProps }) {
           <p className='body1-light text-gray-4'>초대자</p>
         </div>
         <div className='flex grid-cols-10 flex-col gap-10 tablet:grid tablet:items-center'>
-          <p className='body1-light tablet:col-span-5'>
+          <p className='body1-light tablet:col-span-5 tablet:pl-8'>
             {data.dashboard.title}
           </p>
           <p className='body1-light tablet:col-span-2'>
