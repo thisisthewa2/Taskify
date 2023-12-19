@@ -11,11 +11,11 @@ export default function ColorChip() {
   };
 
   return (
-    <div className='flex gap-6 tablet:gap-10'>
+    <div className='flex gap-10'>
       {[0, 1, 2, 3, 4].map((index: number) => (
         <button
           key={index}
-          className={`flex-center relative h-20 w-20 rounded-full bg-${
+          className={`flex-center relative h-28 w-28 rounded-full bg-${
             ['green', 'purple', 'orange', 'blue', 'pink'][index]
           } tablet:h-30 tablet:w-30`}
           onClick={() => handleButtonClick(index)}
