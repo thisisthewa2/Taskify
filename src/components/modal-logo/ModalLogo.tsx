@@ -1,6 +1,6 @@
-import axios from 'axios';
 import Image from 'next/image';
 import { useState } from 'react';
+import { defaultInstance } from '@/services/config/default';
 import { IconAddLogo, IconEditLogo } from '@/public/svgs';
 
 function ModalLogo() {
@@ -8,20 +8,17 @@ function ModalLogo() {
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFormData = new FormData();
+
     if (e.target.files && e.target.files[0]) {
       imageFormData.append('image', e.target.files[0]);
-      axios
-        .post(
-          'https://sp-taskify-api.vercel.app/1-6/columns/47/card-image', //나중에 export된 변수로 변경
-          imageFormData,
-          {
-            headers: {
-              Authorization:
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsInRlYW1JZCI6IjEtNiIsImlhdCI6MTcwMjk2MzQ1OSwiaXNzIjoic3AtdGFza2lmeSJ9.TD0YgCYyaldT0f581DNyyrvrlb1WRvTgPTj_iG9FUHQ',
-              'Content-Type': 'multipart/form-data',
-            },
+      defaultInstance
+        .post('columns/47/card-image', imageFormData, {
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsInRlYW1JZCI6IjEtNiIsImlhdCI6MTcwMjk2MzQ1OSwiaXNzIjoic3AtdGFza2lmeSJ9.TD0YgCYyaldT0f581DNyyrvrlb1WRvTgPTj_iG9FUHQ',
+            'Content-Type': 'multipart/form-data',
           },
-        )
+        })
         .then((res) => {
           setCardLogoImg({
             ...cardLogoImg,
