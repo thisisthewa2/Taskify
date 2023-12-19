@@ -13,7 +13,7 @@ function StateDropdown() {
   const [isDrop, setIsDrip] = useState(false);
   const [todoName, setTodoName] = useState(todoList.todoState[0].state);
 
-  const handleClickDiv = () => {
+  const handleClickBox = () => {
     setIsDrip(!isDrop);
   };
 
@@ -44,16 +44,14 @@ function StateDropdown() {
   };
 
   return (
-    <div className='flex flex-col justify-start gap-10 mobile:w-287 tablet:w-217 pc:w-217'>
-      <h2 className='font-normal mobile:text-16 tablet:text-18 pc:text-18'>
-        상태
-      </h2>
+    <div className='flex w-287 flex-col justify-start gap-10 tablet:w-217'>
+      <h2 className='subheading-normal'>상태</h2>
       <div className='relative' onBlur={handleBlur}>
         <div
           className={` flex h-48 w-full items-center justify-between rounded-md p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
           } cursor-pointer`}
-          onClick={handleClickDiv}
+          onClick={handleClickBox}
         >
           <span>{todoName}</span>
           <IconArrowDown />
@@ -66,7 +64,7 @@ function StateDropdown() {
           {todoList.todoState.map((todo) => {
             return (
               <li
-                className='flex w-full cursor-pointer items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
+                className='body1-normal flex w-full cursor-pointer items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
                 key={todo.id}
                 onClick={(e) => handleClickList(e, todo.id)}
               >
