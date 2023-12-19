@@ -36,11 +36,26 @@ const config: Config = {
         light: 'rgb(var(--primary-light) / <alpha-value>)',
       },
       red: 'rgb(var(--red) / <alpha-value>)',
-      green: 'rgb(var(--green) / <alpha-value>)',
-      purple: 'rgb(var(--purple) / <alpha-value>)',
-      orange: 'rgb(var(--orange) / <alpha-value>)',
-      blue: 'rgb(var(--blue) / <alpha-value>)',
-      pink: 'rgb(var(--pink) / <alpha-value>)',
+      green: {
+        DEFAULT: 'rgb(var(--green) / <alpha-value>)',
+        light: 'rgb(var(--green-light) / <alpha-value>)',
+      },
+      purple: {
+        DEFAULT: 'rgb(var(--purple) / <alpha-value>)',
+        light: 'rgb(var(--purple-light) / <alpha-value>)',
+      },
+      orange: {
+        DEFAULT: 'rgb(var(--orange) / <alpha-value>)',
+        light: 'rgb(var(--orange-light) / <alpha-value>)',
+      },
+      blue: {
+        DEFAULT: 'rgb(var(--blue) / <alpha-value>)',
+        light: 'rgb(var(--blue-light) / <alpha-value>)',
+      },
+      pink: {
+        DEFAULT: 'rgb(var(--pink) / <alpha-value>)',
+        light: 'rgb(var(--pink-light) / <alpha-value>)',
+      },
       black: 'rgb(var(--black) / <alpha-value>)',
       white: 'rgb(var(--white) / <alpha-value>)',
       gray: {
