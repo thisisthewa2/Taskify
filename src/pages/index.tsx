@@ -3,7 +3,8 @@ import Members from '@/components/Members';
 const data1 = [
   {
     id: 1,
-    profileImageUrl: undefined,
+    profileImageUrl:
+      'https://mblogthumb-phinf.pstatic.net/MjAxOTA3MTZfOTcg/MDAxNTYzMjU4OTgxNTgz.n6PR-FWCx97rgc0vjDTBJU_O1SdzuP2wU_0ja-AdtTIg.3tVQKL6R45VsZR1nDNfcjh_EvLt6XHWwopG5rcAfq68g.JPEG.dono_box/%EA%B3%A8%EB%93%A0%EB%A6%AC%ED%8A%B8%EB%A6%AC%EB%B2%8411.jpg?type=w800',
     nickname: '가',
   },
   { id: 2, profileImageUrl: undefined, nickname: '다' },

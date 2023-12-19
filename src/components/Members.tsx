@@ -44,7 +44,7 @@ function Members({ members }: Props) {
           {member.profileImageUrl ? (
             <ImageMember
               profileImageUrl={member.profileImageUrl}
-              index={index}
+              index={slicedMembers.length - index - 1}
             />
           ) : (
             <DefaultMember
@@ -79,12 +79,14 @@ interface ImageMember {
 function ImageMember({ profileImageUrl, index }: ImageMember) {
   return (
     <div
-      className={`flex-center border-solid-white h-38 w-38 overflow-hidden rounded-full`}
+      className={`border-solid-white absolute h-38 w-38 items-center justify-center overflow-hidden rounded-full ${INDEX_POSITION[index]}`}
     >
       <Image
         src={profileImageUrl}
-        width={38}
-        height={38}
+        fill
+        style={{
+          objectFit: 'cover',
+        }}
         alt='멤버 프로필 이미지'
       />
     </div>
