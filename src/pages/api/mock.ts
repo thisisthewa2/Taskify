@@ -79,7 +79,7 @@ export interface InvitationProps {
   updatedAt: string;
 }
 
-export const Mock_1_6_Invitations = {
+export const Mock_1_6_Invitations: InvitationsProps = {
   cursorId: 0,
   invitations: [
     {
@@ -161,6 +161,105 @@ export const Mock_1_6_Invitations = {
       inviteAccepted: true,
       createdAt: '2023-12-19T05:41:19.594Z',
       updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+  ],
+};
+
+export interface MembersProps {
+  members: MemberProps[];
+  totalCount: number;
+}
+
+export interface MemberProps {
+  id: number;
+  userId: number;
+  email: string;
+  nickname: string;
+  profileImageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+  isOwner: false;
+}
+
+export const Mock_members: MembersProps = {
+  members: [
+    {
+      id: 0,
+      userId: 0,
+      email: 'dnksf@sdkfmks.com',
+      nickname: '가나다',
+      createdAt: '2023-12-19T15:00:15.052Z',
+      updatedAt: '2023-12-19T15:00:15.052Z',
+      isOwner: false,
+    },
+    {
+      id: 0,
+      userId: 0,
+      email: 'fsekjos@dlksd.net',
+      nickname: '라마바',
+      createdAt: '2023-12-19T15:00:15.052Z',
+      updatedAt: '2023-12-19T15:00:15.052Z',
+      isOwner: false,
+    },
+  ],
+  totalCount: 2,
+};
+
+export interface DashboardsInvitationsProps {
+  totalCount: number;
+  invitations: InvitationProps[];
+}
+export interface DashboardsInvitationProps {
+  id: number;
+  inviterUserId: number;
+  teamId: string;
+  dashboard: {
+    title: string;
+    id: number;
+  };
+  invitee: {
+    nickname: string;
+    id: number;
+  };
+  inviteAccepted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const Mock_dashboards_dashboardId_invitations = {
+  totalCount: 0,
+  invitations: [
+    {
+      id: 0,
+      inviterUserId: 0,
+      teamId: 'string',
+      dashboard: {
+        title: 'string',
+        id: 0,
+      },
+      invitee: {
+        nickname: '김다은',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2023-12-19T16:17:44.135Z',
+      updatedAt: '2023-12-19T16:17:44.135Z',
+    },
+    {
+      id: 0,
+      inviterUserId: 0,
+      teamId: 'string',
+      dashboard: {
+        title: 'string',
+        id: 0,
+      },
+      invitee: {
+        nickname: '김다은은',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2023-12-19T16:17:44.135Z',
+      updatedAt: '2023-12-19T16:17:44.135Z',
     },
   ],
 };
