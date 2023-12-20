@@ -50,7 +50,11 @@
     @apply border-solid-gray body1-normal w-full rounded-md p-16 text-[#000] outline-none placeholder:text-gray-4;
   }
 
-  .button {
+  .textarea {
+    @apply border-solid-gray body1-normal resize-none w-full h-110 rounded-md p-16 text-[#000] outline-none placeholder:text-gray-4;
+  }
+
+.button {
     @apply flex-center rounded-lg bg-white;
   }
 
@@ -155,4 +159,13 @@
   .border-solid-gray {
     @apply border border-solid border-gray-3;
   }
+}
+
+/* datepicker */
+.react-datepicker__view-calendar-icon input{
+  padding: 1rem!important;
+}
+.react-datepicker__day--outside-month {
+  color: #a8a8a8 !important;
+  pointer-events: none;
 }
