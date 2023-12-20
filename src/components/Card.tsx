@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import { generateColor } from '@/utils/generateColor';
 import { CardProps, Mock_1_6_Cards } from '@/pages/api/mock';
 import { IconCalendar } from '@/public/svgs';
+import Members from './Members';
 import ColorChip from './chips/ColorChip';
 import TagChip from './chips/TagChip';
 
@@ -43,7 +45,6 @@ function Tags({ tags }: { tags: string[] }) {
   return (
     <div className='flex shrink-0 gap-6'>
       {tags.map((tag, key: number) => {
-        //태그 컴포넌트 들어가면 됨. 지금은 내가 임의로 만든거..
         return <TagChip key={key} str={tag} />;
       })}
     </div>
@@ -51,7 +52,7 @@ function Tags({ tags }: { tags: string[] }) {
 }
 
 interface AssigneeInfo {
-  profileImageUrl: string;
+  profileImageUrl?: string;
   nickname: string;
   id: number;
 }
@@ -61,23 +62,25 @@ interface CardInfoProps {
   assignee: AssigneeInfo;
 }
 
-// 색상 기준을 모르겠다...............알파벳에 따라 달라지나? 사용자 이미지 컴포넌트 들어가야 됨.
+// 사용자 이미지 컴포넌트 들어가야 됨.
 function CardInfo({ date, assignee }: CardInfoProps) {
+  const profile = [
+    {
+      id: assignee.id,
+      profileImageUrl: assignee.profileImageUrl || undefined,
+      nickname: assignee.nickname,
+    },
+  ];
+
+  const ddd = <Members members={profile} />;
+
   return (
     <div className='flex w-full items-center justify-between'>
       <div className='flex items-center gap-4'>
         <IconCalendar />
         <p className='caption-normal h-13 text-gray-5 tablet:h-15'>{date}</p>
       </div>
-      <div className='relative h-22 w-22'>
-        <Image
-          fill
-          src={assignee.profileImageUrl}
-          sizes='100%'
-          className='rounded-full object-cover'
-          alt='작성자 이미지'
-        />
-      </div>
+      <Members members={profile} />
     </div>
   );
 }

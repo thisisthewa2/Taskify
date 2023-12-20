@@ -277,7 +277,7 @@ export interface CardProps {
   tags: string[];
   dueDate: string;
   assignee: {
-    profileImageUrl: string;
+    profileImageUrl?: string;
     nickname: string;
     id: number;
   };
@@ -300,8 +300,7 @@ export const Mock_1_6_Cards = {
       tags: ['프로젝트', '일반', '백엔드', '상'],
       dueDate: '2022.12.30',
       assignee: {
-        profileImageUrl:
-          'https://cdn2.colley.kr/item_76566_1_0_title_0.jpeg?d=550x550',
+        profileImageUrl: undefined,
         nickname: '김다은',
         id: 0,
       },
