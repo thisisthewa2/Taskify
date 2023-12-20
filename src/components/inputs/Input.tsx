@@ -87,7 +87,7 @@ function DateInput({ required }: { required: boolean }) {
         nextMonthButtonDisabled,
       }) => (
         <div className='flex justify-between'>
-          <div>
+          <div className='custom-header'>
             <span className='ml-12 font-bold'>{MONTHS[date.getMonth()]}</span>
             <select
               value={date.getFullYear()}

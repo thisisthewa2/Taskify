@@ -186,20 +186,19 @@
 .react-datepicker__calendar-icon{
   padding: 1.1rem!important;
 }
+
 .react-datepicker__view-calendar-icon input{
   padding: 1rem 1rem 1rem 2.5rem!important;
 }
+
 .react-datepicker__day--outside-month {
   color: #a8a8a8 !important;
   pointer-events: none;
 }
+
 .react-datepicker__header {
   border-bottom: 1px solid lightgray;
   background-color: white!important;
-}
-.custom-month{
-  font-weight: bold;
-  font-size: 14px;
 }
 
 .react-datepicker__time-list-item--selected,
@@ -209,4 +208,8 @@
 
 .react-datepicker__day--keyboard-selected{
   background-color: #878DE0!important;
+}
+
+.custom-header{
+  font-size: 0.9rem;
 }
