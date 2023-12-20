@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import SigninContainer from '@/containers/signinContainer';
+import SigninContainer from '@/containers/SigninContainer';
 
 function signin() {
   return (
     <>
       <Head>
-        <title>signin</title>
+        <title>로그인</title>
       </Head>
       <SigninContainer />
     </>
