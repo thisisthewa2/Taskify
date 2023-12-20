@@ -1,17 +1,26 @@
 import { useState } from 'react';
 import { IconArrowDown, IconCheck } from '@/public/svgs';
 
+const columns = {
+  data: [
+    { id: 1, dashboardId: 13, title: 'TODO' },
+    { id: 2, dashboardId: 13, title: 'on Progress' },
+    { id: 3, dashboardId: 13, title: 'Done' },
+  ],
+};
+
 function StateDropdown() {
-  /* 컴포넌트 합칠 때 수정해도됩니다.*/
-  const [todoList, setTodoList] = useState({
-    todoState: [
-      { id: 1, state: 'TODO', isDone: true },
-      { id: 2, state: 'on Progress', isDone: false },
-      { id: 3, state: 'Done', isDone: false },
-    ],
+  /* 받은 데이터에 isDone 추가하는 함수입니다(이름 클릭하면 체크 표시되게 끔) */
+  const newColumns = columns.data.map((column, index) => {
+    if (index === 0) {
+      return { ...column, isDone: true };
+    }
+    return { ...column, isDone: false };
   });
+
+  const [todoList, setTodoList] = useState({ data: newColumns });
   const [isDrop, setIsDrip] = useState(false);
-  const [todoName, setTodoName] = useState(todoList.todoState[0].state);
+  const [todoName, setTodoName] = useState(todoList.data[0].title);
 
   const handleClickBox = () => {
     setIsDrip(!isDrop);
@@ -25,7 +34,7 @@ function StateDropdown() {
       setTodoName(textContent);
     }
 
-    const newTodoList = todoList.todoState.map((todo) => {
+    const newTodoList = todoList.data.map((todo) => {
       return todo.id === id
         ? { ...todo, isDone: true }
         : { ...todo, isDone: false };
@@ -33,7 +42,7 @@ function StateDropdown() {
 
     setTodoList({
       ...todoList,
-      todoState: newTodoList,
+      data: newTodoList,
     });
   };
 
@@ -61,15 +70,19 @@ function StateDropdown() {
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'
           } flex w-full flex-col items-start justify-between gap-13 rounded-md p-8 transition-all duration-500`}
         >
-          {todoList.todoState.map((todo) => {
+          {todoList.data.map((todo) => {
             return (
               <li
                 className='body1-normal flex w-full cursor-pointer items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
                 key={todo.id}
                 onClick={(e) => handleClickList(e, todo.id)}
               >
-                {todo.isDone ? <IconCheck /> : <div className='w-22'></div>}
-                {todo.state}
+                {todo.isDone ? (
+                  <IconCheck fill='black' />
+                ) : (
+                  <div className='w-22'></div>
+                )}
+                {todo.title}
               </li>
             );
           })}
