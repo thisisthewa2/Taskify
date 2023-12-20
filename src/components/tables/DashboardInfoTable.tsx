@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DashboardsInvitationProps, MemberProps } from '@/pages/api/mock';
 import { IconAddBox } from '@/public/svgs';
+import Members from '../Members';
 import { Button } from '../buttons';
 
 //예시 데이터
@@ -99,15 +100,32 @@ function AccountInfo({
   data: MemberProps | DashboardsInvitationProps;
 }) {
   let text;
+  let profile;
 
-  if ('email' in data) text = data.email;
-  else text = data.invitee.nickname;
+  if ('email' in data) {
+    text = data.email;
+    profile = [
+      {
+        id: data.id,
+        profileImageUrl: data.profileImageUrl || undefined,
+        nickname: data.nickname,
+      },
+    ];
+  } else {
+    text = data.invitee.nickname;
+    profile = [
+      {
+        id: data.invitee.id,
+        profileImageUrl: undefined,
+        nickname: data.invitee.nickname,
+      },
+    ];
+  }
 
   return (
     <div className='flex shrink-0 items-center justify-between border-b border-gray-3 py-12 last:border-b-0 tablet:py-16'>
       <div className='flex items-center gap-8'>
-        <div className='h-34 w-34 rounded-full bg-primary' />
-        {/* 사용자프로필..? */}
+        {'invitee' in data && <Members members={profile} />}
         <p className='body1-light'>{text}</p>
       </div>
       <div className='shrink-0'>
