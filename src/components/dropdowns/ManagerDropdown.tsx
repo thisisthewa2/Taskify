@@ -1,23 +1,28 @@
 import { useState } from 'react';
 import { IconArrowDown, IconCheck } from '@/public/svgs';
 
+/* 데이터를 내려받게되면 이부분 지워도됩니다 */
+const manager = {
+  members: [
+    { userid: 1, email: 'test@naver.com', profile: null, nickname: '배유철' },
+    { userid: 2, email: 'test@naver.com', profile: null, nickname: '배동석' },
+    { userid: 3, email: 'test@naver.com', profile: null, nickname: '안윤진' },
+    { userid: 4, email: 'test@naver.com', profile: null, nickname: '김다은' },
+    { userid: 5, email: 'test@naver.com', profile: null, nickname: '임건우' },
+    { userid: 6, email: 'test@naver.com', profile: null, nickname: '강현지' },
+    { userid: 7, email: 'test@naver.com', profile: null, nickname: '남민섭' },
+  ],
+};
+
 function ManagerDropdown() {
-  /* 컴포넌트 합칠 때 수정해도됩니다.*/
-  const [managerList, setManagerList] = useState({
-    managerState: [
-      { id: 1, manager: '배유철', isDone: true },
-      { id: 2, manager: '배동석', isDone: false },
-      { id: 3, manager: '안윤진', isDone: false },
-      { id: 4, manager: '김다은', isDone: false },
-      { id: 5, manager: '임건우', isDone: false },
-      { id: 6, manager: '강현지', isDone: false },
-      { id: 7, manager: '남민섭', isDone: false },
-    ],
+  /* 받은 데이터에 isDone 추가하는 함수입니다(이름 클릭하면 체크 표시되게 끔) */
+  const newMembers = manager.members.map((member) => {
+    return { ...member, isDone: false };
   });
+  const [managerList, setManagerList] = useState({ members: newMembers });
   const [isDrop, setIsDrop] = useState(false); //border 색과 리스트 활성화 상태
-  const [managerName, setmanagerName] = useState(
-    managerList.managerState[0].manager,
-  );
+  const [managerName, setmanagerName] = useState('');
+
   /* 화면에 보이는 박스 클릭했을 때 활성화 */
   const handleClickBox = () => {
     setIsDrop(!isDrop);
@@ -35,11 +40,11 @@ function ManagerDropdown() {
   };
 
   /* 검색리스트 생성 */
-  const searChManagerList = managerList.managerState.filter((manager) => {
+  const searChManagerList = managerList.members.filter((manager) => {
     if (managerName.length > 0) {
-      return manager.manager.includes(managerName);
+      return manager.nickname.includes(managerName);
     } else {
-      return managerList.managerState;
+      return managerList.members;
     }
   });
 
@@ -51,15 +56,15 @@ function ManagerDropdown() {
       setmanagerName(textContent);
     }
 
-    const newManagerList = managerList.managerState.map((manager) => {
-      return manager.id === id
+    const newManagerList = managerList.members.map((manager) => {
+      return manager.userid === id
         ? { ...manager, isDone: true }
         : { ...manager, isDone: false };
     });
 
     setManagerList({
       ...managerList,
-      managerState: newManagerList,
+      members: newManagerList,
     });
   };
 
@@ -106,15 +111,15 @@ function ManagerDropdown() {
               return (
                 <li
                   className='body1-normal flex w-full cursor-pointer items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
-                  key={manager.id}
-                  onClick={(e) => handleClickList(e, manager.id)}
+                  key={manager.userid}
+                  onClick={(e) => handleClickList(e, manager.userid)}
                 >
                   {manager.isDone ? (
-                    <IconCheck />
+                    <IconCheck fill='black' />
                   ) : (
                     <div className='w-22'></div>
                   )}
-                  {manager.manager}
+                  {manager.nickname}
                 </li>
               );
             })
