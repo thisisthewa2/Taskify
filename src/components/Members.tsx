@@ -17,7 +17,7 @@ const CONTAINER_SIZE = [
   'w-100 pc:w-160',
 ];
 
-interface Member {
+export interface Member {
   id: number;
   profileImageUrl?: string;
   nickname: string;
@@ -56,12 +56,12 @@ function Members({ members }: Props) {
         </li>
       ))}
       {extraCount.pc > 0 && (
-        <li className='border-solid-white subheading-normal bg-pink-light absolute right-0 hidden h-38 w-38 items-center justify-center rounded-full text-pink pc:flex'>
+        <li className='border-solid-white subheading-normal absolute right-0 hidden h-38 w-38 items-center justify-center rounded-full bg-pink-light text-pink pc:flex'>
           {`+${extraCount.pc}`}
         </li>
       )}
       {extraCount.tablet > 0 && (
-        <li className='border-solid-white subheading-normal bg-pink-light absolute right-0 flex h-38 w-38 items-center justify-center rounded-full text-pink pc:hidden'>
+        <li className='border-solid-white subheading-normal absolute right-0 flex h-38 w-38 items-center justify-center rounded-full bg-pink-light text-pink pc:hidden'>
           {`+${extraCount.tablet}`}
         </li>
       )}
