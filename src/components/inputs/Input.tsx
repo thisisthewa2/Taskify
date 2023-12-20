@@ -23,23 +23,37 @@ function Label({ title, required }: Props) {
   );
 }
 
-function TextInput({ children, ...rest }: { children: ReactNode }) {
+function TextInput({
+  required,
+  children,
+  ...rest
+}: {
+  required: boolean;
+  children: ReactNode;
+}) {
   return (
-    <input className='input' {...rest}>
+    <input className='input' required={required} {...rest}>
       {children}
     </input>
   );
 }
 
-function CommentInput({ children, ...rest }: { children: ReactNode }) {
+function CommentInput({
+  required,
+  children,
+  ...rest
+}: {
+  required: boolean;
+  children: ReactNode;
+}) {
   return (
-    <textarea className='textarea' {...rest}>
+    <textarea className='textarea' required={required} {...rest}>
       {children}
     </textarea>
   );
 }
 
-function DateInput() {
+function DateInput({ required }: { required: boolean }) {
   const handleChange = (e: React.ChangeEvent) => {
     e.preventDefault();
   };
@@ -122,6 +136,7 @@ function DateInput() {
       onChange={(date: Date) => setValue(date)}
       icon={<IconCalendar />}
       onChangeRaw={handleChange}
+      required={required}
     />
   );
 }
@@ -187,14 +202,22 @@ function TagInput({ children, ...rest }: { children: ReactNode }) {
   );
 }
 
-function SelectedInput({ type, children, ...rest }: Props) {
+function SelectedInput({ type, required = false, children, ...rest }: Props) {
   switch (type) {
     case 'text':
-      return <TextInput {...rest}>{children}</TextInput>;
+      return (
+        <TextInput required={required} {...rest}>
+          {children}
+        </TextInput>
+      );
     case 'date':
-      return <DateInput />;
+      return <DateInput required={required} />;
     case 'comment':
-      return <CommentInput {...rest}>{children}</CommentInput>;
+      return (
+        <CommentInput required={required} {...rest}>
+          {children}
+        </CommentInput>
+      );
     case 'tag':
       return <TagInput {...rest}>{children}</TagInput>;
   }
@@ -210,7 +233,7 @@ function Input({
   return (
     <div className='flex flex-col gap-[10px]'>
       <Label title={title} required={required} />
-      <SelectedInput type={type} {...rest}>
+      <SelectedInput required={required} type={type} {...rest}>
         {children}
       </SelectedInput>
     </div>
