@@ -64,9 +64,9 @@ function MobileTitleUI() {
 function TabletTitleUI() {
   return (
     <div className='mb-8 mt-20 hidden grid-cols-10 gap-10 tablet:grid'>
-      <p className='body1-light text-gray-4 tablet:col-span-5'>이름</p>
-      <p className='body1-light text-gray-4 tablet:col-span-2'>초대자</p>
-      <p className='body1-light text-gray-4 tablet:col-span-3'>수락 여부</p>
+      <p className='body1-light col-span-5 pl-8 text-gray-4'>이름</p>
+      <p className='body1-light col-span-2 text-gray-4'>초대자</p>
+      <p className='body1-light col-span-3 text-gray-4'>수락 여부</p>
     </div>
   );
 }
