@@ -47,11 +47,11 @@
 
 @layer components {
   .input {
-    @apply border-solid-gray body1-normal w-full rounded-md p-16 text-[#000] outline-none placeholder:text-gray-4;
+    @apply border-solid-gray body1-normal w-full rounded-md p-16 text-[#000] outline-none placeholder:text-gray-4 focus:border-purple;
   }
 
   .textarea {
-    @apply border-solid-gray body1-normal resize-none w-full h-110 rounded-md p-16 text-[#000] outline-none placeholder:text-gray-4;
+    @apply border-solid-gray body1-normal resize-none w-full h-110 rounded-md p-16 text-[#000] outline-none placeholder:text-gray-4 focus:border-purple;
   }
 
 .button {
@@ -165,6 +165,7 @@
 .react-datepicker__view-calendar-icon input{
   padding: 1rem!important;
 }
+
 .react-datepicker__day--outside-month {
   color: #a8a8a8 !important;
   pointer-events: none;
