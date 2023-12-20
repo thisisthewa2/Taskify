@@ -91,7 +91,6 @@ function DateInput() {
             <button
               type='button'
               onClick={decreaseMonth}
-              className=''
               disabled={prevMonthButtonDisabled}
             >
               <IconLess className='h-12 w-12' />
@@ -99,7 +98,6 @@ function DateInput() {
             <button
               type='button'
               onClick={increaseMonth}
-              className=''
               disabled={nextMonthButtonDisabled}
             >
               <IconGreater className='h-12 w-12' />
