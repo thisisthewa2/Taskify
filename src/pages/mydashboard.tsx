@@ -18,14 +18,30 @@ function MyDashboard() {
   const dashboardTop5 = dashboards.slice(0, 5); // get 처음에는 데이터 5개 받아오는 듯 합니다...?
   const { invitations } = Mock_1_6_Invitations;
 
+  /* 대시보드 비어있을 때 */
+  const emptyData = {
+    cursorId: 5,
+    totalCount: 0,
+    dashboards: [],
+  };
+
+  const emptyInvitedData = {
+    cursorId: 3,
+    invitations: [],
+  };
+
   return (
     <div className='flex bg-gray-1'>
-      <SideMenu data={dashboards} />
+      <SideMenu data={emptyData.dashboards} />
       <div className='flex w-full flex-col'>
         <Header />
         <div className='flex w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
-          <MyDashboardButtons data={dashboardTop5} totalCount={totalCount} />
-          <Table type='dashboard' data={invitations} />
+          <MyDashboardButtons data={emptyData.dashboards} totalCount={0} />
+          <Table
+            type='dashboard'
+            data={invitations}
+            totalCount={emptyInvitedData.invitations.length}
+          />
         </div>
       </div>
     </div>
@@ -35,16 +51,12 @@ function MyDashboard() {
 export default MyDashboard;
 
 interface ButtonProps {
-  data: DashboardProps[];
+  data: DashboardProps[] | [];
   totalCount: number;
 }
 
 function MyDashboardButtons({ data, totalCount }: ButtonProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPage = Math.floor((totalCount - 5) / 6) + 2; //2페이지부터는 6개
-
-  const handleLeftClick = () => setCurrentPage(currentPage - 1);
-  const handleRightClick = () => setCurrentPage(currentPage + 1);
 
   return (
     <div className='grid grid-flow-row gap-8 tablet:grid-cols-2 pc:grid-cols-3'>
@@ -52,24 +64,52 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
         <p className='pr-12'>새로운 대시보드</p>
         <AddChip />
       </DashboardButton>
-      {data.map((dashBoard, key: number) => {
-        return (
-          <div key={key}>
-            <MyDashboardButton data={dashBoard} />
-          </div>
-        );
-      })}
-      <div className='flex w-full items-center justify-end gap-15 pt-3 tablet:col-span-2 pc:col-span-3'>
-        <p>
-          {totalPage} 페이지 중 {currentPage}
-        </p>
-        <ArrowButton
-          onLeftClick={handleLeftClick}
-          onRightClick={handleRightClick}
-          leftDisabled={currentPage === 1 ? true : false}
-          rightDisabled={currentPage === totalPage ? true : false}
+      {totalCount > 0 &&
+        data.map((dashBoard, key: number) => {
+          return (
+            <div key={key}>
+              <MyDashboardButton data={dashBoard} />
+            </div>
+          );
+        })}
+      {totalCount > 0 && (
+        <ArrowButtonPageChange
+          totalCount={totalCount}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
-      </div>
+      )}
+    </div>
+  );
+}
+
+interface Props {
+  totalCount: number;
+  currentPage: number;
+  setCurrentPage: (arg: number) => void;
+}
+
+function ArrowButtonPageChange({
+  totalCount,
+  currentPage,
+  setCurrentPage,
+}: Props) {
+  const totalPage = Math.floor((totalCount - 5) / 6) + 2;
+
+  const handleLeftClick = () => setCurrentPage(currentPage - 1);
+  const handleRightClick = () => setCurrentPage(currentPage + 1);
+
+  return (
+    <div className='flex w-full items-center justify-end gap-15 pt-3 tablet:col-span-2 pc:col-span-3'>
+      <p>
+        {totalPage} 페이지 중 {currentPage}
+      </p>
+      <ArrowButton
+        onLeftClick={handleLeftClick}
+        onRightClick={handleRightClick}
+        leftDisabled={currentPage === 1 ? true : false}
+        rightDisabled={currentPage === totalPage ? true : false}
+      />
     </div>
   );
 }

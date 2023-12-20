@@ -1,22 +1,44 @@
 import { InvitationProps } from '@/pages/api/mock';
-import { IconSearch } from '@/public/svgs';
+import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
 
-function InvitedDashboardsTable({ data }: { data: InvitationProps[] }) {
+interface Props {
+  data: InvitationProps[];
+  totalCount: number;
+}
+
+function InvitedDashboardsTable({ data, totalCount }: Props) {
   return (
     <div className='rounded-lg bg-white px-16 pt-24'>
       <p className='heading1-bold'>초대받은 대시보드</p>
-      <Search />
-      <TabletTitleUI />
-      {data.map((invitation: InvitationProps, key: number) => {
-        if (invitation.inviteAccepted) return; //이미 수락한 경우
-        return <InvitedDashboard data={invitation} key={key} />;
-      })}
+      {totalCount === 0 ? (
+        <Empty />
+      ) : (
+        <>
+          <Search />
+          <TabletTitleUI />
+          {data.map((invitation: InvitationProps, key: number) => {
+            if (invitation.inviteAccepted) return; //이미 수락한 경우
+            return <InvitedDashboard data={invitation} key={key} />;
+          })}
+        </>
+      )}
     </div>
   );
 }
 
 export default InvitedDashboardsTable;
+
+function Empty() {
+  return (
+    <div className='flex-center flex-col gap-16 pb-154 pt-120 tablet:gap-24'>
+      <div className='h-60 w-60 tablet:h-100 tablet:w-100'>
+        <IconUnsubscribe width='100%' height='100%' viewBox='0 0 100 100' />
+      </div>
+      <p className='body1-light text-gray-4'>아직 초대받은 대시보드가 없어요</p>
+    </div>
+  );
+}
 
 function Search() {
   return (

@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import SideMenu from '@/components/SideMenu';
+import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
 import StateDropdown from '@/components/dropdowns/StateDropdown';
 import Table from '@/components/tables';
@@ -15,20 +17,14 @@ function Home() {
   const { invitations: data3 } = Mock_1_6_Invitations;
 
   return (
-    <div>
-      <ManagerDropdown />
-      <StateDropdown />
-    </div>
-  ); /* (
-    <div className='flex'>
-      <SideMenu />
-      <div className='flex w-full flex-col gap-15 bg-gray-2 p-20'>
-        <Table type='invitation' totalCount={totalCount} data={data} />
-        <Table type='member' totalCount={totalCount2} data={data2} />
-        <Table type='dashboard' data={data3} />
-      </div>
-    </div>
-  ); */
+    // <div>
+    //   <ManagerDropdown />
+    //   <StateDropdown />
+    // </div>
+    <Button>
+      <Link href={'/mydashboard'}>나의 대시보드</Link>
+    </Button>
+  );
 }
 
 export default Home;
