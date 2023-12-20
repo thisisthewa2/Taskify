@@ -193,3 +193,20 @@
   color: #a8a8a8 !important;
   pointer-events: none;
 }
+.react-datepicker__header {
+  border-bottom: 1px solid lightgray;
+  background-color: white!important;
+}
+.custom-month{
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.react-datepicker__time-list-item--selected,
+.react-datepicker__day--selected{
+  background-color: #5634DA!important;
+}
+
+.react-datepicker__day--keyboard-selected{
+  background-color: #878DE0!important;
+}
