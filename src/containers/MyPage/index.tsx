@@ -10,15 +10,15 @@ function MyPage() {
         <IconArrowBackward fill='#333236' />
         돌아가기
       </button>
-      <ProfileMangeBox />
-      <div className='box'></div>
+      <ProfileManageBox />
+      <PasswordManageBox />
     </div>
   );
 }
 
 export default MyPage;
 
-function ProfileMangeBox() {
+function ProfileManageBox() {
   return (
     <div className='box'>
       <div className='heading1-bold pb-32'>프로필</div>
@@ -31,6 +31,30 @@ function ProfileMangeBox() {
           </div>
         </div>
         <div className='flex justify-end'>
+          <Button>변경</Button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function PasswordManageBox() {
+  return (
+    <div className='box'>
+      <div className='heading1-bold pb-32'>비밀번호 변경</div>
+      <form noValidate className='flex w-full flex-col gap-16 tablet:gap-20'>
+        <Input
+          type='text'
+          title='현재 비밀번호'
+          placeholder='현재 비밀번호 입력'
+        />
+        <Input type='text' title='새 비밀번호' placeholder='새 비밀번호 입력' />
+        <Input
+          type='text'
+          title='새 비밀번호 확인'
+          placeholder='새 비밀번호 입력'
+        />
+        <div className='flex justify-end tablet:mt-4'>
           <Button>변경</Button>
         </div>
       </form>
