@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { IconEyeOff, IconEyeOn } from '@/public/svgs';
 
-interface InputType {
+interface AuthInputType {
   type: string;
 }
 
-function Input({ type }: InputType) {
+function AuthInput({ type }: AuthInputType) {
   const [eyeIconState, setEyeIconState] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -41,4 +41,4 @@ function Input({ type }: InputType) {
   );
 }
 
-export default Input;
+export default AuthInput;
