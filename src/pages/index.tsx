@@ -1,29 +1,18 @@
-import Link from 'next/link';
-import SideMenu from '@/components/SideMenu';
-import { Button } from '@/components/buttons';
-import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
-import StateDropdown from '@/components/dropdowns/StateDropdown';
-import Table from '@/components/tables';
-import {
-  Mock_1_6_Invitations,
-  Mock_dashboards_dashboardId_invitations,
-  Mock_members,
-} from './api/mock';
+import { useAtom } from 'jotai';
+import { loginAtom } from '@/store/loginAtom';
 
 function Home() {
-  const { totalCount, members: data } = Mock_members;
-  const { totalCount: totalCount2, invitations: data2 } =
-    Mock_dashboards_dashboardId_invitations;
-  const { invitations: data3 } = Mock_1_6_Invitations;
+  const [loginInfo, setLoginInfo] = useAtom(loginAtom);
+  console.log(loginInfo);
+  const onClick = () => {
+    setLoginInfo({ isLoggedIn: false });
+  };
 
   return (
-    // <div>
-    //   <ManagerDropdown />
-    //   <StateDropdown />
-    // </div>
-    <Button>
-      <Link href={'/mydashboard'}>나의 대시보드</Link>
-    </Button>
+    <div className='p-20pxr'>
+      <button onClick={onClick}>CLICK</button>
+      <div>{loginInfo.nickname}</div>
+    </div>
   );
 }
 

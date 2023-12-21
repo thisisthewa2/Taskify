@@ -4,6 +4,7 @@
   "jsxSingleQuote": true,
   "importOrder": [
     "^@/hooks/(.*)$",
+    "^@/store/(.*)$",
     "^@/utils/(.*)$",
     "^@/services/(.*)$",
     "^@/types/(.*)$",
