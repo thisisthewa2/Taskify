@@ -18,7 +18,7 @@ function ImageDrop({ type, columnId }: ImageDropType) {
     },
     size: {
       modal: 'h-76 w-76',
-      profile: 'h-100 w-100 tablet:h-182 tablet:w-182',
+      profile: 'h-100 w-100 tablet:h-190 tablet:w-190',
     },
     dataName: {
       modal: 'imageUrl',
