@@ -19,12 +19,12 @@ export default function Landing() {
     return null;
   }
   return (
-    <div className='flex-center mx-16 flex-col tablet:mx-40 pc:mx-360'>
+    <div className='flex-center mx-16 flex-col tablet:mx-40'>
       <Header />
       <MainSection />
       <DescriptionSection />
       <SubDescriptionSection />
-      <div className='text-22 font-bold tablet:text-36'>
+      <div className='text-22 mb-90 font-bold tablet:text-36'>
         생산성을 높이는 다양한 설정 ⚡
       </div>
       <FeatureContainer />

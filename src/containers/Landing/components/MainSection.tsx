@@ -4,8 +4,8 @@ import DeskImage from '@/public/pngs/desk-pc.png';
 
 function MainSection() {
   return (
-    <div className='flex-center mt-102 flex-col tablet:mt-164 tablet:justify-center'>
-      <div className='relative h-168 w-287 tablet:h-315 tablet:w-[537px] pc:h-[422px] pc:w-[722px]'>
+    <div className='flex-center mb-100 mt-102 flex-col tablet:mt-164 tablet:justify-center'>
+      <div className='relative mx-100 mt-100 h-168 w-287 tablet:h-315 tablet:w-[537px] pc:h-[422px] pc:w-[722px]'>
         <Image src={DeskImage} alt='Illustration' fill />
       </div>
       <div className='flex-center flex-col text-40 tablet:flex-row tablet:justify-between tablet:text-[42px] pc:text-[50px]'>
@@ -19,7 +19,7 @@ function MainSection() {
       <div className='my-80 text-center text-12 tablet:text-left'>
         서비스의 메인 설명 들어갑니다.
       </div>
-      <Button size='lg'> 로그인 하기</Button>
+      <Button size='lg'>{'   로그인 하기  '}</Button>
     </div>
   );
 }
