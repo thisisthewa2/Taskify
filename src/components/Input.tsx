@@ -1,12 +1,22 @@
 import { useState } from 'react';
+import { ControllerFieldState, ControllerRenderProps } from 'react-hook-form';
+import { SigninType } from '@/containers/SigninContainer';
 import { IconEyeOff, IconEyeOn } from '@/public/svgs';
 
 interface InputType {
   type: string;
+  field:
+    | ControllerRenderProps<SigninType, 'email'>
+    | ControllerRenderProps<SigninType, 'password'>;
+  fieldState: ControllerFieldState;
 }
 
-function Input({ type }: InputType) {
+function Input({ type, field, fieldState }: InputType) {
   const [eyeIconState, setEyeIconState] = useState<boolean>(false);
+
+  if (fieldState.error) {
+    fieldState.error.message;
+  }
 
   const handleClick = () => {
     setEyeIconState(!eyeIconState);
@@ -15,6 +25,7 @@ function Input({ type }: InputType) {
   const isType = () => {
     return type === 'email';
   };
+
   return (
     <>
       <div className='relative'>
@@ -22,6 +33,13 @@ function Input({ type }: InputType) {
           className='input focus:border-solid-primary pt-15 leading-none'
           type={eyeIconState || isType() ? 'text' : 'password'}
           name={type}
+          value={field.value}
+          onChange={(e) => {
+            field.onChange(e);
+          }}
+          onBlur={() => {
+            field.onBlur();
+          }}
           placeholder={
             isType() ? '이메일을 입력해주세요' : '비밀번호를 입력해주세요'
           }
@@ -36,7 +54,11 @@ function Input({ type }: InputType) {
           </div>
         )}
       </div>
-      {/* <small className='body2-normal text-red'>이메일을 입력해주세요</small> */}
+      {fieldState.error && (
+        <small className='body2-normal mt-8 text-red'>
+          {fieldState.error.message}
+        </small>
+      )}
     </>
   );
 }
