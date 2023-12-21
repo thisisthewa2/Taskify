@@ -19,7 +19,7 @@ export default function Landing() {
     return null;
   }
   return (
-    <div className='flex-center flex-col'>
+    <div className='flex-center mx-16 flex-col tablet:mx-40 pc:mx-360'>
       <Header />
       <MainSection />
       <DescriptionSection />
