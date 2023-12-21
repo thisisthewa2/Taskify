@@ -1,38 +1,36 @@
 import { useState } from 'react';
 import { ControllerFieldState, ControllerRenderProps } from 'react-hook-form';
-import { SigninType } from '@/containers/SigninContainer';
+import { SigninType } from '@/containers/Auth/SigninContainer';
 import { IconEyeOff, IconEyeOn } from '@/public/svgs';
 
 interface AuthInputType {
-  type: string;
   field:
     | ControllerRenderProps<SigninType, 'email'>
     | ControllerRenderProps<SigninType, 'password'>;
   fieldState: ControllerFieldState;
 }
 
-function AuthInput({ type, field, fieldState }: AuthInputType) {
+function AuthInput({ field, fieldState }: AuthInputType) {
   const [eyeIconState, setEyeIconState] = useState<boolean>(false);
-
-  if (fieldState.error) {
-    fieldState.error.message;
-  }
+  const { invalid } = fieldState; /* 에러메세지 불린 */
 
   const handleClick = () => {
     setEyeIconState(!eyeIconState);
   };
 
   const isType = () => {
-    return type === 'email';
+    return field.name === 'email';
   };
 
   return (
     <>
-      <div className='relative'>
+      <div className='relative w-full'>
         <input
-          className='input focus:border-solid-primary pt-15 leading-none'
+          className={`focus:border-solid-primary pt-15 leading-none ${
+            invalid ? 'input border-red' : 'input'
+          }`}
           type={eyeIconState || isType() ? 'text' : 'password'}
-          name={type}
+          name={field.name}
           value={field.value}
           onChange={(e) => {
             field.onChange(e);
@@ -55,7 +53,7 @@ function AuthInput({ type, field, fieldState }: AuthInputType) {
         )}
       </div>
       {fieldState.error && (
-        <small className='body2-normal mt-8 text-red'>
+        <small className='body2-normal mt-5 text-red'>
           {fieldState.error.message}
         </small>
       )}

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import SigninContainer from '@/containers/SigninContainer';
+import SigninContainer from '@/containers/Auth/SigninContainer';
 
 function signin() {
   return (
