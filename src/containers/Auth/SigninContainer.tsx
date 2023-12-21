@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
@@ -15,6 +16,7 @@ export interface SigninType {
 }
 
 function SigninContainer() {
+  const router = useRouter();
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
   const {
     handleSubmit: onSubmit,
@@ -27,7 +29,6 @@ function SigninContainer() {
   });
 
   const { email: isEmail, password: isPassword } = formState.dirtyFields;
-  const router = useRouter();
 
   const { fetch } = useRequest({
     skip: true,
@@ -69,6 +70,12 @@ function SigninContainer() {
       router.push('/');
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) {
+      router.push('/');
+    }
+  }, []);
 
   return (
     <div className=' h-screen bg-[#FAFAFA]'>
