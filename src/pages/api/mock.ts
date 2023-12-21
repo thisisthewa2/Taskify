@@ -16,7 +16,7 @@ export interface DashboardProps {
 
 export const Mock_1_6_dashboards: DashboardsProps = {
   cursorId: 0,
-  totalCount: 2,
+  totalCount: 6,
   dashboards: [
     {
       id: 1,
@@ -54,6 +54,24 @@ export const Mock_1_6_dashboards: DashboardsProps = {
       createdByMe: true,
       userId: 2,
     },
+    {
+      id: 5,
+      title: '아함',
+      color: 'pink',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: true,
+      userId: 2,
+    },
+    {
+      id: 6,
+      title: '졸려',
+      color: 'blue',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: false,
+      userId: 2,
+    },
   ],
 };
 
@@ -87,7 +105,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '프로덕트 디자인',
+        title: '조타이 구현',
         id: 3,
       },
       invitee: {
@@ -103,7 +121,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '새로운 기획 문서',
+        title: 'Chip 대성공 ',
         id: 4,
       },
       invitee: {
@@ -119,7 +137,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '핏치핏치',
+        title: '이사 완료!',
         id: 1,
       },
       invitee: {
@@ -135,7 +153,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '김다은과 아이들',
+        title: '이미지 업로드',
         id: 2,
       },
       invitee: {
@@ -151,7 +169,23 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       inviterUserId: 3,
       teamId: '1-6',
       dashboard: {
-        title: '유닛 C',
+        title: '일요일에 pr 올리지 말기',
+        id: 1,
+      },
+      invitee: {
+        nickname: '김다은',
+        id: 2,
+      },
+      inviteAccepted: false,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: '졸려',
         id: 1,
       },
       invitee: {
