@@ -3,7 +3,7 @@ import { ControllerFieldState, ControllerRenderProps } from 'react-hook-form';
 import { SigninType } from '@/containers/SigninContainer';
 import { IconEyeOff, IconEyeOn } from '@/public/svgs';
 
-interface InputType {
+interface AuthInputType {
   type: string;
   field:
     | ControllerRenderProps<SigninType, 'email'>
@@ -11,7 +11,7 @@ interface InputType {
   fieldState: ControllerFieldState;
 }
 
-function Input({ type, field, fieldState }: InputType) {
+function AuthInput({ type, field, fieldState }: AuthInputType) {
   const [eyeIconState, setEyeIconState] = useState<boolean>(false);
 
   if (fieldState.error) {
@@ -63,4 +63,4 @@ function Input({ type, field, fieldState }: InputType) {
   );
 }
 
-export default Input;
+export default AuthInput;

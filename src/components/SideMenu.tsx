@@ -3,9 +3,7 @@ import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
 import Logo from './logos/Logo';
 
-function SideMenu() {
-  const data: DashboardProps[] = Mock_1_6_dashboards.dashboards;
-
+function SideMenu({ data }: { data: DashboardProps[] }) {
   return (
     <div className='h-screen w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
@@ -43,7 +41,7 @@ function DashBoards() {
       <p className='caption-bold hidden text-gray-5 tablet:inline'>
         Dash Boards
       </p>
-      <IconAddBox />
+      <IconAddBox fill='gray' viewBox='0 0 21 21' />
     </div>
   );
 }

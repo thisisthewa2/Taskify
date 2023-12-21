@@ -3,6 +3,7 @@ import { DashboardsInvitationProps, MemberProps } from '@/pages/api/mock';
 import { IconAddBox } from '@/public/svgs';
 import Members from '../Members';
 import { Button } from '../buttons';
+import ArrowButton from '../buttons/ArrowButton';
 
 //예시 데이터
 // const { totalCount, members } = Mock_members;
@@ -27,9 +28,10 @@ function DashboardInfoTable({ type, totalCount, data }: Props) {
         setCurrentPage={setCurrentPage}
         totalCount={totalCount}
       />
-      {data.map((account, key) => {
-        return <AccountInfo data={account} key={key} />;
-      })}
+      {totalCount > 0 &&
+        data.map((account, key) => {
+          return <AccountInfo data={account} key={key} />;
+        })}
     </div>
   );
 }
@@ -51,9 +53,8 @@ function TableHeader({
 }: HeaderProps) {
   const totalPage = Math.floor(totalCount / 5) + 1;
 
-  const handleClick = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  const handleLeftClick = () => setCurrentPage(currentPage - 1);
+  const handleRightClick = () => setCurrentPage(currentPage + 1);
 
   return (
     <>
@@ -65,7 +66,12 @@ function TableHeader({
           <p className='body2-light'>
             {totalPage} 페이지 중 {currentPage}
           </p>
-          <Button.Arrow onClick={handleClick} />
+          <ArrowButton
+            onLeftClick={handleLeftClick}
+            onRightClick={handleRightClick}
+            leftDisabled={currentPage === 1 ? true : false}
+            rightDisabled={currentPage === totalPage ? true : false}
+          />
           {type === 'invitation' && <InvitingButton />}
         </div>
       </div>

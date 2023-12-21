@@ -14,6 +14,7 @@ interface DashboardInfoProps {
 
 interface InvitedDashboardsProps {
   type: 'dashboard';
+  totalCount: number;
   data: InvitationProps[];
 }
 
@@ -23,11 +24,14 @@ function Table(props: Props) {
   return props.type !== 'dashboard' ? (
     <DashboardInfoTable
       type={props.type}
-      totalCount={(props as DashboardInfoProps).totalCount}
+      totalCount={props.totalCount}
       data={(props as DashboardInfoProps).data}
     />
   ) : (
-    <InvitedDashboardsTable data={(props as InvitedDashboardsProps).data} />
+    <InvitedDashboardsTable
+      data={(props as InvitedDashboardsProps).data}
+      totalCount={props.totalCount}
+    />
   );
 }
 
