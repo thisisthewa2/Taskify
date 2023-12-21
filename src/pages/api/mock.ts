@@ -227,7 +227,7 @@ export const Mock_members: MembersProps = {
       isOwner: false,
     },
     {
-      id: 0,
+      id: 1,
       userId: 0,
       email: 'fsekjos@dlksd.net',
       nickname: '라마바',

@@ -1,6 +1,4 @@
 import { Mock_1_6_Invitations, Mock_1_6_dashboards } from '@/pages/api/mock';
-import Header from '@/components/Header';
-import SideMenu from '@/components/SideMenu';
 import Table from '@/components/tables';
 import MyDashboardButtons from './components/MyDashboardButtons';
 
@@ -23,19 +21,13 @@ function MyDashboard() {
   };
 
   return (
-    <div className='flex bg-gray-1'>
-      <SideMenu data={emptyData.dashboards} />
-      <div className='flex w-full flex-col'>
-        <Header />
-        <div className='flex w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
-          <MyDashboardButtons data={emptyData.dashboards} totalCount={0} />
-          <Table
-            type='dashboard'
-            data={invitations}
-            totalCount={emptyInvitedData.invitations.length}
-          />
-        </div>
-      </div>
+    <div className='flex w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
+      <MyDashboardButtons data={emptyData.dashboards} totalCount={0} />
+      <Table
+        type='dashboard'
+        data={invitations}
+        totalCount={emptyInvitedData.invitations.length}
+      />
     </div>
   );
 }
