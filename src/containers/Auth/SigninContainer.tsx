@@ -79,7 +79,7 @@ function SigninContainer() {
   }, []);
 
   return (
-    <div className='bg-white'>
+    <div className='h-screen bg-white'>
       <div className='mx-auto my-0 w-full max-w-xl px-12 pt-143 text-center'>
         <Link
           className='mx-auto my-0 inline-block w-120 tablet:w-200'
@@ -89,7 +89,7 @@ function SigninContainer() {
         </Link>
         <h3 className='mt-10 text-20 font-normal'>오늘도 만나서 반가워요!</h3>
         <form className='mt-38' onSubmit={onSubmit(handleSubmit)}>
-          <div className='mb-16 flex h-100 flex-col items-start justify-start'>
+          <div className='mb-16 flex h-95 flex-col items-start justify-start'>
             <label className='mb-8 text-16 font-normal' htmlFor='email'>
               이메일
             </label>
