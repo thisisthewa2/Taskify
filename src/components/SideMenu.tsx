@@ -5,7 +5,7 @@ import Logo from './logos/Logo';
 
 function SideMenu({ data }: { data: DashboardProps[] }) {
   return (
-    <div className='h-screen w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
+    <div className='h-auto w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
       <div className='py-20'>
         <DashBoards />
