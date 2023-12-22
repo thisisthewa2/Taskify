@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { generateColor } from '@/utils/generateColor';
 
 const DEFAULT_TAG_COLOR = {
@@ -8,13 +9,14 @@ const DEFAULT_TAG_COLOR = {
   purple: 'bg-[#F1EFFD] text-[#5534DA]',
 };
 
-function TagChip({ str }: { str: string }) {
+function TagChip({ str, children }: { str: string; children?: ReactNode }) {
   const color = DEFAULT_TAG_COLOR[generateColor(str)];
   return (
     <div
       className={` flex-center h-20 w-fit rounded-sm px-6 py-6 text-10 tablet:h-22 tablet:text-12 ${color}`}
     >
       {str}
+      {children}
     </div>
   );
 }

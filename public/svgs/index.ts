@@ -13,6 +13,8 @@ import IconEmail from './email.svg';
 import IconEyeOff from './eye-off.svg';
 import IconEyeOn from './eye-on.svg';
 import IconFacebook from './facebook.svg';
+import IconGreater from './icon-greater.svg';
+import IconLess from './icon-less.svg';
 import IconInstagram from './instagram.svg';
 import IconKebab from './kebab.svg';
 import IconLargeLogo from './large-logo.svg';
@@ -50,4 +52,6 @@ export {
   IconEllipse,
   IconAddLogo,
   IconEditLogo,
+  IconLess,
+  IconGreater,
 };
