@@ -69,7 +69,7 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ['Pretendard', 'Arial', 'Montserrat'],
+      sans: ['Pretendard', 'Arial'],
     },
     fontSize: {
       10: '0.625rem',
@@ -79,8 +79,6 @@ const config: Config = {
       18: '1.125rem',
       20: '1.25rem',
       24: '1.5rem',
-      36: '2.25rem',
-      40: '2.5rem',
     },
     fontWeight: {
       light: '400',

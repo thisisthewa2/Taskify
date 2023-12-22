@@ -8,7 +8,7 @@ interface FeatureSectionProps {
 
 function FeatureSection({ imageUrl, title, description }: FeatureSectionProps) {
   return (
-    <div className='h-686 m-16 flex w-343 flex-col rounded-md bg-gradient-to-b from-gray-3 to-gray-3/50 py-16'>
+    <div className='m-16 flex h-309 w-343 flex-col rounded-md bg-gradient-to-b from-gray-3 to-gray-3/50 py-16'>
       <div className='flex h-235 items-center justify-center bg-gray-3'>
         <Image src={imageUrl} alt='Illustration' width={296} height={248} />
       </div>
