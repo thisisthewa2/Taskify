@@ -1,10 +1,11 @@
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
+import { setAccessToken } from '@/services/utils/handleToken';
 import { Button } from '@/components/buttons';
 import AuthInput from '@/components/inputs/AuthInput';
 import MainLogo from '@/components/logos/MainLogo';
@@ -17,7 +18,7 @@ export interface SigninType {
 
 function SigninContainer() {
   const router = useRouter();
-  const [loginInfo, setLoginInfo] = useAtom(loginAtom);
+  const setLoginInfo = useSetAtom(loginAtom);
   const {
     handleSubmit: onSubmit,
     formState,
@@ -41,44 +42,44 @@ function SigninContainer() {
   const handleSubmit: SubmitHandler<SigninType> = async (formData) => {
     const { email, password } = formData;
 
-    if (email && password) {
-      const { data, error } = await fetch({ data: { email, password } });
+    if (!(email && password)) return;
 
-      if (error) {
-        setError('email', {
-          type: 'menual',
-          message: '이메일을 확인해주세요',
-        });
-        setError('password', {
-          type: 'menual',
-          message: '비밀번호를 확인해주세요',
-        });
-        return;
-      }
+    const { data, error } = await fetch({ data: { email, password } });
 
-      alert('환영합니다.');
-      const { accessToken, user } = data;
-
-      setLoginInfo({
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname,
-        profileImageUrl: user.profileImageUrl,
+    if (error) {
+      setError('email', {
+        type: 'manual',
+        message: '이메일을 확인해주세요',
       });
-
-      localStorage.setItem('accessToken', accessToken);
-      router.push('/');
+      setError('password', {
+        type: 'manual',
+        message: '비밀번호를 확인해주세요',
+      });
+      return;
     }
+
+    const { accessToken, user } = data;
+
+    setLoginInfo({
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      profileImageUrl: user.profileImageUrl,
+    });
+
+    setAccessToken(accessToken);
+    router.push('/boards');
   };
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
-      router.push('/');
+    const loginInfo = localStorage.getItem('loginInfo');
+    if (loginInfo) {
+      JSON.parse(loginInfo).isLoggedIn && router.push('/boards');
     }
   }, []);
 
   return (
-    <div className=' h-screen bg-[#FAFAFA]'>
+    <div className='bg-white'>
       <div className='mx-auto my-0 w-full max-w-xl px-12 pt-143 text-center'>
         <Link
           className='mx-auto my-0 inline-block w-120 tablet:w-200'
@@ -89,7 +90,7 @@ function SigninContainer() {
         <h3 className='mt-10 text-20 font-normal'>오늘도 만나서 반가워요!</h3>
         <form className='mt-38' onSubmit={onSubmit(handleSubmit)}>
           <div className='mb-16 flex h-100 flex-col items-start justify-start'>
-            <label className='text-base mb-8 font-normal' htmlFor='email'>
+            <label className='mb-8 text-16 font-normal' htmlFor='email'>
               이메일
             </label>
             <Controller
@@ -110,7 +111,7 @@ function SigninContainer() {
             />
           </div>
           <div className='mb-20 flex h-110 flex-col items-start justify-start'>
-            <label className='text-base mb-8 font-normal' htmlFor='password'>
+            <label className='mb-8 text-16 font-normal' htmlFor='password'>
               비밀번호
             </label>
             <Controller
@@ -120,7 +121,7 @@ function SigninContainer() {
                 required: '비밀번호를 입력해주세요',
                 pattern: {
                   value: REG_EXP.CHECK_PASSWORD,
-                  message: '8자 이상입력해 주세요',
+                  message: '8자 이상 입력해 주세요',
                 },
               }}
               render={({ field, fieldState }) => (

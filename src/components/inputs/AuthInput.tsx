@@ -18,18 +18,16 @@ function AuthInput({ field, fieldState }: AuthInputType) {
     setEyeIconState(!eyeIconState);
   };
 
-  const isType = () => {
-    return field.name === 'email';
-  };
+  const isPassword = field.name === 'email';
 
   return (
     <>
       <div className='relative w-full'>
         <input
-          className={`focus:border-solid-primary pt-15 leading-none ${
-            invalid ? 'input border-red' : 'input'
+          className={`focus:border-solid-primary input pt-15 leading-none ${
+            invalid && 'input border-red'
           }`}
-          type={eyeIconState || isType() ? 'text' : 'password'}
+          type={eyeIconState || isPassword ? 'text' : 'password'}
           name={field.name}
           value={field.value}
           onChange={(e) => {
@@ -39,11 +37,11 @@ function AuthInput({ field, fieldState }: AuthInputType) {
             field.onBlur();
           }}
           placeholder={
-            isType() ? '이메일을 입력해주세요' : '비밀번호를 입력해주세요'
+            isPassword ? '이메일을 입력해주세요' : '비밀번호를 입력해주세요'
           }
           autoComplete='off'
         />
-        {isType() ? null : (
+        {!isPassword && (
           <div
             className='absolute right-0 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2'
             onClick={handleClick}
