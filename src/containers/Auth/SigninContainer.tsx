@@ -9,7 +9,7 @@ import { setAccessToken } from '@/services/utils/handleToken';
 import { Button } from '@/components/buttons';
 import AuthInput from '@/components/inputs/AuthInput';
 import MainLogo from '@/components/logos/MainLogo';
-import { REG_EXP } from './validation';
+import { ERROR_MESSAGES, REG_EXP } from './validation';
 
 export interface SigninType {
   email: string;
@@ -49,11 +49,11 @@ function SigninContainer() {
     if (error) {
       setError('email', {
         type: 'manual',
-        message: '이메일을 확인해주세요',
+        message: ERROR_MESSAGES.email.emailToVerify,
       });
       setError('password', {
         type: 'manual',
-        message: '비밀번호를 확인해주세요',
+        message: ERROR_MESSAGES.password.passwordToVerify,
       });
       return;
     }
@@ -97,10 +97,10 @@ function SigninContainer() {
               name='email'
               control={control}
               rules={{
-                required: '이메일을 입력해주세요',
+                required: ERROR_MESSAGES.email.emailField,
                 pattern: {
                   value: REG_EXP.CHECK_EMAIL,
-                  message: '이메일 형식으로 작성해 주세요',
+                  message: ERROR_MESSAGES.email.emailPattern,
                 },
               }}
               render={({ field, fieldState }) => (
@@ -118,10 +118,10 @@ function SigninContainer() {
               name='password'
               control={control}
               rules={{
-                required: '비밀번호를 입력해주세요',
+                required: ERROR_MESSAGES.password.passwordField,
                 pattern: {
                   value: REG_EXP.CHECK_PASSWORD,
-                  message: '8자 이상 입력해 주세요',
+                  message: ERROR_MESSAGES.password.passwordPattern,
                 },
               }}
               render={({ field, fieldState }) => (
