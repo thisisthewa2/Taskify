@@ -3,7 +3,7 @@ import ModalImage from '@/public/pngs/modal.png';
 
 function SubDescriptionSection() {
   return (
-    <div className='mb-90 flex h-full w-full flex-col rounded-md bg-gray-3 pc:grid pc:grid-cols-2'>
+    <div className='mb-90 flex h-full w-full max-w-7xl flex-col rounded-md bg-gray-3 pc:grid pc:grid-cols-2'>
       <div className='order-1 mx-100 mt-100 flex-col justify-center tablet:justify-start pc:order-2'>
         <div className='font-500 text-18 text-gray-5 tablet:text-24'>
           Point2
