@@ -6,45 +6,47 @@ interface ImageDropType {
   type: 'modal' | 'profile';
   columnId?: number;
 }
-interface cardLogoImgType {
+
+interface BannerImageType {
   [key: string]: 'modal' | 'profile';
 }
 
-function ImageDrop({ type, columnId }: ImageDropType) {
-  const BOX_ATTRIBUTE = {
-    path: {
-      modal: `columns/${columnId}/card-image`,
-      profile: 'users/me/image',
-    },
-    size: {
-      modal: 'h-76 w-76',
-      profile: 'h-100 w-100 tablet:h-190 tablet:w-190',
-    },
-    dataName: {
-      modal: 'imageUrl',
-      profile: 'profileImageUrl',
-    },
-  };
+const DEFINE_IMAGE_PROPERTIES = (columnId?: number) => ({
+  path: {
+    modal: `columns/${columnId}/card-image`,
+    profile: 'users/me/image',
+  },
+  size: {
+    modal: 'h-58 w-58 tablet:h-76 tablet:w-76',
+    profile: 'h-100 w-100 tablet:h-190 tablet:w-190',
+  },
+  dataName: {
+    modal: 'imageUrl',
+    profile: 'profileImageUrl',
+  },
+});
 
+function ImageDrop({ type, columnId }: ImageDropType) {
+  const IMAGE_PROPERTIES = DEFINE_IMAGE_PROPERTIES(columnId && columnId);
   const imageFormData = new FormData();
-  const { data: image, fetch } = useRequest<cardLogoImgType>({
+
+  const { data: image, fetch } = useRequest<BannerImageType>({
     skip: true,
     options: {
-      url: BOX_ATTRIBUTE.path[type],
+      url: IMAGE_PROPERTIES.path[type],
       method: 'post',
       data: imageFormData,
     },
   });
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      imageFormData.append('image', e.target.files[0]);
-      fetch();
-    }
+    if (!(e.target.files && e.target.files[0])) return;
+    imageFormData.append('image', e.target.files[0]);
+    fetch();
   };
 
   return (
-    <div className={BOX_ATTRIBUTE.size[type]}>
+    <div className={IMAGE_PROPERTIES.size[type]}>
       <label>
         <input
           className='hidden'
@@ -52,13 +54,13 @@ function ImageDrop({ type, columnId }: ImageDropType) {
           type='file'
           onChange={handleChangeImage}
         />
-        <figure className={`group relative ${BOX_ATTRIBUTE.size[type]}`}>
-          {image?.[BOX_ATTRIBUTE.dataName[type]] && (
+        <figure className={`group relative ${IMAGE_PROPERTIES.size[type]}`}>
+          {image?.[IMAGE_PROPERTIES.dataName[type]] && (
             <div className='absolute-center z-base h-full w-full'>
               <Image
                 className='rounded-md group-hover:brightness-75'
                 fill
-                src={image[BOX_ATTRIBUTE.dataName[type]]}
+                src={image[IMAGE_PROPERTIES.dataName[type]]}
                 alt='BannerImage'
               />
               <IconEditLogo className='absolute-center invisible z-nav group-hover:visible' />
