@@ -8,10 +8,15 @@
     --primary-light: 241 239 253;
     --red: 214 23 58;
     --green: 122 197 85;
+    --green-light: 231 247 219;
     --purple: 118 13 222;
+    --purple-light: 241 207 255;
     --orange: 255 165 0;
+    --orange-light: 249 238 227;
     --blue: 118 165 234;
+    --blue-light: 219 230 247;
     --pink: 232 118 234;
+    --pink-light: 247 219 240;
     --black: 23 23 23;
     --white: 255 255 255;
     --gray-1: 250 250 250;
@@ -28,7 +33,15 @@
     --primary-light: 241 239 253;
     --red: 214 23 58;
     --green: 122 197 85;
+    --green-light: 241 207 255;
     --purple: 118 13 222;
+    --purple-light: 211 166 255;
+    --orange: 255 165 0;
+    --orange-light: 249 238 227;
+    --blue: 118 165 234;
+    --blue-light: 219 230 247;
+    --pink: 232 118 234;
+    --pink-light: 247 219 240;
     --black: 255 255 255;
     --white: 23 23 23;
     --gray-1: 51 50 54;
@@ -117,15 +130,15 @@
   }
 
   .body2-light {
-    @apply text-16 font-light tablet:text-14;
+    @apply text-12 font-light tablet:text-14;
   }
 
   .body2-normal {
-    @apply text-16 font-normal tablet:text-14;
+    @apply text-12 font-normal tablet:text-14;
   }
 
   .body2-bold {
-    @apply text-16 font-bold tablet:text-14;
+    @apply text-12 font-bold tablet:text-14;
   }
 
   .caption-light {
@@ -154,5 +167,9 @@
 
   .border-solid-gray {
     @apply border border-solid border-gray-3;
+  }
+
+  .border-solid-white {
+    @apply border border-solid border-white;
   }
 }
