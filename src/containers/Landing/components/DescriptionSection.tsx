@@ -14,7 +14,7 @@ function DescriptionSection() {
         </div>
       </div>
       <div className='flex justify-end'>
-        <div className='relative flex h-250 w-296 tablet:mt-120 tablet:h-435 tablet:w-[519px] pc:h-[502px] pc:w-[594px]'>
+        <div className='relative flex h-250 w-296 tablet:mt-120 tablet:h-435 tablet:w-[32.5rem] pc:h-500 pc:w-[37.125rem]'>
           <Image src={DashBoardImage} alt='Illustration' fill />
         </div>
       </div>

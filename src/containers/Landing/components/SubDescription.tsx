@@ -16,7 +16,7 @@ function SubDescriptionSection() {
         </div>
       </div>
       <div className='flex-center order-2 justify-end pc:order-1 pc:ml-100'>
-        <div className='relative h-250 w-217 tablet:mt-120 tablet:h-415 tablet:w-360 pc:h-[502px] pc:w-436'>
+        <div className='relative h-250 w-217 tablet:mt-120 tablet:h-415 tablet:w-360 pc:h-[31.25rem] pc:w-436'>
           <Image src={ModalImage} alt='Illustration' fill />
         </div>
       </div>

@@ -5,7 +5,7 @@ import DeskImage from '@/public/pngs/desk-pc.png';
 function MainSection() {
   return (
     <div className='flex-center mb-100 mt-102 flex-col tablet:mt-164 tablet:justify-center'>
-      <div className='relative mx-100 mt-100 h-168 w-287 tablet:h-315 tablet:w-[537px] pc:h-[422px] pc:w-[722px]'>
+      <div className='relative mt-100 h-168 w-287 tablet:h-315 tablet:w-[36rem] pc:h-[53rem] pc:w-[90rem]'>
         <Image src={DeskImage} alt='Illustration' fill />
       </div>
       <div className='flex-center flex-col text-40 tablet:flex-row tablet:justify-between tablet:text-[42px] pc:text-[50px]'>
