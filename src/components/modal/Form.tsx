@@ -51,10 +51,8 @@ function DashboardForm({ onCloseModal }: Props) {
 function TodoForm({ onCloseModal }: Props) {
   const [tagList, setTagList] = useState<string[]>([]);
 
-  const handleSetTagList = (newTagList: string[]) => {
-    setTagList(newTagList);
-    // console.log(tagItem);
-    // setTagList((prevTagList) => [...prevTagList, tagItem]);
+  const handleSetTagList = (tagItem: string) => {
+    setTagList((prevTagList) => [...prevTagList, tagItem]);
   };
 
   return (

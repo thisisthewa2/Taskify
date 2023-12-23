@@ -1,4 +1,10 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TagChip from '@/components/chips/TagChip';
@@ -155,24 +161,6 @@ function TagInput({
 }) {
   const [tagItem, setTagItem] = useState<string>('');
 
-  const tagItems = useMemo(() => {
-    console.log(tagList);
-    return tagList.length > 0
-      ? tagList.map((tag, index) => (
-          <div className='flex shrink-0' key={index}>
-            <TagChip str={tag}>
-              <button
-                className='text-8 ml-5 text-gray-5 tablet:h-20 tablet:text-10'
-                onClick={() => deleteTagItem(index)}
-              >
-                X
-              </button>
-            </TagChip>
-          </div>
-        ))
-      : '';
-  }, [tagList]);
-
   const handleTagValue = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (e.key === 'Enter' && target.value.length !== 0) {
@@ -186,8 +174,8 @@ function TagInput({
 
   const addTagItem = () => {
     if (tagItem.trim() !== '') {
-      console.log(tagItem);
-      setTagList([...tagList, tagItem]);
+      // setTagList([...tagList, tagItem]);
+      setTagList(tagItem);
       setTagItem('');
     }
   };
@@ -201,8 +189,20 @@ function TagInput({
   return (
     <div className='input flex items-center'>
       <div className='flex w-full gap-8'>
-        {tagItems}
-
+        {/*{tagItems}*/}
+        {tagList.map((tag, index) => (
+          <div className='flex shrink-0' key={index}>
+            <TagChip str={tag}>
+              <button
+                type='button'
+                className='text-8 ml-5 text-gray-5 tablet:h-20 tablet:text-10'
+                onClick={() => deleteTagItem(index)}
+              >
+                x
+              </button>
+            </TagChip>
+          </div>
+        ))}
         <input
           className='input-no-style'
           {...rest}
