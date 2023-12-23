@@ -8,7 +8,7 @@ type Props = {
   title?: string;
   required?: boolean;
   value?: string | number;
-  type?: 'text' | 'date' | 'tag' | 'comment';
+  type?: 'text' | 'date' | 'tag' | 'textarea';
   placeholder?: string;
   children?: React.ReactNode;
   onInput?: React.ChangeEventHandler<HTMLInputElement>;
@@ -40,7 +40,7 @@ function TextInput({
   );
 }
 
-function CommentInput({
+function Textarea({
   required,
   children,
   ...rest
@@ -156,7 +156,8 @@ function TagInput({
   const [tagItem, setTagItem] = useState<string>('');
 
   const tagItems = useMemo(() => {
-    return tagList
+    console.log(tagList);
+    return tagList.length > 0
       ? tagList.map((tag, index) => (
           <div className='flex shrink-0' key={index}>
             <TagChip str={tag}>
@@ -185,6 +186,7 @@ function TagInput({
 
   const addTagItem = () => {
     if (tagItem.trim() !== '') {
+      console.log(tagItem);
       setTagList([...tagList, tagItem]);
       setTagItem('');
     }
@@ -232,11 +234,11 @@ function SelectedInput({
       );
     case 'date':
       return <DateInput required={required} />;
-    case 'comment':
+    case 'textarea':
       return (
-        <CommentInput required={required} {...rest}>
+        <Textarea required={required} {...rest}>
           {children}
-        </CommentInput>
+        </Textarea>
       );
     case 'tag':
       return (

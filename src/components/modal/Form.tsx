@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
@@ -26,7 +26,11 @@ function DashboardForm({ onCloseModal }: Props) {
     <>
       <h1 className='heading1-bold'>새로운 대시보드</h1>
       <div>
-        <Input type='text' title='대시보드 이름' />
+        <Input
+          type='text'
+          title='대시보드 이름'
+          placeholder='이름을 입력해 주세요'
+        />
         <div className='py-20'>
           <ColorChip />
         </div>
@@ -49,19 +53,32 @@ function TodoForm({ onCloseModal }: Props) {
 
   const handleSetTagList = (newTagList: string[]) => {
     setTagList(newTagList);
+    // console.log(tagItem);
+    // setTagList((prevTagList) => [...prevTagList, tagItem]);
   };
 
   return (
     <>
       <h1 className='heading1-bold'>할 일 생성</h1>
       <ManagerDropdown />
-      <Input type='text' title='제목' required={true} />
-      <Input type='comment' title='설명' required={true} />
+      <Input
+        type='text'
+        title='제목'
+        required={true}
+        placeholder='제목을 입력해 주세요'
+      />
+      <Input
+        type='textarea'
+        title='설명'
+        required={true}
+        placeholder='설명을 입력해 주세요'
+      />
       <Input type='date' title='마감일' />
       <Input
         type='tag'
         title='태그'
         setTagList={handleSetTagList}
+        placeholder='입력 후 Enter'
         tagList={tagList}
       />
       <div>
@@ -84,7 +101,7 @@ function ColumnForm({ onCloseModal }: Props) {
   return (
     <>
       <h1 className='heading1-bold'>새 컬럼 생성</h1>
-      <Input type='text' title='이름' placeholder='새로운 프로젝트' />
+      <Input type='text' title='이름' placeholder='이름을 입력해 주세요' />
       <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
         <Button.Secondary size='lg' onClick={onCloseModal}>
           취소
