@@ -5,7 +5,6 @@ import Input from '@/components/inputs/Input';
 
 interface Props {
   onCloseModal: () => void;
-  children?: React.ReactNode;
 }
 
 function DashboardForm({ onCloseModal }: Props) {

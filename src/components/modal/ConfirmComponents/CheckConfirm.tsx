@@ -3,7 +3,6 @@ import { Button } from '@/components/buttons';
 
 interface Props {
   onCloseModal: () => void;
-  children?: React.ReactNode;
 }
 
 function CheckConfirm({ onCloseModal }: Props) {

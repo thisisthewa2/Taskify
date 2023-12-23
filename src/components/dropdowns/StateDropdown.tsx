@@ -68,7 +68,7 @@ function StateDropdown() {
         <ul
           className={`border-solid-gray absolute left-0 ${
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'
-          } flex w-full flex-col items-start justify-between gap-13 rounded-md p-8 transition-all duration-500`}
+          } flex w-full flex-col items-start justify-between gap-13 rounded-md bg-white p-8 transition-all duration-500`}
         >
           {todoList.data.map((todo) => {
             return (

@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
+import StateDropdown from '@/components/dropdowns/StateDropdown';
 import ImageDrop from '@/components/image-drop/ImageDrop';
 import Input from '@/components/inputs/Input';
 
 interface Props {
   onCloseModal: () => void;
-  children?: React.ReactNode;
+  type: 'create' | 'edit';
 }
 
-function TodoForm({ onCloseModal }: Props) {
+function TodoForm({ onCloseModal, type = 'edit' }: Props) {
   const [tagList, setTagList] = useState<string[]>([]);
 
   const handleSetTagList = (newTagList: string[]) => {
     setTagList(newTagList);
   };
 
+  const title = type === 'edit' ? '할 일 수정' : '할 일 생성';
+
   return (
     <>
-      <h1 className='heading1-bold'>할 일 생성</h1>
-      <ManagerDropdown />
+      <h1 className='heading1-bold'>{title}</h1>
+      <div className='flex gap-12'>
+        {type === 'edit' && <StateDropdown />}
+
+        <ManagerDropdown />
+      </div>
       <Input
         type='text'
         title='제목'
@@ -48,9 +55,15 @@ function TodoForm({ onCloseModal }: Props) {
         <Button.Secondary type='button' size='lg' onClick={onCloseModal}>
           취소
         </Button.Secondary>
-        <Button type='button' size='lg'>
-          생성
-        </Button>
+        {type === 'edit' ? (
+          <Button type='button' size='lg'>
+            수정
+          </Button>
+        ) : (
+          <Button type='button' size='lg'>
+            생성
+          </Button>
+        )}
       </div>
     </>
   );
