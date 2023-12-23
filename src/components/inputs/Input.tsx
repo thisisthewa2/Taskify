@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ReactNode, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TagChip from '@/components/chips/TagChip';
@@ -19,7 +13,7 @@ type Props = {
   children?: React.ReactNode;
   onInput?: React.ChangeEventHandler<HTMLInputElement>;
   tagList?: string[];
-  setTagList?: (newTagList: string[]) => void;
+  setTagList?: (tagList: string[]) => void;
 };
 
 function Label({ title, required }: Props) {
@@ -151,14 +145,10 @@ function DateInput({ required }: { required: boolean }) {
 
 function TagInput({
   children,
-  tagList,
-  setTagList,
+  tagList = [],
+  setTagList = () => {},
   ...rest
-}: {
-  children: ReactNode;
-  tagList?: string[];
-  setTagList?: void;
-}) {
+}: Props) {
   const [tagItem, setTagItem] = useState<string>('');
 
   const handleTagValue = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -174,8 +164,7 @@ function TagInput({
 
   const addTagItem = () => {
     if (tagItem.trim() !== '') {
-      // setTagList([...tagList, tagItem]);
-      setTagList(tagItem);
+      setTagList([...tagList, tagItem]);
       setTagItem('');
     }
   };
@@ -189,7 +178,6 @@ function TagInput({
   return (
     <div className='input flex h-auto items-center'>
       <div className='flex w-full flex-wrap  gap-8 '>
-        {/*{tagItems}*/}
         {tagList.map((tag, index) => (
           <div className='flex shrink-0' key={index}>
             <TagChip str={tag}>
