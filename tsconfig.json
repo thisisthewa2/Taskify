@@ -18,6 +18,7 @@
       "@/services/*": ["src/services/*"],
       "@/components/*": ["src/components/*"],
       "@/hooks/*": ["src/hooks/*"],
+      "@/store/*": ["src/store/*"],
       "@/pages/*": ["src/pages/*"],
       "@/containers/*": ["src/containers/*"],
       "@/styles/*": ["src/styles/*"],
