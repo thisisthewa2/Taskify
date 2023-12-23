@@ -1,17 +1,12 @@
 import { useAtom, useAtomValue } from 'jotai';
-import { ReactNode, useEffect } from 'react';
-import {
-  FieldValues,
-  SubmitHandler,
-  UseControllerProps,
-  useController,
-  useForm,
-} from 'react-hook-form';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { loginAtom } from '@/store/loginAtom';
 import { Button } from '@/components/buttons';
 import ImageDrop from '@/components/image-drop/ImageDrop';
+import InputContainer from './InputContainer';
 
 function ProfileManageBox() {
   return (
@@ -91,30 +86,5 @@ function Form() {
         <Button>변경</Button>
       </div>
     </form>
-  );
-}
-
-interface InputContainer<T extends FieldValues> extends UseControllerProps<T> {
-  children: ReactNode;
-  placeholder?: string;
-}
-
-function InputContainer<T extends FieldValues>({
-  children,
-  placeholder,
-  ...controls
-}: InputContainer<T>) {
-  const { field } = useController(controls);
-
-  return (
-    <>
-      <label htmlFor={field.name}>{children}</label>
-      <input
-        id={field.name}
-        placeholder={placeholder}
-        {...field}
-        className='input'
-      />
-    </>
   );
 }
