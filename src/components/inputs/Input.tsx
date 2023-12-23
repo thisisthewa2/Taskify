@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TagChip from '@/components/chips/TagChip';
@@ -12,6 +12,8 @@ type Props = {
   placeholder?: string;
   children?: React.ReactNode;
   onInput?: React.ChangeEventHandler<HTMLInputElement>;
+  tagList?: string[];
+  setTagList?: (newTagList: string[]) => void;
 };
 
 function Label({ title, required }: Props) {
@@ -141,26 +143,51 @@ function DateInput({ required }: { required: boolean }) {
   );
 }
 
-function TagInput({ children, ...rest }: { children: ReactNode }) {
+function TagInput({
+  children,
+  tagList,
+  setTagList,
+  ...rest
+}: {
+  children: ReactNode;
+  tagList?: string[];
+  setTagList?: void;
+}) {
   const [tagItem, setTagItem] = useState<string>('');
-  const [tagList, setTagList] = useState<string[]>([]);
+
+  const tagItems = useMemo(() => {
+    return tagList
+      ? tagList.map((tag, index) => (
+          <div className='flex shrink-0' key={index}>
+            <TagChip str={tag}>
+              <button
+                className='text-8 ml-5 text-gray-5 tablet:h-20 tablet:text-10'
+                onClick={() => deleteTagItem(index)}
+              >
+                X
+              </button>
+            </TagChip>
+          </div>
+        ))
+      : '';
+  }, [tagList]);
+
   const handleTagValue = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
     const target = e.target as HTMLInputElement;
     if (e.key === 'Enter' && target.value.length !== 0) {
       addTagItem();
       return;
     }
-    if (e.key === 'Backspace' && tagList.length !== 0) {
+    if (e.key === 'Backspace' && tagList?.length !== 0) {
       deleteTagItem(tagList.length - 1);
     }
   };
 
   const addTagItem = () => {
-    let updatedTagList = [...tagList];
-    updatedTagList.push(tagItem);
-    setTagList(updatedTagList);
-    setTagItem('');
+    if (tagItem.trim() !== '') {
+      setTagList([...tagList, tagItem]);
+      setTagItem('');
+    }
   };
 
   const deleteTagItem = (index: number) => {
@@ -170,23 +197,9 @@ function TagInput({ children, ...rest }: { children: ReactNode }) {
   };
 
   return (
-    <div className='input'>
-      <div className='flex items-center gap-8'>
-        {tagList.map((tagItem, index) => {
-          return (
-            <div className='flex shrink-0' key={index}>
-              <TagChip str={tagItem}>
-                <button
-                  key={index}
-                  className='text-8 ml-5 text-gray-5 tablet:h-20 tablet:text-10'
-                  onClick={() => deleteTagItem(index)}
-                >
-                  X
-                </button>
-              </TagChip>
-            </div>
-          );
-        })}
+    <div className='input flex items-center'>
+      <div className='flex w-full gap-8'>
+        {tagItems}
 
         <input
           className='input-no-style'
@@ -202,7 +215,14 @@ function TagInput({ children, ...rest }: { children: ReactNode }) {
   );
 }
 
-function SelectedInput({ type, required = false, children, ...rest }: Props) {
+function SelectedInput({
+  type,
+  required = false,
+  children,
+  tagList,
+  setTagList,
+  ...rest
+}: Props) {
   switch (type) {
     case 'text':
       return (
@@ -219,7 +239,11 @@ function SelectedInput({ type, required = false, children, ...rest }: Props) {
         </CommentInput>
       );
     case 'tag':
-      return <TagInput {...rest}>{children}</TagInput>;
+      return (
+        <TagInput tagList={tagList} setTagList={setTagList} {...rest}>
+          {children}
+        </TagInput>
+      );
   }
 }
 
@@ -228,14 +252,28 @@ function Input({
   type = 'text',
   required = false,
   children,
+  tagList,
+  setTagList,
   ...rest
 }: Props) {
   return (
     <div className='flex flex-col gap-[10px]'>
       <Label title={title} required={required} />
-      <SelectedInput required={required} type={type} {...rest}>
-        {children}
-      </SelectedInput>
+      {type === 'tag' ? (
+        <SelectedInput
+          tagList={tagList}
+          setTagList={setTagList}
+          required={required}
+          type={type}
+          {...rest}
+        >
+          {children}
+        </SelectedInput>
+      ) : (
+        <SelectedInput required={required} type={type} {...rest}>
+          {children}
+        </SelectedInput>
+      )}
     </div>
   );
 }
