@@ -1,5 +1,7 @@
+import { useSetAtom } from 'jotai';
 import Image from 'next/image';
 import useRequest from '@/hooks/useRequest';
+import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { IconAddLogo, IconEditLogo } from '@/public/svgs';
 
 interface ImageDropType {
@@ -39,10 +41,15 @@ function ImageDrop({ type, columnId }: ImageDropType) {
     },
   });
 
+  const setImageUrl = useSetAtom(ImageUrlAtom);
+
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!(e.target.files && e.target.files[0])) return;
     imageFormData.append('image', e.target.files[0]);
-    fetch();
+    const { data: nextImage } = await fetch();
+    if (nextImage) {
+      setImageUrl(nextImage);
+    }
   };
 
   return (

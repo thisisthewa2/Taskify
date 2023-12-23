@@ -1,33 +1,47 @@
 import { useState } from 'react';
+import { ControllerFieldState, ControllerRenderProps } from 'react-hook-form';
+import { SigninType } from '@/containers/Auth/SigninContainer';
 import { IconEyeOff, IconEyeOn } from '@/public/svgs';
 
 interface AuthInputType {
-  type: string;
+  field:
+    | ControllerRenderProps<SigninType, 'email'>
+    | ControllerRenderProps<SigninType, 'password'>;
+  fieldState: ControllerFieldState;
 }
 
-function AuthInput({ type }: AuthInputType) {
+function AuthInput({ field, fieldState }: AuthInputType) {
   const [eyeIconState, setEyeIconState] = useState<boolean>(false);
+  const { invalid } = fieldState; /* 에러메세지 불린 */
 
   const handleClick = () => {
     setEyeIconState(!eyeIconState);
   };
 
-  const isType = () => {
-    return type === 'email';
-  };
+  const isPassword = field.name === 'email';
+
   return (
     <>
-      <div className='relative'>
+      <div className='relative w-full'>
         <input
-          className='input focus:border-solid-primary pt-15 leading-none'
-          type={eyeIconState || isType() ? 'text' : 'password'}
-          name={type}
+          className={`focus:border-solid-primary input pt-15 leading-none ${
+            invalid && 'input border-red'
+          }`}
+          type={eyeIconState || isPassword ? 'text' : 'password'}
+          name={field.name}
+          value={field.value}
+          onChange={(e) => {
+            field.onChange(e);
+          }}
+          onBlur={() => {
+            field.onBlur();
+          }}
           placeholder={
-            isType() ? '이메일을 입력해주세요' : '비밀번호를 입력해주세요'
+            isPassword ? '이메일을 입력해주세요' : '비밀번호를 입력해주세요'
           }
           autoComplete='off'
         />
-        {isType() ? null : (
+        {!isPassword && (
           <div
             className='absolute right-0 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2'
             onClick={handleClick}
@@ -36,7 +50,11 @@ function AuthInput({ type }: AuthInputType) {
           </div>
         )}
       </div>
-      {/* <small className='body2-normal text-red'>이메일을 입력해주세요</small> */}
+      {fieldState.error && (
+        <small className='body2-normal mt-5 text-red'>
+          {fieldState.error.message}
+        </small>
+      )}
     </>
   );
 }
