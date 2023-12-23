@@ -43,21 +43,19 @@ function Window({ children, name }: BodyProps) {
   if (name !== openName) return null;
 
   return createPortal(
-    <Backdrop>
+    <div>
+      <Backdrop />
       <div className='modal'>
-        <button onClick={close}>X</button>
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </div>
-    </Backdrop>,
+    </div>,
     document.body,
   );
 }
 
-function Backdrop({ children }: { children: React.ReactNode }) {
+function Backdrop() {
   return (
-    <div className='z-9999 fixed inset-0 flex h-full w-full items-center justify-center bg-black opacity-50'>
-      {children}
-    </div>
+    <div className='fixed inset-0 flex h-full w-full items-center justify-center bg-black opacity-50' />
   );
 }
 
