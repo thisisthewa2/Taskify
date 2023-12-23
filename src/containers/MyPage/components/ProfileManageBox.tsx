@@ -12,7 +12,6 @@ import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { loginAtom } from '@/store/loginAtom';
 import { Button } from '@/components/buttons';
 import ImageDrop from '@/components/image-drop/ImageDrop';
-import Input from '@/components/inputs/Input';
 
 function ProfileManageBox() {
   return (
@@ -26,11 +25,10 @@ export default ProfileManageBox;
 
 interface FormValues {
   nickname?: string;
-  profileImageUrl?: string;
 }
 
 function Form() {
-  const profileImageUrl = useAtomValue(ImageUrlAtom);
+  const { profileImageUrl } = useAtomValue(ImageUrlAtom);
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
 
   const { fetch } = useRequest({
@@ -44,17 +42,15 @@ function Form() {
   const { handleSubmit, control, setError, reset } = useForm<FormValues>({
     defaultValues: {
       nickname: loginInfo.nickname,
-      profileImageUrl: loginInfo.profileImageUrl,
     },
     mode: 'onBlur',
   });
 
   const changeProfile: SubmitHandler<FormValues> = async (formData) => {
-    console.log(formData);
     const newProfile = {
       nickname: formData.nickname ?? '',
-      ...(formData.profileImageUrl && {
-        profileImageUrl: formData.profileImageUrl,
+      ...(loginInfo.profileImageUrl !== profileImageUrl && {
+        profileImageUrl,
       }),
     };
 
@@ -63,15 +59,11 @@ function Form() {
     });
 
     if (error) return;
-
     setLoginInfo(newProfile);
   };
 
   useEffect(() => {
-    reset({
-      nickname: loginInfo.nickname,
-      profileImageUrl: loginInfo.profileImageUrl,
-    });
+    reset({ nickname: loginInfo.nickname });
   }, [loginInfo]);
 
   return (

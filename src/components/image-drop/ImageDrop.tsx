@@ -63,12 +63,16 @@ function ImageDrop({ type, columnId, initialImageUrl }: ImageDropType) {
           onChange={handleChangeImage}
         />
         <figure className={`group relative ${IMAGE_PROPERTIES.size[type]}`}>
-          {image?.[IMAGE_PROPERTIES.dataName[type]] && (
+          {(image?.[IMAGE_PROPERTIES.dataName[type]] || initialImageUrl) && (
             <div className='absolute-center z-base h-full w-full'>
               <Image
                 className='rounded-md group-hover:brightness-75'
                 fill
-                src={image[IMAGE_PROPERTIES.dataName[type]] ?? initialImageUrl}
+                src={
+                  image?.[IMAGE_PROPERTIES.dataName[type]] ??
+                  initialImageUrl ??
+                  ''
+                }
                 alt='BannerImage'
               />
               <IconEditLogo className='absolute-center invisible z-nav group-hover:visible' />
