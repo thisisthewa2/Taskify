@@ -25,6 +25,12 @@ interface FormValues {
 function Form() {
   const { profileImageUrl } = useAtomValue(ImageUrlAtom);
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
+  const { handleSubmit, control, reset } = useForm<FormValues>({
+    defaultValues: {
+      nickname: loginInfo.nickname,
+    },
+    mode: 'onBlur',
+  });
 
   const { fetch } = useRequest({
     skip: true,
@@ -32,13 +38,6 @@ function Form() {
       url: 'users/me',
       method: 'put',
     },
-  });
-
-  const { handleSubmit, control, setError, reset } = useForm<FormValues>({
-    defaultValues: {
-      nickname: loginInfo.nickname,
-    },
-    mode: 'onBlur',
   });
 
   const changeProfile: SubmitHandler<FormValues> = async (formData) => {
@@ -69,7 +68,7 @@ function Form() {
           <label htmlFor='password'>이메일</label>
           <input
             id='password'
-            className='input'
+            className='input mb-10'
             placeholder={loginInfo.email}
             disabled
           />

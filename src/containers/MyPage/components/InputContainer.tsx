@@ -18,15 +18,15 @@ function InputContainer<T extends FieldValues>({
   const { field } = useController(controls);
 
   return (
-    <>
+    <div>
       <label htmlFor={field.name}>{children}</label>
       <input
         id={field.name}
         placeholder={placeholder}
         {...field}
-        className='input'
+        className='input mt-10'
       />
-    </>
+    </div>
   );
 }
 
