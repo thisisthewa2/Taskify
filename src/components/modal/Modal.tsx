@@ -12,19 +12,17 @@ type ModalContextType = {
   open: (name: string) => void;
 };
 
-type ModalProps = {
-  children: React.ReactNode;
-};
+interface ModalProps {
+  children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+}
 
-type OpenProps = {
-  children: React.ReactElement;
+interface OpenProps extends ModalProps {
   opens: string;
-};
+}
 
-type BodyProps = {
-  children: React.ReactElement;
+interface BodyProps extends ModalProps {
   name: string;
-};
+}
 
 const ModalContext = createContext<ModalContextType>({
   openName: '',
