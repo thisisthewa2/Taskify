@@ -145,7 +145,6 @@ function TagInput({ children, ...rest }: { children: ReactNode }) {
   const [tagItem, setTagItem] = useState<string>('');
   const [tagList, setTagList] = useState<string[]>([]);
   const handleTagValue = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
     const target = e.target as HTMLInputElement;
     if (e.key === 'Enter' && target.value.length !== 0) {
       addTagItem();

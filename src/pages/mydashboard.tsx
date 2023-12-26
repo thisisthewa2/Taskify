@@ -23,9 +23,6 @@ function MyDashboardPage() {
   });
   const dashboards = dashboardsData?.dashboards;
   const totalCount = dashboardsData?.totalCount; //대시보드 개수
-
-  console.log('real total count', totalCount);
-  console.log('real total count', dashboards);
   return (
     <Layout cursorId={0} totalCount={totalCount} dashboards={dashboards}>
       <MyDashboard
