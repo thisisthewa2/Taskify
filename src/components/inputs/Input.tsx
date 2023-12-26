@@ -66,6 +66,7 @@ function Input({
   children,
   tagList,
   setTagList,
+  onInput,
   ...rest
 }: Props) {
   return (
@@ -82,7 +83,12 @@ function Input({
           {children}
         </SelectedInput>
       ) : (
-        <SelectedInput required={required} type={type} {...rest}>
+        <SelectedInput
+          required={required}
+          type={type}
+          onInput={onInput}
+          {...rest}
+        >
           {children}
         </SelectedInput>
       )}

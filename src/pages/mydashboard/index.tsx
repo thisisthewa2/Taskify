@@ -1,8 +1,14 @@
 import useRequest from '@/hooks/useRequest';
 import MyDashboard from '@/containers/MyDashboard';
 import Layout from '@/components/Layout';
-import { DashboardsProps } from './api/mock';
-
+import { DashboardsProps } from '../api/mock';
+/*
+TODO
+- dashboard form에서 생성버튼을 누른 경우 내부의 input과 colorchip을 post 하도록
+1. colorchip의 선택결과를 상위 컴포넌트로 전달하도록 (O)
+2. input
+3. useRequest 
+*/
 function MyDashboardPage() {
   const {
     data: dashboardsData,

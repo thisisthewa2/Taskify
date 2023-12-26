@@ -1,16 +1,21 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { DashboardProps } from '@/pages/api/mock';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import AddChip from '@/components/chips/AddChip';
+import DashboardForm from '@/components/modal/FormComponents/DashboardForm';
+import Modal from '@/components/modal/Modal';
 import ArrowButtonPageChange from './ArrowButtonPageChange';
 import MyDashboardButton from './MyDashboardButton';
 
 interface ButtonProps {
   data: DashboardProps[] | undefined;
   totalCount: number | undefined;
+  setPostTrigger: React.Dispatch<React.SetStateAction<number>>; // 상태 업데이트 함수
 }
 
-function MyDashboardButtons({ data, totalCount }: ButtonProps) {
+function MyDashboardButtons({ data, totalCount, setPostTrigger }: ButtonProps) {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const totalCountAvailable = totalCount !== undefined && totalCount > 0;
   const itemsPerPage = 6; // 페이지당 표시할 아이템 개수
@@ -19,14 +24,27 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
     currentPage == 1
       ? startIndex + itemsPerPage - 1
       : startIndex + itemsPerPage;
+  const handlePostClick = () => {
+    setPostTrigger((prev) => prev + 1); // Post 후 상태 업데이트
+    router.reload();
+  };
 
   return (
     <div className='grid grid-flow-row gap-8 tablet:grid-cols-2 pc:grid-cols-3'>
       {currentPage == 1 && ( //페이지 번호가 1인 경우에만 대시 보드 추가 버튼 보이게
-        <DashboardButton size='lg'>
-          <p className='pr-12'>새로운 대시보드</p>
-          <AddChip />
-        </DashboardButton>
+        <Modal>
+          <>
+            <Modal.Open opens='modal-form'>
+              <DashboardButton className='mx-12'>
+                새로운 대시 보드
+                <AddChip />
+              </DashboardButton>
+            </Modal.Open>
+            <Modal.Window name='modal-form'>
+              <DashboardForm onCloseModal={handlePostClick} />
+            </Modal.Window>
+          </>
+        </Modal>
       )}
       {totalCountAvailable &&
         data

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useRequest from '@/hooks/useRequest';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Input from '@/components/inputs/Input';
@@ -9,16 +10,30 @@ interface Props {
 
 function DashboardForm({ onCloseModal }: Props) {
   const [selectedColor, setSelectedColor] = useState('');
+  const [dashboardName, setDashboardName] = useState('');
 
   const handleColorSelection = (color: string) => {
     setSelectedColor(color); // ColorChip으로부터 선택된 색상을 상태로 설정
   };
+  const { fetch: postData } = useRequest<any>({
+    options: { url: 'dashboards/', method: 'post' },
+  });
+  const handleCreateDashboard = async () => {
+    try {
+      await postData({
+        data: {
+          title: dashboardName,
+          color: selectedColor,
+        },
+      });
 
-  const handleCreateDashboard = () => {
-    // 선택된 색상 및 다른 정보를 사용하여 작업 수행
-    console.log('Selected color:', selectedColor); 
-    // 여기서 선택된 색상과 input 내용을 이용해 작업을 수행할 수 있음
+      // Post 성공 후에 상위 컴포넌트의 콜백 함수 호출하여 리렌더링 유도
+      onCloseModal();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
   return (
     <>
       <h1 className='heading1-bold'>새로운 대시보드</h1>
@@ -27,6 +42,9 @@ function DashboardForm({ onCloseModal }: Props) {
           type='text'
           title='대시보드 이름'
           placeholder='이름을 입력해 주세요'
+          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDashboardName(e.target.value)
+          }
         />
         <div className='py-20'>
           <ColorChip onSelectColor={handleColorSelection} />

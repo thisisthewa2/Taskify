@@ -1,10 +1,13 @@
 import { ReactNode } from 'react';
-import { DashboardsProps } from '@/pages/api/mock';
+import { DashboardProps } from '@/pages/api/mock';
 import Header from './Header';
 import SideMenu from './SideMenu';
 
-interface Props extends DashboardsProps {
+interface Props {
   children: ReactNode;
+  cursorId?: number | undefined;
+  totalCount?: number | undefined;
+  dashboards?: DashboardProps[] | undefined;
 }
 
 function Layout({ dashboards, children }: Props) {
