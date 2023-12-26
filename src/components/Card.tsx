@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import { generateColor } from '@/utils/generateColor';
-import { CardProps, Mock_1_6_Cards } from '@/pages/api/mock';
+import { CardProps } from '@/pages/api/mock';
 import { IconCalendar } from '@/public/svgs';
-import Members from './Members';
-import ColorChip from './chips/ColorChip';
+import { DEFAULT_PROFILE_COLOR } from './Members';
 import TagChip from './chips/TagChip';
 
 //날짜 타입 그냥 내가 맘대로 씀.. 아마 실제로는 함수 써서 바꿔야 될 듯?
@@ -62,17 +61,12 @@ interface CardInfoProps {
   assignee: AssigneeInfo;
 }
 
-// 사용자 이미지 컴포넌트 들어가야 됨.
 function CardInfo({ date, assignee }: CardInfoProps) {
-  const profile = [
-    {
-      id: assignee.id,
-      profileImageUrl: assignee.profileImageUrl || undefined,
-      nickname: assignee.nickname,
-    },
-  ];
-
-  const ddd = <Members members={profile} />;
+  const profile = {
+    id: assignee.id,
+    profileImageUrl: assignee.profileImageUrl || undefined,
+    nickname: assignee.nickname,
+  };
 
   return (
     <div className='flex w-full items-center justify-between'>
@@ -81,8 +75,56 @@ function CardInfo({ date, assignee }: CardInfoProps) {
         <p className='caption-normal h-13 text-gray-5 tablet:h-15'>{date}</p>
       </div>
       <div className='h-22 w-22 tablet:h-24 tablet:w-24'>
-        <Members members={profile} />
+        <Member member={profile} />
       </div>
+    </div>
+  );
+}
+
+function Member({ member }: { member: AssigneeInfo }) {
+  return (
+    <div className='flex-center relative h-22 tablet:h-24'>
+      {member.profileImageUrl ? (
+        <ImageMember profileImageUrl={member.profileImageUrl} />
+      ) : (
+        <DefaultMember key={member.id} nickname={member.nickname} />
+      )}
+    </div>
+  );
+}
+
+interface ImageMember {
+  profileImageUrl: string;
+}
+
+function ImageMember({ profileImageUrl }: ImageMember) {
+  return (
+    <div className='border-solid-white flex-center absolute h-22 w-22 overflow-hidden rounded-full tablet:h-24 tablet:w-24'>
+      <Image
+        src={profileImageUrl}
+        fill
+        style={{
+          objectFit: 'cover',
+        }}
+        alt='멤버 프로필 이미지'
+      />
+    </div>
+  );
+}
+
+interface DefaultMember {
+  nickname: string;
+}
+
+function DefaultMember({ nickname }: DefaultMember) {
+  const initial = nickname[0].toUpperCase();
+  const color = DEFAULT_PROFILE_COLOR[generateColor(initial)];
+
+  return (
+    <div
+      className={`border-solid-white caption-bold ${color} flex-center absolute h-22 w-22 rounded-full text-white tablet:h-24 tablet:w-24`}
+    >
+      {initial}
     </div>
   );
 }

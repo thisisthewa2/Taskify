@@ -93,7 +93,7 @@ function ImageMember({ profileImageUrl, index }: ImageMember) {
   );
 }
 
-const DEFAULT_PROFILE_COLOR = {
+export const DEFAULT_PROFILE_COLOR = {
   green: 'bg-[#5be352]',
   purple: 'bg-[#bc57ff]',
   orange: 'bg-[#FFC85A]',
