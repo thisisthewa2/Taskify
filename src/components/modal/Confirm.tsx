@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ConfirmComponents } from '@/components/modal/ConfirmComponents';
 
 interface Props {
-  onCloseModal: () => void;
+  onCloseModal?: () => void;
   children?: React.ReactNode;
 }
 

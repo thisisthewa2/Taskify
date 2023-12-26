@@ -2,7 +2,7 @@ import React from 'react';
 import { FormComponents } from '@/components/modal/FormComponents';
 
 interface Props {
-  onCloseModal: () => void;
+  onCloseModal?: () => void;
   children?: React.ReactNode;
 }
 
