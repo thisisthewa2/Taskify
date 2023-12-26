@@ -1,38 +1,25 @@
-import Router from 'next/router';
-import { useEffect, useState } from 'react';
+import { SetStateAction } from 'jotai';
+import { Dispatch, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
+import {
+  ColumnsProps,
+  GetDashboardInfoType,
+  MembersProps,
+} from '@/pages/api/mock';
 import AddChip from '@/components/chips/AddChip';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import DashboardColumn from './components/DashboardColumn';
 
-interface SuccessType {
-  result: 'SUCCESS';
-  data: {
-    id: number;
-    title: string;
-    teamId: '1-6';
-    createdAt: string;
-    updatedAt: string;
-  }[];
-}
-
-interface FailType {
-  message: string;
-}
-
-type APIResponseType = SuccessType | FailType;
-
 interface DashboardProps {
   id: string;
+  setCreatedByMe: (arg: boolean) => void;
+  setMembers: Dispatch<SetStateAction<MembersProps | undefined>>;
 }
 
-function Dashboard({ id }: DashboardProps) {
-  console.log(id);
-  let columnId;
-
+function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
   const { data: columnsResponse, fetch: getColumns } = useRequest<
-    SuccessType | undefined
+    ColumnsProps | undefined
   >({
     skip: true,
     options: {
@@ -41,17 +28,42 @@ function Dashboard({ id }: DashboardProps) {
     },
   });
 
+  const { data: dashboardInfo, fetch: getDashboardInfo } = useRequest<
+    GetDashboardInfoType | undefined
+  >({
+    skip: true,
+    options: {
+      url: `dashboards/${id}`,
+      method: 'get',
+    },
+  });
+
+  const { data: memberList, fetch: getMemberList } = useRequest<
+    MembersProps | undefined
+  >({
+    skip: true,
+    options: {
+      url: `members?page=1&size=4&dashboardId=${id}`,
+      method: 'get',
+    },
+  });
+
   useEffect(() => {
     if (!id) return;
     getColumns();
-  }, [id]);
+    getDashboardInfo();
+    getMemberList();
+    if (dashboardInfo?.createdByMe && memberList) {
+      setCreatedByMe(true);
+      setMembers(memberList);
+    }
+  }, [id, dashboardInfo?.createdByMe, memberList?.totalCount]);
 
-  if (!columnsResponse || !columnsResponse.result) return;
+  if (!columnsResponse || !columnsResponse.result || !dashboardInfo) return;
+
   return (
     <div className='flex min-h-screen flex-col pc:flex-row'>
       {columnsResponse.data.map((column: any, key: number) => {
-        columnId = column.id;
-        console.log(columnId);
         return (
           <DashboardColumn
             columnId={column.id}

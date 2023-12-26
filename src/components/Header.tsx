@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/router';
 import { loginAtom } from '@/store/loginAtom';
-import { Mock_members } from '@/pages/api/mock';
+import { MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import { IconAddBox, IconSettings } from '@/public/svgs';
 import Members from './Members';
@@ -9,15 +9,16 @@ import Logo from './logos/Logo';
 
 interface Prop {
   createdByMe?: boolean;
+  memberList?: MembersProps;
 }
 
-function Header({ createdByMe }: Prop) {
+function Header({ createdByMe, memberList }: Prop) {
   const loginInfo = useAtomValue(loginAtom);
 
   return (
     <>
       {loginInfo.isLoggedIn ? (
-        <MyHeader createdByMe={createdByMe} />
+        <MyHeader createdByMe={createdByMe} memberList={memberList} />
       ) : (
         <DefaultHeader />
       )}
@@ -49,7 +50,7 @@ function TransparentButton({ children }: { children: string }) {
   );
 }
 
-function MyHeader({ createdByMe }: Prop) {
+function MyHeader({ createdByMe, memberList }: Prop) {
   const router = useRouter();
   const title = '내 대시보드';
 
@@ -58,7 +59,7 @@ function MyHeader({ createdByMe }: Prop) {
       <div className='heading2-bold pl-4 pt-4'>{title}</div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
         {router.pathname !== '/mydashboard' && (
-          <DashBoardInfo createdByMe={createdByMe} />
+          <DashBoardInfo createdByMe={createdByMe} memberList={memberList} />
         )}
         <ProfileInfo />
       </div>
@@ -82,11 +83,11 @@ function ProfileInfo() {
   );
 }
 
-function DashBoardInfo({ createdByMe }: Prop) {
+function DashBoardInfo({ createdByMe, memberList }: Prop) {
   return (
     <div className='flex-center h-34 gap-16 border-r border-gray-3 pr-12 text-gray-5 tablet:h-38 tablet:gap-23 tablet:pr-24 pc:gap-40'>
       <DashboardManageButton createdByMe={createdByMe} />
-      <Members members={Mock_members.members} />
+      {memberList && <Members members={memberList?.members} />}
     </div>
   );
 }

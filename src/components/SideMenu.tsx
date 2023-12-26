@@ -1,4 +1,4 @@
-import { DashboardProps, Mock_1_6_dashboards } from '@/pages/api/mock';
+import { DashboardProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
 import Logo from './logos/Logo';
