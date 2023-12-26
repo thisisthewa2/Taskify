@@ -1,9 +1,11 @@
 import axios from 'axios';
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
+import { loginAtom } from '@/store/loginAtom';
 import { Button } from '@/components/buttons';
 import AuthInput from '@/components/inputs/AuthInput';
 import MainLogo from '@/components/logos/MainLogo';
@@ -19,7 +21,7 @@ export interface SignUpType {
 
 function SignUpContainer() {
   const router = useRouter();
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [loginInfo, setLoginInfo] = useAtom(loginAtom);
   const [isCheckBox, setIsCheckBox] = useState(false);
   const {
     handleSubmit: onSubmit,
@@ -28,7 +30,6 @@ function SignUpContainer() {
     control,
     watch,
     trigger,
-    getValues,
   } = useForm<SignUpType>({
     defaultValues: {
       email: '',
@@ -39,15 +40,10 @@ function SignUpContainer() {
     },
     mode: 'onBlur',
   });
-
   const passwordState = watch('password');
+  const { isDirty, isValid } = formState;
 
-  const {
-    email: emailValue,
-    nickname: nicknameValue,
-    password: passwordValue,
-    passwordCh: passwordChValue,
-  } = getValues();
+  const isSignUp = isDirty && isValid && isCheckBox; //버튼 활성화
 
   const { fetch } = useRequest({
     skip: true,
@@ -68,6 +64,7 @@ function SignUpContainer() {
 
     if (data) {
       router.push('/signIn');
+      return;
     }
 
     if (!axios.isAxiosError(error)) return;
@@ -77,32 +74,15 @@ function SignUpContainer() {
         type: 'email',
         message: error.response.data.message,
       });
-      setIsSignUp(false);
     }
   };
 
   useEffect(() => {
-    const loginInfo = localStorage.getItem('loginInfo');
-
-    if (loginInfo) {
-      JSON.parse(loginInfo).isLoggedIn && router.push('/boards');
+    if (loginInfo.isLoggedIn) {
+      router.push('/boards');
       return;
     }
-
-    if (
-      Object.keys(formState.errors).length <= 0 &&
-      emailValue !== '' &&
-      nicknameValue !== '' &&
-      passwordValue !== '' &&
-      passwordChValue !== '' &&
-      isCheckBox
-    ) {
-      setIsSignUp(true);
-      return;
-    }
-
-    setIsSignUp(false);
-  }, [emailValue, nicknameValue, passwordValue, passwordChValue, isCheckBox]);
+  }, []);
 
   return (
     <div className='bg-white'>
@@ -187,9 +167,7 @@ function SignUpContainer() {
               control={control}
               rules={{
                 validate: (value) =>
-                  value !== passwordState
-                    ? '비밀번호가 일치하지 않습니다'
-                    : true,
+                  value === passwordState || '비밀번호가 일치하지 않습니다',
               }}
               render={({ field, fieldState }) => (
                 <>
