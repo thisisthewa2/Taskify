@@ -64,7 +64,7 @@
   }
 
   .input-no-style {
-    @apply body1-normal h-48 w-full text-[#000] outline-none placeholder:text-gray-4 focus:border-purple;
+    @apply body1-normal w-full text-[#000] outline-none placeholder:text-gray-4 focus:border-purple;
   }
 
   .textarea {
@@ -84,7 +84,7 @@
   }
 
   .modal {
-    @apply absolute-center z-floating max-h-[32.5rem] w-[20rem] rounded-lg bg-white p-20 pt-28 tablet:max-h-[56rem] tablet:w-[32.5rem] tablet:p-28 tablet:pt-32;
+    @apply absolute-center z-floating w-[20rem] rounded-lg bg-white p-20 pt-28 tablet:w-[32.5rem] tablet:p-28 tablet:pt-32;
   }
 }
 

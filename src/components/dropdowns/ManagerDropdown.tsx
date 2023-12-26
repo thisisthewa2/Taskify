@@ -104,7 +104,7 @@ function ManagerDropdown() {
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'
           } flex  ${
             isListLengthCheck() ? 'h-118' : null
-          } w-full flex-col items-start justify-start gap-13 overflow-auto rounded-md p-8 transition-all duration-500`}
+          } w-full flex-col items-start justify-start gap-13 overflow-auto rounded-md bg-white p-8 transition-all duration-500`}
         >
           {searChManagerList.length > 0 ? (
             searChManagerList.map((manager) => {
