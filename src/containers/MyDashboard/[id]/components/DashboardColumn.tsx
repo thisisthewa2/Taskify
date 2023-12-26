@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { Mock_1_6_Cards } from '@/pages/api/mock';
 import Card from '@/components/Card';
 import DashBoardColorDot from '@/components/DashBoardColorDot';
 import AddChip from '@/components/chips/AddChip';
 import NumberChip from '@/components/chips/NumberChip';
+import Form from '@/components/modal/Form';
+import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
 
 function DashboardColumn({
@@ -31,9 +32,9 @@ function DashboardColumn({
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
       <ColumnInfo title={title} totalCount={cardList?.totalCount} />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
-        <div className='card flex-center py-9'>
-          <AddChip />
-        </div>
+        <Modal>
+          <AddCardButton />
+        </Modal>
         {cardList &&
           cardList.totalCount !== 0 &&
           cardList.cards.map((card: any, key: number) => {
@@ -60,7 +61,45 @@ function ColumnInfo({
         <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
         <NumberChip num={totalCount} />
       </div>
-      <IconSettings />
+      <ManageButton />
     </div>
+  );
+}
+
+function AddCardButton() {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='modal-form'>
+          <button className='card flex-center py-9'>
+            <AddChip />
+          </button>
+        </Modal.Open>
+        <Modal.Window name='modal-form'>
+          <Form>
+            <Form.TodoForm type='create' />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
+  );
+}
+
+function ManageButton() {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='modal-form'>
+          <button>
+            <IconSettings />
+          </button>
+        </Modal.Open>
+        <Modal.Window name='modal-form'>
+          <Form>
+            <Form.ColumnForm type='edit' />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
   );
 }

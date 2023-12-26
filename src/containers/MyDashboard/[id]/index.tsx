@@ -1,6 +1,9 @@
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
+import AddChip from '@/components/chips/AddChip';
+import Form from '@/components/modal/Form';
+import Modal from '@/components/modal/Modal';
 import DashboardColumn from './components/DashboardColumn';
 
 interface SuccessType {
@@ -57,8 +60,29 @@ function Dashboard({ id }: DashboardProps) {
           />
         );
       })}
+      <AddColumnButton />
     </div>
   );
 }
 
 export default Dashboard;
+
+function AddColumnButton() {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='modal-form'>
+          <button className='card flex-center m-12 max-w-full gap-10 p-20 tablet:m-20 tablet:h-70 pc:mt-67 pc:w-354 pc:border-r'>
+            <p className='subheading-bold'>새로운 컬럼 추가하기</p>
+            <AddChip />
+          </button>
+        </Modal.Open>
+        <Modal.Window name='modal-form'>
+          <Form>
+            <Form.ColumnForm />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
+  );
+}
