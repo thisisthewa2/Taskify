@@ -7,7 +7,7 @@ export interface DashboardsProps {
 export interface DashboardProps {
   id?: number;
   title?: string;
-  color: string;
+  color: 'green' | 'primary' | 'orange' | 'blue' | 'pink';
   createdAt?: string;
   updatedAt?: string;
   createdByMe?: boolean;
@@ -119,3 +119,166 @@ export interface ColumnProps {
   createdAt: string;
   updatedAt: string;
 }
+
+export const Mock_1_6_dashboards: DashboardsProps = {
+  cursorId: 0,
+  totalCount: 6,
+  dashboards: [
+    {
+      id: 1,
+      title: '핏치핏치',
+      color: 'pink',
+      createdAt: '2023-12-15T03:59:20.817Z',
+      updatedAt: '2023-12-15T03:59:20.817Z',
+      createdByMe: false,
+      userId: 1,
+    },
+    {
+      id: 2,
+      title: '김다은과 아이들',
+      color: 'blue',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: true,
+      userId: 2,
+    },
+    {
+      id: 3,
+      title: '프로덕트 디자인',
+      color: 'green',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: false,
+      userId: 2,
+    },
+    {
+      id: 4,
+      title: '새로운 기획 문서',
+      color: 'primary',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: true,
+      userId: 2,
+    },
+    {
+      id: 5,
+      title: '아함',
+      color: 'pink',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: true,
+      userId: 2,
+    },
+    {
+      id: 6,
+      title: '졸려',
+      color: 'blue',
+      createdAt: '2023-12-17T03:59:20.817Z',
+      updatedAt: '2023-12-17T03:59:20.817Z',
+      createdByMe: false,
+      userId: 2,
+    },
+  ],
+};
+
+export const Mock_1_6_Invitations: InvitationsProps = {
+  cursorId: 0,
+  invitations: [
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: '조타이 구현',
+        id: 3,
+      },
+      invitee: {
+        nickname: '임건우',
+        id: 2,
+      },
+      inviteAccepted: false,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: 'Chip 대성공 ',
+        id: 4,
+      },
+      invitee: {
+        nickname: '윤진',
+        id: 2,
+      },
+      inviteAccepted: false,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: '이사 완료!',
+        id: 1,
+      },
+      invitee: {
+        nickname: '강현지',
+        id: 2,
+      },
+      inviteAccepted: false,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: '이미지 업로드',
+        id: 2,
+      },
+      invitee: {
+        nickname: '남민섭',
+        id: 2,
+      },
+      inviteAccepted: false,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: '일요일에 pr 올리지 말기',
+        id: 1,
+      },
+      invitee: {
+        nickname: '김다은',
+        id: 2,
+      },
+      inviteAccepted: false,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+    {
+      id: 1,
+      inviterUserId: 3,
+      teamId: '1-6',
+      dashboard: {
+        title: '졸려',
+        id: 1,
+      },
+      invitee: {
+        nickname: '김다은',
+        id: 2,
+      },
+      inviteAccepted: true,
+      createdAt: '2023-12-19T05:41:19.594Z',
+      updatedAt: '2023-12-19T05:41:19.594Z',
+    },
+  ],
+};
