@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
 import DashBoardColorDot from '@/components/DashBoardColorDot';
 import AddChip from '@/components/chips/AddChip';
@@ -15,7 +16,9 @@ function DashboardColumn({
   title: string;
   columnId: string;
 }) {
-  const { data: cardList, fetch: getCards } = useRequest<any>({
+  const { data: cardList, fetch: getCards } = useRequest<
+    CardsProps | undefined
+  >({
     skip: true,
     options: {
       url: `cards?size=10&columnId=${columnId}`,
@@ -28,16 +31,17 @@ function DashboardColumn({
     getCards();
   }, [columnId]);
 
+  if (!cardList) return;
   return (
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
-      <ColumnInfo title={title} totalCount={cardList?.totalCount} />
+      <ColumnInfo title={title} totalCount={cardList.totalCount} />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
         <Modal>
           <AddCardButton />
         </Modal>
         {cardList &&
           cardList.totalCount !== 0 &&
-          cardList.cards.map((card: any, key: number) => {
+          cardList.cards.map((card: CardProps, key: number) => {
             return <Card data={card} key={key} />;
           })}
       </div>

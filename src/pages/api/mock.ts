@@ -113,7 +113,7 @@ export interface ColumnsProps {
 }
 
 export interface ColumnProps {
-  id: number;
+  id: string;
   title: string;
   teamId: '1-6';
   createdAt: string;

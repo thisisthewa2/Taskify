@@ -2,6 +2,7 @@ import { SetStateAction } from 'jotai';
 import { Dispatch, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import {
+  ColumnProps,
   ColumnsProps,
   GetDashboardInfoType,
   MembersProps,
@@ -63,7 +64,7 @@ function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
 
   return (
     <div className='flex min-h-screen flex-col pc:flex-row'>
-      {columnsResponse.data.map((column: any, key: number) => {
+      {columnsResponse.data.map((column: ColumnProps, key: number) => {
         return (
           <DashboardColumn
             columnId={column.id}
