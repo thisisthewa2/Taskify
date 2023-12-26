@@ -1,5 +1,7 @@
+import { SubmitHandler, useForm } from 'react-hook-form';
+import useRequest from '@/hooks/useRequest';
 import { Button } from '@/components/buttons';
-import Input from '@/components/inputs/Input';
+import InputContainer from './InputContainer';
 
 function PasswordManageBox() {
   return (
@@ -12,20 +14,67 @@ function PasswordManageBox() {
 
 export default PasswordManageBox;
 
+interface FormValues {
+  password: string;
+  newPassword: string;
+  newPasswordCheck: string;
+}
+
 function Form() {
+  const { handleSubmit, control } = useForm<FormValues>({
+    defaultValues: {
+      password: '',
+      newPassword: '',
+      newPasswordCheck: '',
+    },
+    mode: 'onBlur',
+  });
+
+  const { fetch } = useRequest({
+    skip: true,
+    options: {
+      url: 'auth/password',
+      method: 'put',
+    },
+  });
+
+  const changePassword: SubmitHandler<FormValues> = async (formData) => {
+    if (formData.newPassword !== formData.newPasswordCheck) return;
+
+    const { error } = await fetch({
+      data: { password: formData.password, newPassword: formData.newPassword },
+    });
+
+    if (error) console.error(error);
+  };
+
   return (
-    <form noValidate className='flex w-full flex-col gap-16 tablet:gap-20'>
-      <Input
-        type='text'
-        title='현재 비밀번호'
+    <form
+      noValidate
+      onSubmit={handleSubmit(changePassword)}
+      className='flex w-full flex-col gap-16 tablet:gap-20'
+    >
+      <InputContainer<FormValues>
+        control={control}
+        name='password'
         placeholder='현재 비밀번호 입력'
-      />
-      <Input type='text' title='새 비밀번호' placeholder='새 비밀번호 입력' />
-      <Input
-        type='text'
-        title='새 비밀번호 확인'
+      >
+        현재 비밀번호
+      </InputContainer>
+      <InputContainer<FormValues>
+        control={control}
+        name='newPassword'
         placeholder='새 비밀번호 입력'
-      />
+      >
+        새 비밀번호
+      </InputContainer>
+      <InputContainer<FormValues>
+        control={control}
+        name='newPasswordCheck'
+        placeholder='새 비밀번호 입력'
+      >
+        새 비밀번호 확인
+      </InputContainer>
       <div className='flex justify-end tablet:mt-4'>
         <Button>변경</Button>
       </div>

@@ -43,7 +43,7 @@ function CardImage({ src }: { src: string }) {
 
 function Tags({ tags }: { tags: string[] }) {
   return (
-    <div className='flex shrink-0 gap-6'>
+    <div className='flex shrink-0 items-center gap-6'>
       {tags.map((tag, key: number) => {
         return <TagChip key={key} str={tag} />;
       })}
@@ -80,7 +80,9 @@ function CardInfo({ date, assignee }: CardInfoProps) {
         <IconCalendar />
         <p className='caption-normal h-13 text-gray-5 tablet:h-15'>{date}</p>
       </div>
-      <Members members={profile} />
+      <div className='h-22 w-22 tablet:h-24 tablet:w-24'>
+        <Members members={profile} />
+      </div>
     </div>
   );
 }

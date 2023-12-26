@@ -6,12 +6,19 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg' | 'full';
 }
 
-function PrimaryButton({ children, onClick, disabled, size = 'md' }: Props) {
+function PrimaryButton({
+  children,
+  onClick,
+  disabled,
+  size = 'md',
+  ...rest
+}: Props) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={`button bg-primary text-white disabled:bg-gray-4 ${BUTTON_SIZE[size]}`}
+      {...rest}
     >
       {children}
     </button>

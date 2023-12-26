@@ -7,6 +7,7 @@ import { IconAddLogo, IconEditLogo } from '@/public/svgs';
 interface ImageDropType {
   type: 'modal' | 'profile';
   columnId?: number;
+  initialImageUrl?: string;
 }
 
 interface BannerImageType {
@@ -28,7 +29,7 @@ const DEFINE_IMAGE_PROPERTIES = (columnId?: number) => ({
   },
 });
 
-function ImageDrop({ type, columnId }: ImageDropType) {
+function ImageDrop({ type, columnId, initialImageUrl }: ImageDropType) {
   const IMAGE_PROPERTIES = DEFINE_IMAGE_PROPERTIES(columnId && columnId);
   const imageFormData = new FormData();
 
@@ -62,12 +63,16 @@ function ImageDrop({ type, columnId }: ImageDropType) {
           onChange={handleChangeImage}
         />
         <figure className={`group relative ${IMAGE_PROPERTIES.size[type]}`}>
-          {image?.[IMAGE_PROPERTIES.dataName[type]] && (
+          {(image?.[IMAGE_PROPERTIES.dataName[type]] || initialImageUrl) && (
             <div className='absolute-center z-base h-full w-full'>
               <Image
                 className='rounded-md group-hover:brightness-75'
                 fill
-                src={image[IMAGE_PROPERTIES.dataName[type]]}
+                src={
+                  image?.[IMAGE_PROPERTIES.dataName[type]] ??
+                  initialImageUrl ??
+                  ''
+                }
                 alt='BannerImage'
               />
               <IconEditLogo className='absolute-center invisible z-nav group-hover:visible' />
