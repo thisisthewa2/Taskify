@@ -5,11 +5,6 @@ import Members from '../Members';
 import { Button } from '../buttons';
 import ArrowButton from '../buttons/ArrowButton';
 
-//예시 데이터
-// const { totalCount, members } = Mock_members;
-// const { totalCount: totalCount2, invitations } =
-//   Mock_dashboards_dashboardId_invitations;
-
 interface Props {
   type: 'invitation' | 'member';
   totalCount: number;
@@ -18,8 +13,6 @@ interface Props {
 
 function DashboardInfoTable({ type, totalCount, data }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
-  // const data = get /1-6/members page=currentPage size=5 해서 MemberList로 넘겨주기(dep = currentPage)
-
   return (
     <div className='flex flex-col rounded-lg bg-white px-16 pt-24'>
       <TableHeader
@@ -51,7 +44,7 @@ function TableHeader({
   setCurrentPage,
   totalCount,
 }: HeaderProps) {
-  const totalPage = Math.floor(totalCount / 5) + 1;
+  const totalPage = Math.ceil(totalCount / 6); // 한 페이지에 6개씩 표시
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);
