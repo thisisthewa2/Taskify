@@ -1,21 +1,16 @@
 import { ReactNode } from 'react';
+import { DashboardsProps } from '@/pages/api/mock';
 import Header from './Header';
 import SideMenu from './SideMenu';
 
-interface Props {
+interface Props extends DashboardsProps {
   children: ReactNode;
 }
 
-function Layout({ children }: Props) {
-  const emptyData = {
-    cursorId: 5,
-    totalCount: 0,
-    dashboards: [],
-  };
-
+function Layout({ dashboards, children }: Props) {
   return (
     <div className='flex bg-gray-1'>
-      <SideMenu data={emptyData.dashboards} />
+      <SideMenu data={dashboards} />
       <div className='flex w-full flex-col'>
         <Header />
         {children}
