@@ -19,10 +19,21 @@ export interface SignUpType {
   checkBox: boolean;
 }
 
+const TOAST_STYLE = {
+  succes: 'opacity-100 bottom-20 block',
+  basic: 'opacity-0 bottom-0 hidden',
+};
+
 function SignUpContainer() {
   const router = useRouter();
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
+
+  if (loginInfo.isLoggedIn) {
+    router.push('/boards');
+  }
+
   const [isCheckBox, setIsCheckBox] = useState(false);
+  const [isToast, setToast] = useState(false);
   const {
     handleSubmit: onSubmit,
     formState,
@@ -63,7 +74,12 @@ function SignUpContainer() {
     });
 
     if (data) {
-      router.push('/signIn');
+      setToast(true);
+      setTimeout(() => {
+        setToast(false);
+        router.push('/signIn');
+      }, 2000);
+
       return;
     }
 
@@ -76,13 +92,6 @@ function SignUpContainer() {
       });
     }
   };
-
-  useEffect(() => {
-    if (loginInfo.isLoggedIn) {
-      router.push('/boards');
-      return;
-    }
-  }, []);
 
   return (
     <div className='bg-white'>
@@ -206,10 +215,18 @@ function SignUpContainer() {
         </form>
         <div className='mt-24 text-center text-16 font-normal'>
           이미 가입하셨나요?
-          <Link className='ml-7 text-primary underline' href='/signIn'>
+          <Link className='none ml-7 text-primary underline' href='/signIn'>
             로그인하기
           </Link>
         </div>
+      </div>
+      <div
+        id='toast'
+        className={`fixed left-1/2 -translate-x-1/2 rounded-lg bg-black px-15 py-10 text-white transition-all ${
+          isToast ? TOAST_STYLE.succes : TOAST_STYLE.basic
+        }`}
+      >
+        회원가입이 완료되었습니다.
       </div>
     </div>
   );
