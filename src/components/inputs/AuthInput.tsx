@@ -1,16 +1,24 @@
 import { useState } from 'react';
-import { ControllerFieldState, ControllerRenderProps } from 'react-hook-form';
-import { SigninType } from '@/containers/Auth/SigninContainer';
+import {
+  ControllerFieldState,
+  ControllerRenderProps,
+  UseFormTrigger,
+} from 'react-hook-form';
+import { SignUpType } from '@/containers/Auth/SignUpContainer';
 import { IconEyeOff, IconEyeOn } from '@/public/svgs';
+import { PLACEHOLDER_TEXT } from './authPlaceholder';
 
 interface AuthInputType {
   field:
-    | ControllerRenderProps<SigninType, 'email'>
-    | ControllerRenderProps<SigninType, 'password'>;
+    | ControllerRenderProps<SignUpType, 'email'>
+    | ControllerRenderProps<SignUpType, 'nickname'>
+    | ControllerRenderProps<SignUpType, 'password'>
+    | ControllerRenderProps<SignUpType, 'passwordCh'>;
   fieldState: ControllerFieldState;
+  trigger?: UseFormTrigger<SignUpType>;
 }
 
-function AuthInput({ field, fieldState }: AuthInputType) {
+function AuthInput({ field, fieldState, trigger }: AuthInputType) {
   const [eyeIconState, setEyeIconState] = useState<boolean>(false);
   const { invalid } = fieldState; /* 에러메세지 불린 */
 
@@ -18,7 +26,7 @@ function AuthInput({ field, fieldState }: AuthInputType) {
     setEyeIconState(!eyeIconState);
   };
 
-  const isPassword = field.name === 'email';
+  const isPassword = field.name === 'email' || field.name === 'nickname';
 
   return (
     <>
@@ -32,13 +40,13 @@ function AuthInput({ field, fieldState }: AuthInputType) {
           value={field.value}
           onChange={(e) => {
             field.onChange(e);
+            if (field.name !== 'passwordCh') return;
+            trigger && trigger('passwordCh');
           }}
           onBlur={() => {
             field.onBlur();
           }}
-          placeholder={
-            isPassword ? '이메일을 입력해주세요' : '비밀번호를 입력해주세요'
-          }
+          placeholder={PLACEHOLDER_TEXT[`${field.name}`]}
           autoComplete='off'
         />
         {!isPassword && (
