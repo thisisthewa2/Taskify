@@ -9,7 +9,7 @@ export interface axiosOptions {
   data?:
     | FormData
     | {
-        [data: string]: string | number | boolean;
+        [data: string]: string | number | boolean | string[];
       };
   headers?: {
     Authorization?: string;

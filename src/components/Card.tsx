@@ -5,8 +5,6 @@ import { IconCalendar } from '@/public/svgs';
 import { DEFAULT_PROFILE_COLOR } from './Members';
 import TagChip from './chips/TagChip';
 
-//날짜 타입 그냥 내가 맘대로 씀.. 아마 실제로는 함수 써서 바꿔야 될 듯?
-
 function Card({ data }: { data: CardProps }) {
   if (!data) return;
   return (

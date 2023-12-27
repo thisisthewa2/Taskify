@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { generateColor } from '@/utils/generateColor';
+import { MemberProps } from '@/pages/api/mock';
 
 const INDEX_POSITION = [
   'right-0 flex',
@@ -24,7 +25,7 @@ export interface Member {
 }
 
 interface Props {
-  members: Member[];
+  members: Member[] | MemberProps[];
 }
 
 function Members({ members }: Props) {

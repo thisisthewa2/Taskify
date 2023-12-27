@@ -12,7 +12,7 @@ function Form({ onCloseModal, children }: Props) {
   );
   return (
     <div className='relative flex min-h-[12rem] flex-col bg-scroll tablet:min-h-[14rem]'>
-      <form className='mb-70 flex flex-col gap-30'>{childrenWithProps}</form>
+      {childrenWithProps}
     </div>
   );
 }
