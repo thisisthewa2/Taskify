@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import SignInContainer from '@/containers/Auth/SignInContainer';
 
-function signin() {
+function signIn() {
   return (
     <>
       <Head>
@@ -12,4 +12,4 @@ function signin() {
   );
 }
 
-export default signin;
+export default signIn;
