@@ -7,10 +7,13 @@ interface Props {
   type: 'create' | 'edit';
 }
 
+function handleSubmit() {
+  console.log('aaaa');
+}
 function ColumnForm({ onCloseModal, type = 'create' }: Props) {
   const title = type === 'edit' ? '컬럼 관리' : '새 컬럼 생성';
   return (
-    <>
+    <form className='mb-70 flex flex-col gap-30'>
       <h1 className='heading1-bold'>{title}</h1>
       <Input type='text' title='이름' placeholder='이름을 입력해 주세요' />
       {type === 'edit' && (
@@ -26,11 +29,11 @@ function ColumnForm({ onCloseModal, type = 'create' }: Props) {
         <Button.Secondary size='lg' onClick={onCloseModal}>
           취소
         </Button.Secondary>
-        <Button size='lg' onClick={onCloseModal}>
+        <Button size='lg' onClick={handleSubmit}>
           생성
         </Button>
       </div>
-    </>
+    </form>
   );
 }
 
