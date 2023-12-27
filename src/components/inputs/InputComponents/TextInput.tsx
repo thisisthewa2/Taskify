@@ -1,26 +1,36 @@
-import { useSetAtom } from 'jotai';
-import React, { ReactNode } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
+import React, { ReactNode, useEffect } from 'react';
 import { ColumnsAtom } from '@/store/columnsAtom';
 
 function TextInput({
   required,
   children,
+  columnName,
   ...rest
 }: {
   required: boolean;
   children: ReactNode;
+  columnName?: string;
 }) {
-  const setColumn = useSetAtom(ColumnsAtom);
+  const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setColumn({ newColumn: value });
+    setColumnTitle({ columnTitle: value });
   };
+
+  useEffect(() => {
+    if (columnName) {
+      setColumnTitle({ columnTitle: columnName });
+    }
+  }, []);
+
   return (
     <input
       className='input'
       onChange={handleChange}
       required={required}
+      value={columnTitle.columnTitle}
       {...rest}
     >
       {children}

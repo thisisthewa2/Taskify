@@ -1,7 +1,18 @@
 import { atom } from 'jotai';
 
 interface Column {
-  newColumn?: string;
+  columnTitle: string;
 }
 
-export const ColumnsAtom = atom<Column>({});
+const columnInit: Column = {
+  columnTitle: '',
+};
+
+export const ColumnsAtom = atom(
+  (get) => get(columnState),
+  (get, set, update: Column) => {
+    set(columnState, { ...get(columnState), ...update });
+  },
+);
+
+const columnState = atom(columnInit);
