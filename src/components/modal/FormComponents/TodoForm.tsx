@@ -20,7 +20,7 @@ function TodoForm({ onCloseModal, type = 'edit' }: Props) {
   const title = type === 'edit' ? '할 일 수정' : '할 일 생성';
 
   return (
-    <>
+    <form className='mb-70 flex flex-col gap-30'>
       <h1 className='heading1-bold'>{title}</h1>
       <div className='flex gap-12'>
         {type === 'edit' && <StateDropdown />}
@@ -65,7 +65,7 @@ function TodoForm({ onCloseModal, type = 'edit' }: Props) {
           </Button>
         )}
       </div>
-    </>
+    </form>
   );
 }
 
