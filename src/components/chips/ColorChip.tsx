@@ -12,7 +12,8 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
   const colors = ['#7AC555', '#760DDE', '#FFA500', '#76A5EA', '#E876EA'];
 
   const handleButtonClick = (index: ButtonIndex) => {
-    if (index !== null) {//0번째 인덱스 선택 가능하도록...
+    if (index !== null) {
+      //0번째 인덱스 선택 가능하도록...
       const selectedColor = colors[index];
       setSelectedButton(index === selectedButton ? null : index);
       onSelectColor(selectedColor); // 색상 선택 시 부모 컴포넌트로 선택된 색상 전달
@@ -24,7 +25,7 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
       {colors.map((color: string, index: number) => (
         <button
           key={index}
-          className={`flex-center relative h-28 w-28 rounded-full bg-${color} tablet:h-30 tablet:w-30`}
+          className={`flex-center relative h-28 w-28 rounded-full tablet:h-30 tablet:w-30`}
           onClick={() => handleButtonClick(index)}
           style={{
             position: 'relative',
