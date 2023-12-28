@@ -4,8 +4,8 @@ import DeskImage from '@/public/pngs/desk-pc.png';
 
 function MainSection() {
   return (
-    <div className='flex-center mb-100 mt-50 flex-col tablet:mt-164 tablet:justify-center'>
-      <div className='relative h-168 w-287 tablet:mt-100 tablet:h-315 tablet:w-[36rem] pc:h-[53rem] pc:w-[90rem]'>
+    <div className='flex-center mb-100 flex-col tablet:justify-center'>
+      <div className='relative mt-50 h-168 max-h-[26.375rem] w-287 max-w-[45.125rem] tablet:mt-100 tablet:h-315 tablet:w-[36rem] pc:h-[53rem] pc:w-[90rem]'>
         <Image src={DeskImage} alt='Illustration' fill />
       </div>
       <div className='flex-center mt-50 flex-col text-[40px] tablet:flex-row tablet:justify-between tablet:text-[42px] pc:text-[50px]'>
@@ -17,7 +17,14 @@ function MainSection() {
         </div>
       </div>
       <div className='my-40 whitespace-break-spaces text-center text-24 font-bold tablet:text-left tablet:text-[32px]'>
-        효율적인 일정 관리와 협업을 위한 완벽한 툴
+        <div className='hidden tablet:block'>
+          효율적인 일정 관리와 협업을 위한 완벽한 툴
+        </div>
+        <div className='block tablet:hidden'>
+          효율적인 일정 관리와
+          <br />
+          협업을 위한 완벽한 툴
+        </div>
       </div>
       <Button size='lg'>{'   로그인 하기  '}</Button>
     </div>
