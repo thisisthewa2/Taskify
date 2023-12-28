@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCallback } from 'react';
+import useRequest from '@/hooks/useRequest';
 import { getAccessToken } from '@/services/utils/handleToken';
 import { InvitationProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
@@ -117,24 +118,6 @@ function InvitedDashboard({ data }: { data: InvitationProps }) {
   );
 }
 
-// 내부에서 리액트 훅을 사용할 수 없어서 만든 함수. 초대 수락/거절에 대한 put 요청을 보냄
-// PUT 요청을 보내는 함수
-const sendPutRequest = async (url: string, data: any) => {
-  try {
-    const accessToken = getAccessToken();
-
-    const headers = {
-      Authorization: accessToken ? `Bearer ${accessToken}` : '',
-    };
-
-    const response = await axios.put(url, data, { headers });
-    return response.data; // 업데이트된 데이터 반환
-  } catch (error) {
-    console.error('PUT 요청 중 오류가 발생했습니다:', error);
-    throw error; // 에러 던지기
-  }
-};
-
 function TableButton({
   className,
   data,
@@ -144,33 +127,36 @@ function TableButton({
 }) {
   const router = useRouter();
 
-  const acceptInvitation = useCallback(async () => {
+  const { fetch: putData } = useRequest<Boolean>({
+    skip: true,
+    options: { url: `invitations/${data.id}`, method: 'put' },
+  });
+
+  const acceptInvitation = async () => {
     try {
-      await sendPutRequest(
-        `${process.env.NEXT_PUBLIC_BASE_URL}invitations/${data.id}`,
-        {
+      await putData({
+        data: {
           inviteAccepted: true,
         },
-      );
+      });
       router.reload(); // 페이지 전체 다시 렌더링
     } catch (error) {
-      // 에러 처리
+      console.error('Error:', error);
     }
-  }, [data, router]);
+  };
 
-  const rejectInvitation = useCallback(async () => {
+  const rejectInvitation = async () => {
     try {
-      await sendPutRequest(
-        `${process.env.NEXT_PUBLIC_BASE_URL}invitations/${data.id}`,
-        {
+      await putData({
+        data: {
           inviteAccepted: false,
         },
-      );
+      });
       router.reload(); // 페이지 전체 다시 렌더링
     } catch (error) {
-      // 에러 처리
+      console.error('Error:', error);
     }
-  }, [data, router]);
+  };
 
   return (
     <div className={`gap-10 ${className}`}>
