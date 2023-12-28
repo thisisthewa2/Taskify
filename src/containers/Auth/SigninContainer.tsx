@@ -68,7 +68,7 @@ function SigninContainer() {
     });
 
     setAccessToken(accessToken);
-    router.push('/boards');
+    router.push('/mydashboard');
   };
 
   useEffect(() => {
