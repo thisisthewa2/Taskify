@@ -5,6 +5,7 @@ import Card from '@/components/Card';
 import DashBoardColorDot from '@/components/DashBoardColorDot';
 import AddChip from '@/components/chips/AddChip';
 import NumberChip from '@/components/chips/NumberChip';
+import Confirm from '@/components/modal/Confirm';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
@@ -80,12 +81,12 @@ function AddCardButton() {
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
+        <Modal.Open opens='add'>
           <button className='card flex-center py-9'>
             <AddChip />
           </button>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='add'>
           <Form>
             <Form.TodoForm type='create' />
           </Form>
@@ -104,12 +105,12 @@ function ManageButton({ title, columnId }: ManageButtonType) {
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
+        <Modal.Open opens='edit'>
           <button>
             <IconSettings />
           </button>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='edit'>
           <Form>
             <Form.ColumnForm
               type='edit'
@@ -117,6 +118,37 @@ function ManageButton({ title, columnId }: ManageButtonType) {
               columnId={columnId}
             />
           </Form>
+        </Modal.Window>
+      </>
+    </Modal>
+  );
+}
+
+export function DeleteCardButton({
+  handleReset,
+  columnId,
+}: {
+  handleReset: () => void;
+  columnId?: string;
+}) {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='delete'>
+          <button
+            type='button'
+            className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
+          >
+            삭제하기
+          </button>
+        </Modal.Open>
+        <Modal.Window name='delete'>
+          <Confirm>
+            <Confirm.DeleteConfirm
+              columnId={columnId}
+              onCloseModal={handleReset}
+            />
+          </Confirm>
         </Modal.Window>
       </>
     </Modal>
