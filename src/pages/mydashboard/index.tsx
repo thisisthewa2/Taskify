@@ -1,15 +1,8 @@
+import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import MyDashboard from '@/containers/MyDashboard';
 import Layout from '@/components/Layout';
 import { DashboardsProps } from '../api/mock';
-
-/*
-TODO
-- dashboard form에서 생성버튼을 누른 경우 내부의 input과 colorchip을 post 하도록
->> 즉시 상태반영 필요
-- 초대받은 목록 수락 클릭 시
->> 즉시 상태반영 필요 
-*/
 
 function MyDashboardPage() {
   const {
@@ -29,6 +22,20 @@ function MyDashboardPage() {
       },
     },
   });
+
+  useEffect(() => {
+    if (!dashboardsData) return;
+    const fetchData = async () => {
+      try {
+        await fetchDashboardsData(); // 대시보드 데이터 갱신
+      } catch (error) {
+        console.error('Error fetching dashboards:', error);
+      }
+    };
+
+    fetchData();
+  }, [dashboardsData, fetchDashboardsData]);
+
   const dashboards = dashboardsData?.dashboards;
   const totalCount = dashboardsData?.totalCount; //대시보드 개수
   return (
@@ -37,6 +44,7 @@ function MyDashboardPage() {
         cursorId={0}
         totalCount={totalCount}
         dashboards={dashboards}
+        fetchDashboardsData={fetchDashboardsData}
       />
     </Layout>
   );

@@ -1,7 +1,10 @@
+import { axiosOptions } from '@/services/utils/fetch';
+
 export interface DashboardsProps {
   cursorId: number | undefined;
   totalCount: number | undefined;
   dashboards: DashboardProps[] | undefined;
+  fetchDashboardsData?: (args?: axiosOptions) => Promise<any> | undefined;
 }
 
 export interface DashboardProps {

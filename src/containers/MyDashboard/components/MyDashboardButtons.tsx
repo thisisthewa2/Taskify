@@ -11,10 +11,9 @@ import MyDashboardButton from './MyDashboardButton';
 interface ButtonProps {
   data: DashboardProps[] | undefined;
   totalCount: number | undefined;
-  setPostTrigger: React.Dispatch<React.SetStateAction<number>>; // 상태 업데이트 함수
 }
 
-function MyDashboardButtons({ data, totalCount, setPostTrigger }: ButtonProps) {
+function MyDashboardButtons({ data, totalCount }: ButtonProps) {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const totalCountAvailable = totalCount !== undefined && totalCount > 0;
@@ -24,10 +23,8 @@ function MyDashboardButtons({ data, totalCount, setPostTrigger }: ButtonProps) {
     currentPage == 1
       ? startIndex + itemsPerPage - 1
       : startIndex + itemsPerPage;
-  const handlePostClick = () => {
-    setPostTrigger((prev) => prev + 1); // Post 후 상태 업데이트
-    router.reload();
-  };
+
+  const handleModalClose = () => {};
 
   return (
     <div className='grid grid-flow-row gap-8 tablet:grid-cols-2 pc:grid-cols-3'>
@@ -41,7 +38,7 @@ function MyDashboardButtons({ data, totalCount, setPostTrigger }: ButtonProps) {
               </DashboardButton>
             </Modal.Open>
             <Modal.Window name='modal-form'>
-              <DashboardForm onCloseModal={handlePostClick} />
+              <DashboardForm onCloseModal={handleModalClose} />
             </Modal.Window>
           </>
         </Modal>
