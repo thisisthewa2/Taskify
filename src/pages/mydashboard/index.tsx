@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import MyDashboard from '@/containers/MyDashboard';
-import Layout from '@/components/Layout';
+import MyDashboardLayout from '@/components/MyDashboardLayout';
 import { DashboardsProps } from '../api/mock';
 
 function MyDashboardPage() {
@@ -39,14 +39,18 @@ function MyDashboardPage() {
   const dashboards = dashboardsData?.dashboards;
   const totalCount = dashboardsData?.totalCount; //대시보드 개수
   return (
-    <Layout cursorId={0} totalCount={totalCount} dashboards={dashboards}>
+    <MyDashboardLayout
+      cursorId={0}
+      totalCount={totalCount}
+      dashboards={dashboards}
+    >
       <MyDashboard
         cursorId={0}
         totalCount={totalCount}
         dashboards={dashboards}
         fetchDashboardsData={fetchDashboardsData}
       />
-    </Layout>
+    </MyDashboardLayout>
   );
 }
 
