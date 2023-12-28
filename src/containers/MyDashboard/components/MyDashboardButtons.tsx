@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { DashboardProps } from '@/pages/api/mock';
 import DashboardButton from '@/components/buttons/DashboardButton';
@@ -14,7 +13,6 @@ interface ButtonProps {
 }
 
 function MyDashboardButtons({ data, totalCount }: ButtonProps) {
-  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const totalCountAvailable = totalCount !== undefined && totalCount > 0;
   const itemsPerPage = 6; // 페이지당 표시할 아이템 개수
