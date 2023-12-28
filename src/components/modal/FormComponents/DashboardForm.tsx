@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { DashboardProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Input from '@/components/inputs/Input';
 
+// DashboardForm > DashboardButtons, Sidemenu
 interface Props {
   onCloseModal: () => void;
 }
@@ -11,14 +13,38 @@ interface Props {
 function DashboardForm({ onCloseModal }: Props) {
   const [selectedColor, setSelectedColor] = useState('');
   const [dashboardName, setDashboardName] = useState('');
+  const [colorError, setColorError] = useState('');
+  const [nameError, setNameError] = useState('');
 
   const handleColorSelection = (color: string) => {
     setSelectedColor(color); // ColorChip으로부터 선택된 색상을 상태로 설정
   };
-  const { fetch: postData } = useRequest<any>({
+  const { fetch: postData } = useRequest<DashboardProps>({
+    skip: true,
     options: { url: 'dashboards/', method: 'post' },
   });
+
   const handleCreateDashboard = async () => {
+    let hasError = false;
+
+    if (!selectedColor) {
+      setColorError('대시보드의 색상을 지정하세요.');
+      hasError = true;
+    } else {
+      setColorError('');
+    }
+
+    if (!dashboardName) {
+      setNameError('대시보드의 이름을 입력하세요.');
+      hasError = true;
+    } else {
+      setNameError('');
+    }
+
+    if (hasError) {
+      return; // 에러가 있으면 이후 로직 실행하지 않음
+    }
+
     try {
       await postData({
         data: {
@@ -27,7 +53,6 @@ function DashboardForm({ onCloseModal }: Props) {
         },
       });
 
-      // Post 성공 후에 상위 컴포넌트의 콜백 함수 호출하여 리렌더링 유도
       onCloseModal();
     } catch (error) {
       console.error('Error:', error);
@@ -46,8 +71,12 @@ function DashboardForm({ onCloseModal }: Props) {
             setDashboardName(e.target.value)
           }
         />
-        <div className='py-20'>
+        <div className='text-14 text-red'>
+          {nameError && <p>{nameError}</p>}
+        </div>
+        <div className='my-20 text-14 text-red'>
           <ColorChip onSelectColor={handleColorSelection} />
+          {colorError && <p>{colorError}</p>}
         </div>
       </div>
 
