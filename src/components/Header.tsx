@@ -1,16 +1,29 @@
 import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/router';
 import { loginAtom } from '@/store/loginAtom';
-import { Mock_members } from '@/pages/api/mock';
+import { MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import { IconAddBox, IconSettings } from '@/public/svgs';
 import Members from './Members';
 import Logo from './logos/Logo';
 
-function Header() {
+interface Prop {
+  createdByMe?: boolean;
+  memberList?: MembersProps;
+}
+
+function Header({ createdByMe, memberList }: Prop) {
   const loginInfo = useAtomValue(loginAtom);
 
-  return <>{loginInfo.isLoggedIn ? <MyHeader /> : <DefaultHeader />}</>;
+  return (
+    <>
+      {loginInfo.isLoggedIn ? (
+        <MyHeader createdByMe={createdByMe} memberList={memberList} />
+      ) : (
+        <DefaultHeader />
+      )}
+    </>
+  );
 }
 
 export default Header;
@@ -37,7 +50,7 @@ function TransparentButton({ children }: { children: string }) {
   );
 }
 
-function MyHeader() {
+function MyHeader({ createdByMe, memberList }: Prop) {
   const router = useRouter();
   const title = '내 대시보드';
 
@@ -45,7 +58,9 @@ function MyHeader() {
     <div className='flex h-60 items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
       <div className='heading2-bold pl-4 pt-4'>{title}</div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
-        {router.pathname === '/mydashboard' && <DashBoardInfo />}
+        {router.pathname !== '/mydashboard' && (
+          <DashBoardInfo createdByMe={createdByMe} memberList={memberList} />
+        )}
         <ProfileInfo />
       </div>
     </div>
@@ -68,24 +83,26 @@ function ProfileInfo() {
   );
 }
 
-function DashBoardInfo() {
+function DashBoardInfo({ createdByMe, memberList }: Prop) {
   return (
     <div className='flex-center h-34 gap-16 border-r border-gray-3 pr-12 text-gray-5 tablet:h-38 tablet:gap-23 tablet:pr-24 pc:gap-40'>
-      <DashboardManageButton />
-      <Members members={Mock_members.members} />
+      <DashboardManageButton createdByMe={createdByMe} />
+      {memberList && <Members members={memberList?.members} />}
     </div>
   );
 }
 
-function DashboardManageButton() {
+function DashboardManageButton({ createdByMe = false }: Prop) {
   return (
     <div className='flex-center gap-16'>
-      <Button.Outline size='sm'>
-        <div className='hidden pr-8 tablet:block'>
-          <IconSettings />
-        </div>
-        관리
-      </Button.Outline>
+      {createdByMe && (
+        <Button.Outline size='sm'>
+          <div className='hidden pr-8 tablet:block'>
+            <IconSettings />
+          </div>
+          관리
+        </Button.Outline>
+      )}
       <Button.Outline size='sm'>
         <div className='hidden pr-8 tablet:block'>
           <IconAddBox fill='#787486' />

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { generateColor } from '@/utils/generateColor';
+import { MemberProps } from '@/pages/api/mock';
 
 const INDEX_POSITION = [
   'right-0 flex',
@@ -24,7 +25,7 @@ export interface Member {
 }
 
 interface Props {
-  members: Member[];
+  members: Member[] | MemberProps[];
 }
 
 function Members({ members }: Props) {
@@ -93,7 +94,7 @@ function ImageMember({ profileImageUrl, index }: ImageMember) {
   );
 }
 
-const DEFAULT_PROFILE_COLOR = {
+export const DEFAULT_PROFILE_COLOR = {
   green: 'bg-[#5be352]',
   purple: 'bg-[#bc57ff]',
   orange: 'bg-[#FFC85A]',

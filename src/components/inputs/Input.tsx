@@ -12,6 +12,8 @@ export type Props = {
   onInput?: React.ChangeEventHandler<HTMLInputElement>;
   tagList?: string[];
   setTagList?: (tagList: string[]) => void;
+  columnName?: string;
+  columnId?: string;
 };
 
 function Label({ title, required }: Props) {

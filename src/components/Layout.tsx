@@ -1,21 +1,26 @@
 import { ReactNode } from 'react';
-import { DashboardProps } from '@/pages/api/mock';
+import { MembersProps } from '@/pages/api/mock';
 import Header from './Header';
 import SideMenu from './SideMenu';
 
 interface Props {
   children: ReactNode;
-  cursorId?: number | undefined;
-  totalCount?: number | undefined;
-  dashboards?: DashboardProps[] | undefined;
+  createdByMe?: boolean;
+  members?: MembersProps;
 }
 
-function Layout({ dashboards, children }: Props) {
+function Layout({ children, createdByMe, members }: Props) {
+  const emptyData = {
+    cursorId: 5,
+    totalCount: 0,
+    dashboards: [],
+  };
+
   return (
-    <div className='flex bg-gray-1'>
-      <SideMenu data={dashboards} />
-      <div className='flex w-full flex-col'>
-        <Header />
+    <div className='flex'>
+      <SideMenu data={emptyData.dashboards} />
+      <div className='flex w-full flex-col bg-gray-1'>
+        {members && <Header createdByMe={createdByMe} memberList={members} />}
         {children}
       </div>
     </div>

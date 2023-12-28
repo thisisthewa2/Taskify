@@ -1,15 +1,15 @@
 import Head from 'next/head';
-import SigninContainer from '@/containers/Auth/SigninContainer';
+import SignInContainer from '@/containers/Auth/SignInContainer';
 
-function signin() {
+function signIn() {
   return (
     <>
       <Head>
         <title>로그인</title>
       </Head>
-      <SigninContainer />
+      <SignInContainer />
     </>
   );
 }
 
-export default signin;
+export default signIn;

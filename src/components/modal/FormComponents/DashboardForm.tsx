@@ -60,7 +60,7 @@ function DashboardForm({ onCloseModal }: Props) {
   };
 
   return (
-    <>
+    <form className='mb-70 flex flex-col gap-30'>
       <h1 className='heading1-bold'>새로운 대시보드</h1>
       <div>
         <Input
@@ -88,7 +88,7 @@ function DashboardForm({ onCloseModal }: Props) {
           생성
         </Button>
       </div>
-    </>
+    </form>
   );
 }
 
