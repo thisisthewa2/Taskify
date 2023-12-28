@@ -1,3 +1,5 @@
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import useRequest from '@/hooks/useRequest';
 import { Mock_1_6_Invitations } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
@@ -42,7 +44,11 @@ const Mock_dashboards_dashboardId_invitations = {
   ],
 };
 
-function DashboardEdit() {
+interface Props {
+  dashboardId: string;
+}
+
+function DashboardEdit({ dashboardId }: Props) {
   const { totalCount, invitations: data2 } =
     Mock_dashboards_dashboardId_invitations;
   const { invitations: data3 } = Mock_1_6_Invitations;
@@ -53,7 +59,7 @@ function DashboardEdit() {
         <IconArrowBackward fill='#333236' />
         돌아가기
       </button>
-      <TitleManageBox />
+      <TitleManageBox dashboardId={dashboardId} />
       <Table type='member' totalCount={2} data={data2} />
       <Table type='dashboard' data={data3} totalCount={6} />
     </div>
@@ -62,20 +68,77 @@ function DashboardEdit() {
 
 export default DashboardEdit;
 
-function TitleManageBox() {
+interface DashboardInfo {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  createdByMe: boolean;
+}
+
+function TitleManageBox({ dashboardId }: Props) {
+  const [title, setTitle] = useState('');
+
+  const { data: dashboardInfo, fetch: getDashboardInfo } =
+    useRequest<DashboardInfo>({
+      skip: true,
+      options: {
+        url: `dashboards/${dashboardId}`,
+        method: 'get',
+      },
+    });
+
+  const { fetch: changeDashboardInfo } = useRequest({
+    skip: true,
+    options: {
+      url: `dashboards/${dashboardId}`,
+      method: 'put',
+    },
+  });
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(() => e.target.value);
+  };
+
+  const setDashboardInfo = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    await changeDashboardInfo({
+      data: {
+        title: title ?? dashboardInfo?.title,
+        color: dashboardInfo?.color ?? '',
+      },
+    });
+    await getDashboardInfo();
+  };
+
+  useEffect(() => {
+    getDashboardInfo();
+  }, [dashboardId]);
+
   return (
-    <div className='flex flex-col gap-30 rounded-lg bg-white px-16 py-32'>
+    <form
+      onSubmit={setDashboardInfo}
+      className='flex flex-col gap-30 rounded-lg bg-white px-16 py-32'
+    >
       <div className='flex items-center justify-between'>
-        <span className='heading1-bold'>비브리지</span>
+        <span className='heading1-bold'>{dashboardInfo?.title}</span>
         <ColorChip />
       </div>
       <label className='subheading-normal'>
         대시보드 이름
-        <input placeholder='' className='input mt-10' />
+        <input
+          placeholder={dashboardInfo?.title}
+          onChange={handleTitleChange}
+          value={title}
+          className='input mt-10'
+        />
       </label>
       <div className='flex justify-end'>
         <Button>변경</Button>
       </div>
-    </div>
+    </form>
   );
 }

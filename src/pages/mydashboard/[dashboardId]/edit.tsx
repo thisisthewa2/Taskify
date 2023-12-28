@@ -4,11 +4,13 @@ import Layout from '@/components/Layout';
 
 function DashboardEditPage() {
   const router = useRouter();
-  const { id } = router.query;
+  const dashboardId = Array.isArray(router.query.dashboardId)
+    ? router.query.dashboardId[0]
+    : router.query.dashboardId;
 
   return (
     <Layout>
-      <DashboardEdit />
+      <DashboardEdit dashboardId={dashboardId ?? ''} />
     </Layout>
   );
 }
