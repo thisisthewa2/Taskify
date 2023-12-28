@@ -215,7 +215,7 @@ function SignUpContainer() {
         </form>
         <div className='mt-24 text-center text-16 font-normal'>
           이미 가입하셨나요?
-          <Link className='none ml-7 text-primary underline' href='/signIn'>
+          <Link className='ml-7 text-primary underline' href='/signIn'>
             로그인하기
           </Link>
         </div>
