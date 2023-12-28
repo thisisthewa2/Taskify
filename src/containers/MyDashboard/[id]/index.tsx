@@ -21,6 +21,7 @@ interface DashboardProps {
 }
 
 function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
+  const { columnTitle } = useAtomValue(ColumnsAtom);
   const { data: columnsResponse, fetch: getColumns } = useRequest<
     ColumnsProps | undefined
   >({
@@ -60,7 +61,7 @@ function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
       setCreatedByMe(true);
       setMembers(memberList);
     }
-  }, [id, dashboardInfo?.createdByMe, columnsResponse, memberList?.totalCount]);
+  }, [id, dashboardInfo?.createdByMe, columnTitle, memberList?.totalCount]);
 
   if (!columnsResponse || !columnsResponse.result || !dashboardInfo) return;
 

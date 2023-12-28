@@ -56,7 +56,7 @@ function ColumnForm({
     },
   });
 
-  const handleClick = () => {
+  const handleReset = () => {
     onCloseModal();
     setColumnTitle({ columnTitle: '' });
   };
@@ -121,7 +121,7 @@ function ColumnForm({
         )}
 
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
-          <Button.Secondary size='lg' onClick={handleClick}>
+          <Button.Secondary size='lg' onClick={handleReset}>
             취소
           </Button.Secondary>
           <Button size='lg'>생성</Button>
