@@ -74,7 +74,7 @@ function SigninContainer() {
   useEffect(() => {
     const loginInfo = localStorage.getItem('loginInfo');
     if (loginInfo) {
-      JSON.parse(loginInfo).isLoggedIn && router.push('/boards');
+      JSON.parse(loginInfo).isLoggedIn && router.push('/mydashboard');
     }
   }, []);
 
