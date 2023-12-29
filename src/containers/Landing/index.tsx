@@ -16,7 +16,7 @@ export default function Landing() {
   const isLoggedIn = loginInfo.isLoggedIn;
 
   if (isLoggedIn) {
-    router.push('/mydashboard');
+    router.push('/dashboard');
     return null;
   }
   return (
