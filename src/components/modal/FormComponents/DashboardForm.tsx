@@ -38,11 +38,7 @@ function DashboardForm({ onCloseModal }: Props) {
     e.preventDefault();
     let hasError = false;
 
-    if (!selectedColor) {
-      hasError = true;
-    }
-
-    if (dashboardName === '') {
+    if (!selectedColor || dashboardName === '') {
       hasError = true;
     }
 
