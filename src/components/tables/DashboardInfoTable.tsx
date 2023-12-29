@@ -108,13 +108,12 @@ function InvitingButton() {
   );
 }
 
-function AccountInfo({
-  data,
-  fetch,
-}: {
+interface Props {
   data: MemberProps | InvitationProps;
   fetch: () => void;
-}) {
+}
+
+function AccountInfo({ data, fetch }: Props) {
   const router = useRouter();
   const { dashboardId } = router.query;
   let text, id, nickname, profileImageUrl;

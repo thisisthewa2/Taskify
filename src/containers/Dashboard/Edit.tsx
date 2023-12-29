@@ -15,6 +15,7 @@ function DashboardEdit({ dashboardId }: Props) {
   const [currentInvitationPage, setCurrentInvitationPage] = useState(1);
 
   const { data: memberList, fetch: getMemberList } = useRequest<MembersProps>({
+    skip: !dashboardId,
     options: {
       url: `members?page=${currentMembersPage}&size=5&dashboardId=${dashboardId}`,
       method: 'get',
@@ -24,6 +25,7 @@ function DashboardEdit({ dashboardId }: Props) {
 
   const { data: invitationList, fetch: getInvitationList } =
     useRequest<InvitationsProps>({
+      skip: !dashboardId,
       options: {
         url: `dashboards/${dashboardId}/invitations?page=${currentInvitationPage}&size=5`,
         method: 'get',
