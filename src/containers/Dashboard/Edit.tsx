@@ -80,6 +80,7 @@ interface DashboardInfo {
 
 function TitleManageBox({ dashboardId }: Props) {
   const [title, setTitle] = useState('');
+  const [color, setColor] = useState('');
 
   const { data: dashboardInfo, fetch: getDashboardInfo } =
     useRequest<DashboardInfo>({
@@ -99,7 +100,11 @@ function TitleManageBox({ dashboardId }: Props) {
   });
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(() => e.target.value);
+    setTitle(e.target.value);
+  };
+
+  const handleColorChange = (color: string) => {
+    setColor(color);
   };
 
   const setDashboardInfo = async (e: SyntheticEvent) => {
@@ -108,7 +113,7 @@ function TitleManageBox({ dashboardId }: Props) {
     await changeDashboardInfo({
       data: {
         title: title ?? dashboardInfo?.title,
-        color: dashboardInfo?.color ?? '',
+        color: color ?? dashboardInfo?.color,
       },
     });
     await getDashboardInfo();
@@ -125,7 +130,7 @@ function TitleManageBox({ dashboardId }: Props) {
     >
       <div className='flex items-center justify-between'>
         <span className='heading1-bold'>{dashboardInfo?.title}</span>
-        <ColorChip />
+        <ColorChip onSelectColor={handleColorChange} />
       </div>
       <label className='subheading-normal'>
         대시보드 이름

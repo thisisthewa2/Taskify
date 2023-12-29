@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Form } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
-import { DeleteCardButton } from '@/containers/MyDashboard/[id]/components/DashboardColumn';
+import { DeleteCardButton } from '@/containers/Dashboard/components/DashboardColumn';
 import { Button } from '@/components/buttons';
 import Input from '@/components/inputs/Input';
 import Confirm from '../Confirm';
