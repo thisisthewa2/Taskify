@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 import { DashboardProps } from '@/pages/api/mock';
 import DashboardButton from '@/components/buttons/DashboardButton';
@@ -49,7 +50,9 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
           ?.slice(startIndex, endIndex) // 페이지 범위에 맞게 슬라이싱
           .map((dashBoard, key: number) => (
             <div key={key}>
-              <MyDashboardButton data={dashBoard} />
+              <Link href={`dashboard/${dashBoard.id}`}>
+                <MyDashboardButton data={dashBoard} />
+              </Link>
             </div>
           ))}
       {totalCountAvailable && (
