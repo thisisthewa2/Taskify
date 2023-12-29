@@ -80,6 +80,9 @@ function TableHeader({
 }
 
 function InvitingButton() {
+  const router = useRouter();
+  const { dashboardId } = router.query;
+
   return (
     <Modal>
       <>
@@ -100,7 +103,7 @@ function InvitingButton() {
         </Modal.Open>
         <Modal.Window name='모달'>
           <Form>
-            <Form.ColumnForm />
+            <Form.InviteForm dashboardId={dashboardId} />
           </Form>
         </Modal.Window>
       </>
