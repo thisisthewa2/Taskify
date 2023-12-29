@@ -35,7 +35,7 @@ function DashboardEdit({ dashboardId }: Props) {
   const { totalCount: InvitationsCount, invitations } = invitationList;
 
   return (
-    <div className='flex h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
+    <div className='flex max-h-fit min-h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
       <button className='flex-center body1-normal mb-8 w-80 gap-6'>
         <IconArrowBackward fill='#333236' />
         돌아가기
