@@ -29,10 +29,9 @@ function MyDashboard({ cursorId, totalCount, dashboards }: DashboardsProps) {
 
   const invitations = invitationsData?.invitations;
 
-  //로그인 되어 있지 않다면 signIn페이지로 이동
   useEffect(() => {
     if (!isLoggedIn) {
-      router.push('/signIn');
+      router.push('/signin');
     }
   }, [isLoggedIn, router]);
 

@@ -77,7 +77,7 @@ function SignUpContainer() {
       setToast(true);
       setTimeout(() => {
         setToast(false);
-        router.push('/signIn');
+        router.push('/signin');
       }, 2000);
 
       return;
