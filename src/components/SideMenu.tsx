@@ -2,22 +2,25 @@ import { DashboardProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
 import Logo from './logos/Logo';
+import Link from 'next/link';
 
-function SideMenu({ data }: { data: DashboardProps[] }) {
+function SideMenu({ data }: { data: DashboardProps[] | undefined }) {
   return (
     <div className='h-auto w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
       <div className='py-20'>
         <DashBoards />
       </div>
-      {data.map((dashBoard, key: number) => {
+      {data?.map((dashBoard, key: number) => {
         return (
           <div key={key}>
-            <Card
-              title={dashBoard.title}
-              color={dashBoard.color}
-              createdByMe={dashBoard.createdByMe}
-            />
+            <Link href={`/dashboard/${dashBoard.id}`}>
+              <Card
+                title={dashBoard.title}
+                color={dashBoard.color}
+                createdByMe={dashBoard.createdByMe}
+              />
+            </Link>
           </div>
         );
       })}
