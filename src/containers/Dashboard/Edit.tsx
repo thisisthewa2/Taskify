@@ -1,6 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { MembersProps, Mock_1_6_Invitations } from '@/pages/api/mock';
+import { InvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Table from '@/components/tables';
@@ -11,19 +11,28 @@ interface Props {
 }
 
 function DashboardEdit({ dashboardId }: Props) {
-  const { invitations: data3 } = Mock_1_6_Invitations;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentMembersPage, setCurrentMembersPage] = useState(1);
+  const [currentInvitationPage, setCurrentInvitationPage] = useState(1);
 
-  const { data: memberList, fetch: getMemberList } = useRequest<MembersProps>({
+  const { data: memberList } = useRequest<MembersProps>({
     options: {
-      url: `members?page=${currentPage}&size=5&dashboardId=${dashboardId}`,
+      url: `members?page=${currentMembersPage}&size=5&dashboardId=${dashboardId}`,
       method: 'get',
     },
-    deps: [currentPage, dashboardId],
+    deps: [currentMembersPage, dashboardId],
   });
 
-  if (!memberList) return;
-  const { totalCount, members } = memberList;
+  const { data: invitationList } = useRequest<InvitationsProps>({
+    options: {
+      url: `dashboards/${dashboardId}/invitations?page=${currentInvitationPage}&size=5`,
+      method: 'get',
+    },
+    deps: [currentInvitationPage, dashboardId],
+  });
+
+  if (!memberList || !invitationList) return;
+  const { totalCount: membersTotalCount, members } = memberList;
+  const { totalCount: InvitationsCount, invitations } = invitationList;
 
   return (
     <div className='flex h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
@@ -34,15 +43,17 @@ function DashboardEdit({ dashboardId }: Props) {
       <TitleManageBox dashboardId={dashboardId} />
       <Table
         type='member'
-        totalCount={totalCount}
+        totalCount={membersTotalCount}
         data={members}
-        setCurrentPage={setCurrentPage}
+        setCurrentPage={setCurrentMembersPage}
+        currentPage={currentMembersPage}
       />
       <Table
         type='invitation'
-        data={data3}
-        totalCount={6}
-        setCurrentPage={setCurrentPage}
+        data={invitations}
+        totalCount={InvitationsCount}
+        setCurrentPage={setCurrentInvitationPage}
+        currentPage={currentInvitationPage}
       />
     </div>
   );

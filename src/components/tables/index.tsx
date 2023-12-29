@@ -9,8 +9,9 @@ import InvitedDashboardsTable from './InvitedDashboardsTable';
 export interface DashboardInfoProps {
   type: 'member' | 'invitation';
   totalCount: number;
-  data: MemberProps[] | DashboardsInvitationProps[];
+  data: MemberProps[] | InvitationProps[];
   setCurrentPage: (arg: number) => void;
+  currentPage: number;
 }
 
 interface InvitedDashboardsProps {
@@ -28,6 +29,7 @@ function Table(props: Props) {
       totalCount={props.totalCount}
       data={(props as DashboardInfoProps).data}
       setCurrentPage={props.setCurrentPage}
+      currentPage={props.currentPage}
     />
   ) : (
     <InvitedDashboardsTable

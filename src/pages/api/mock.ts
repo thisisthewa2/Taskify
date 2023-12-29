@@ -25,13 +25,17 @@ export interface GetDashboardInfoType {
 }
 
 export interface InvitationsProps {
-  cursorId: number;
   invitations: InvitationProps[];
+  totalCount: number;
 }
 
 export interface InvitationProps {
   id: number;
-  inviterUserId: number;
+  inviter: {
+    id: number;
+    email: string;
+    nickname: string;
+  };
   teamId: string;
   dashboard: {
     title: string;
@@ -42,7 +46,7 @@ export interface InvitationProps {
     email: string;
     id: number;
   };
-  inviteAccepted: boolean;
+  inviteAccepted: boolean | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -184,28 +188,35 @@ export const Mock_1_6_dashboards: DashboardsProps = {
 };
 
 export const Mock_1_6_Invitations: InvitationsProps = {
-  cursorId: 0,
   invitations: [
     {
-      id: 1,
-      inviterUserId: 3,
+      id: 604,
+      inviter: {
+        id: 68,
+        email: 'kde9889@naver.com',
+        nickname: '정우부인',
+      },
       teamId: '1-6',
       dashboard: {
-        title: '조타이 구현',
-        id: 3,
+        id: 123,
+        title: '테스트',
       },
       invitee: {
-        nickname: '임건우',
-        email: 'fkasehjio@fnjkd.com',
-        id: 2,
+        id: 111,
+        email: 'user@email.com',
+        nickname: 'useruser',
       },
-      inviteAccepted: false,
-      createdAt: '2023-12-19T05:41:19.594Z',
-      updatedAt: '2023-12-19T05:41:19.594Z',
+      inviteAccepted: null,
+      createdAt: '2023-12-30T02:15:46.793Z',
+      updatedAt: '2023-12-30T02:15:46.793Z',
     },
     {
       id: 1,
-      inviterUserId: 3,
+      inviter: {
+        id: 68,
+        email: 'kde9889@naver.com',
+        nickname: '정우부인',
+      },
       teamId: '1-6',
       dashboard: {
         title: 'Chip 대성공 ',
@@ -222,7 +233,11 @@ export const Mock_1_6_Invitations: InvitationsProps = {
     },
     {
       id: 1,
-      inviterUserId: 3,
+      inviter: {
+        id: 68,
+        email: 'kde9889@naver.com',
+        nickname: '정우부인',
+      },
       teamId: '1-6',
       dashboard: {
         title: '이사 완료!',
@@ -239,7 +254,11 @@ export const Mock_1_6_Invitations: InvitationsProps = {
     },
     {
       id: 1,
-      inviterUserId: 3,
+      inviter: {
+        id: 68,
+        email: 'kde9889@naver.com',
+        nickname: '정우부인',
+      },
       teamId: '1-6',
       dashboard: {
         title: '이미지 업로드',
@@ -256,7 +275,11 @@ export const Mock_1_6_Invitations: InvitationsProps = {
     },
     {
       id: 1,
-      inviterUserId: 3,
+      inviter: {
+        id: 68,
+        email: 'kde9889@naver.com',
+        nickname: '정우부인',
+      },
       teamId: '1-6',
       dashboard: {
         title: '일요일에 pr 올리지 말기',
@@ -273,7 +296,11 @@ export const Mock_1_6_Invitations: InvitationsProps = {
     },
     {
       id: 1,
-      inviterUserId: 3,
+      inviter: {
+        id: 68,
+        email: 'kde9889@naver.com',
+        nickname: '정우부인',
+      },
       teamId: '1-6',
       dashboard: {
         title: '졸려',
@@ -289,4 +316,5 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       updatedAt: '2023-12-19T05:41:19.594Z',
     },
   ],
+  totalCount: 7,
 };

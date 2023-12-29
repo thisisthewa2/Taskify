@@ -1,30 +1,24 @@
-import { useState } from 'react';
-import { DashboardsInvitationProps, MemberProps } from '@/pages/api/mock';
+import { InvitationProps, MemberProps } from '@/pages/api/mock';
 import { IconAddBox } from '@/public/svgs';
 import { DashboardInfoProps } from '.';
 import Members from '../Members';
 import { Button } from '../buttons';
 import ArrowButton from '../buttons/ArrowButton';
 
-//예시 데이터
-// const { totalCount, members } = Mock_members;
-// const { totalCount: totalCount2, invitations } =
-//   Mock_dashboards_dashboardId_invitations;
-
 function DashboardInfoTable({
   type,
   totalCount,
   data,
   setCurrentPage,
+  currentPage,
 }: DashboardInfoProps) {
-  // const data = get /1-6/members page=currentPage size=5 해서 MemberList로 넘겨주기(dep = currentPage)
-
   return (
     <div className='flex flex-col rounded-lg bg-white px-16 pt-24'>
       <TableHeader
         type={type}
         setCurrentPage={setCurrentPage}
         totalCount={totalCount}
+        currentPage={currentPage}
       />
       {totalCount > 0 &&
         data.map((account, key) => {
@@ -40,11 +34,16 @@ interface HeaderProps {
   type: string;
   setCurrentPage: (arg: number) => void;
   totalCount: number;
+  currentPage: number;
 }
 
-function TableHeader({ type, setCurrentPage, totalCount }: HeaderProps) {
+function TableHeader({
+  type,
+  setCurrentPage,
+  totalCount,
+  currentPage,
+}: HeaderProps) {
   const totalPage = Math.floor(totalCount / 5) + 1;
-  const currentPage = 1;
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);
@@ -93,11 +92,7 @@ function InvitingButton() {
   );
 }
 
-function AccountInfo({
-  data,
-}: {
-  data: MemberProps | DashboardsInvitationProps;
-}) {
+function AccountInfo({ data }: { data: MemberProps | InvitationProps }) {
   let text;
   let profile;
 
