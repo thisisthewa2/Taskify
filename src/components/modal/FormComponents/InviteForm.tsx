@@ -13,9 +13,10 @@ interface FormValue {
 interface Props {
   dashboardId: string;
   onCloseModal: () => void;
+  fetch: () => void;
 }
 
-function InviteForm({ dashboardId, onCloseModal }: Props) {
+function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { fetch: postInvitation } = useRequest({
@@ -40,6 +41,7 @@ function InviteForm({ dashboardId, onCloseModal }: Props) {
     if (data) {
       setErrorMessage('');
       onCloseModal();
+      fetch();
     }
 
     if (!axios.isAxiosError(error)) return;
