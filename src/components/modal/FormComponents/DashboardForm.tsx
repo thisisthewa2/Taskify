@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { DashboardProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Input from '@/components/inputs/Input';
 
-// DashboardForm > DashboardButtons, Sidemenu
 interface Props {
   onCloseModal: () => void;
 }
@@ -15,16 +14,30 @@ function DashboardForm({ onCloseModal }: Props) {
   const [dashboardName, setDashboardName] = useState('');
   const [colorError, setColorError] = useState('');
   const [nameError, setNameError] = useState('');
+  const [canPost, setCanPost] = useState(false);
 
   const handleColorSelection = (color: string) => {
-    setSelectedColor(color); // ColorChip으로부터 선택된 색상을 상태로 설정
+    setSelectedColor(color);
   };
+
+  useEffect(() => {
+    // selectedColor와 dashboardName이 모두 채워졌을 때만 canPost 상태를 true로 변경
+    if (selectedColor && dashboardName) {
+      setCanPost(true);
+    } else {
+      setCanPost(false);
+    }
+  }, [selectedColor, dashboardName]);
+
   const { fetch: postData } = useRequest<DashboardProps>({
     skip: true,
     options: { url: 'dashboards/', method: 'post' },
   });
 
-  const handleCreateDashboard = async () => {
+  const handleCreateDashboard = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
     let hasError = false;
 
     if (!selectedColor) {
@@ -34,7 +47,7 @@ function DashboardForm({ onCloseModal }: Props) {
       setColorError('');
     }
 
-    if (!dashboardName) {
+    if (dashboardName === '') {
       setNameError('대시보드의 이름을 입력하세요.');
       hasError = true;
     } else {
@@ -42,10 +55,11 @@ function DashboardForm({ onCloseModal }: Props) {
     }
 
     if (hasError) {
-      return; // 에러가 있으면 이후 로직 실행하지 않음
+      return; //  로직 실행하지 않음
     }
 
     try {
+      console.log('posting..');
       await postData({
         data: {
           title: dashboardName,
@@ -84,7 +98,7 @@ function DashboardForm({ onCloseModal }: Props) {
         <Button.Secondary size='lg' onClick={onCloseModal}>
           취소
         </Button.Secondary>
-        <Button size='lg' onClick={handleCreateDashboard}>
+        <Button size='lg' onClick={handleCreateDashboard} disabled={!canPost}>
           생성
         </Button>
       </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DashboardProps } from '@/pages/api/mock';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import AddChip from '@/components/chips/AddChip';
+import Form from '@/components/modal/Form';
 import DashboardForm from '@/components/modal/FormComponents/DashboardForm';
 import Modal from '@/components/modal/Modal';
 import ArrowButtonPageChange from './ArrowButtonPageChange';
@@ -36,7 +37,9 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
               </DashboardButton>
             </Modal.Open>
             <Modal.Window name='modal-form'>
-              <DashboardForm onCloseModal={handleModalClose} />
+              <Form>
+                <DashboardForm onCloseModal={handleModalClose} />
+              </Form>
             </Modal.Window>
           </>
         </Modal>

@@ -5,8 +5,6 @@ import SideMenu from './SideMenu';
 
 interface Props {
   children: ReactNode;
-  cursorId?: number | undefined;
-  totalCount?: number | undefined;
   dashboards?: DashboardProps[] | undefined;
 }
 
