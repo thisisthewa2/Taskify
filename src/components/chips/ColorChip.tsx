@@ -4,7 +4,7 @@ import { IconCheck } from '@/public/svgs';
 type ButtonIndex = number | null;
 
 interface ColorChipProps {
-  onSelectColor: (color: string) => void;
+  onSelectColor?: (color: string) => void;
 }
 
 export default function ColorChip({ onSelectColor }: ColorChipProps) {
