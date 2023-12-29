@@ -5,6 +5,7 @@ import Card from '@/components/Card';
 import DashBoardColorDot from '@/components/DashBoardColorDot';
 import AddChip from '@/components/chips/AddChip';
 import NumberChip from '@/components/chips/NumberChip';
+import Confirm from '@/components/modal/Confirm';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
@@ -34,7 +35,11 @@ function DashboardColumn({
   if (!cardList) return;
   return (
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
-      <ColumnInfo title={title} totalCount={cardList.totalCount} />
+      <ColumnInfo
+        title={title}
+        totalCount={cardList.totalCount}
+        columnId={columnId}
+      />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
         <Modal>
           <AddCardButton />
@@ -54,9 +59,11 @@ export default DashboardColumn;
 function ColumnInfo({
   title,
   totalCount,
+  columnId,
 }: {
   title: string;
   totalCount: number;
+  columnId: string;
 }) {
   return (
     <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
@@ -65,7 +72,7 @@ function ColumnInfo({
         <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
         <NumberChip num={totalCount} />
       </div>
-      <ManageButton />
+      <ManageButton title={title} columnId={columnId} />
     </div>
   );
 }
@@ -74,12 +81,12 @@ function AddCardButton() {
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
+        <Modal.Open opens='add'>
           <button className='card flex-center py-9'>
             <AddChip />
           </button>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='add'>
           <Form>
             <Form.TodoForm type='create' />
           </Form>
@@ -89,19 +96,59 @@ function AddCardButton() {
   );
 }
 
-function ManageButton() {
+interface ManageButtonType {
+  title: string;
+  columnId: string;
+}
+
+function ManageButton({ title, columnId }: ManageButtonType) {
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
+        <Modal.Open opens='edit'>
           <button>
             <IconSettings />
           </button>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='edit'>
           <Form>
-            <Form.ColumnForm type='edit' />
+            <Form.ColumnForm
+              type='edit'
+              columnName={title}
+              columnId={columnId}
+            />
           </Form>
+        </Modal.Window>
+      </>
+    </Modal>
+  );
+}
+
+export function DeleteCardButton({
+  handleReset,
+  columnId,
+}: {
+  handleReset: () => void;
+  columnId?: string;
+}) {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='delete'>
+          <button
+            type='button'
+            className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
+          >
+            삭제하기
+          </button>
+        </Modal.Open>
+        <Modal.Window name='delete'>
+          <Confirm>
+            <Confirm.DeleteConfirm
+              columnId={columnId}
+              onCloseModal={handleReset}
+            />
+          </Confirm>
         </Modal.Window>
       </>
     </Modal>

@@ -1,6 +1,8 @@
-import { SetStateAction } from 'jotai';
+import { SetStateAction, useAtomValue } from 'jotai';
+import { useParams } from 'next/navigation';
 import { Dispatch, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { ColumnsAtom } from '@/store/columnsAtom';
 import {
   ColumnProps,
   ColumnsProps,
@@ -19,6 +21,7 @@ interface DashboardProps {
 }
 
 function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
+  const { columnTitle } = useAtomValue(ColumnsAtom);
   const { data: columnsResponse, fetch: getColumns } = useRequest<
     ColumnsProps | undefined
   >({
@@ -58,7 +61,7 @@ function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
       setCreatedByMe(true);
       setMembers(memberList);
     }
-  }, [id, dashboardInfo?.createdByMe, memberList?.totalCount]);
+  }, [id, dashboardInfo?.createdByMe, columnTitle, memberList?.totalCount]);
 
   if (!columnsResponse || !columnsResponse.result || !dashboardInfo) return;
 

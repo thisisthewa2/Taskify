@@ -18,7 +18,7 @@ function Confirm({ onCloseModal, children }: Props) {
   );
 }
 
-Confirm.CheckConfirm = ConfirmComponents.CheckConfirm;
+Confirm.CheckConfirm = ConfirmComponents?.CheckConfirm;
 Confirm.DeleteConfirm = ConfirmComponents.DeleteConfirm;
 
 export default Confirm;

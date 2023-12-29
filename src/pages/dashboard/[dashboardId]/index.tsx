@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import Dashboard from '@/containers/MyDashboard/[id]';
+import Dashboard from '@/containers/Dashboard/DashboardId';
 import Layout from '@/components/Layout';
-import { MembersProps } from '../api/mock';
+import { MembersProps } from '../../api/mock';
 
 function DashboardPage() {
   const router = useRouter();
