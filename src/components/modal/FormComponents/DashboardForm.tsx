@@ -59,18 +59,23 @@ function DashboardForm({ onCloseModal }: Props) {
     }
 
     try {
-      console.log('posting..');
       await postData({
         data: {
           title: dashboardName,
           color: selectedColor,
         },
       });
-
       onCloseModal();
+      setSelectedColor(''); // 폼 제출 후 초기화
+      setDashboardName('');
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleCancel = () => {
+    setSelectedColor(''); // 취소 시 초기화
+    setDashboardName('');
   };
 
   return (
@@ -81,6 +86,7 @@ function DashboardForm({ onCloseModal }: Props) {
           type='text'
           title='대시보드 이름'
           placeholder='이름을 입력해 주세요'
+          value={dashboardName}
           onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
             setDashboardName(e.target.value)
           }
@@ -95,7 +101,7 @@ function DashboardForm({ onCloseModal }: Props) {
       </div>
 
       <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
-        <Button.Secondary size='lg' onClick={onCloseModal}>
+        <Button.Secondary size='lg' onClick={handleCancel}>
           취소
         </Button.Secondary>
         <Button size='lg' onClick={handleCreateDashboard} disabled={!canPost}>
