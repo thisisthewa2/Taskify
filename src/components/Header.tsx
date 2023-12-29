@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { loginAtom } from '@/store/loginAtom';
 import { MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
@@ -29,22 +29,45 @@ function Header({ createdByMe, memberList }: Prop) {
 export default Header;
 
 function DefaultHeader() {
+  const handleSignInClick = () => {
+    // 로그인 버튼을 클릭했을 때 signin 페이지로 이동
+    router.push('/signin');
+  };
+
+  const handleSignUpClick = () => {
+    // 로그인 버튼을 클릭했을 때 signin 페이지로 이동
+    router.push('/signup');
+  };
+
   return (
     <div className='flex h-60 w-full max-w-[120rem] items-center justify-between bg-white px-24 tablet:h-70 tablet:pl-16 tablet:pr-40 pc:pr-80'>
       <div className='pl-4 pt-4'>
         <Logo />
       </div>
       <div className='flex gap-20 tablet:gap-36'>
-        <TransparentButton>로그인</TransparentButton>
-        <TransparentButton>회원가입</TransparentButton>
+        <TransparentButton onClick={handleSignInClick}>
+          로그인
+        </TransparentButton>
+        <TransparentButton onClick={handleSignUpClick}>
+          회원가입
+        </TransparentButton>
       </div>
     </div>
   );
 }
 
-function TransparentButton({ children }: { children: string }) {
+function TransparentButton({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: string;
+}) {
   return (
-    <button className='button body1-normal hover:body1-bold text-gray-7'>
+    <button
+      className='button body1-normal hover:body1-bold text-gray-7'
+      onClick={onClick}
+    >
       {children}
     </button>
   );
