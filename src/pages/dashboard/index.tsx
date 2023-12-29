@@ -1,4 +1,4 @@
-import MyDashboard from '@/containers/MyDashboard';
+import MyDashboard from '@/containers/Dashboard';
 import Layout from '@/components/Layout';
 
 function MyDashboardPage() {

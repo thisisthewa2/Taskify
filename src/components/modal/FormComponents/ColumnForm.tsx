@@ -2,10 +2,14 @@ import axios from 'axios';
 import { useAtom, useAtomValue } from 'jotai';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
+import { Form } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
+import { DeleteCardButton } from '@/containers/Dashboard/components/DashboardColumn';
 import { Button } from '@/components/buttons';
 import Input from '@/components/inputs/Input';
+import Confirm from '../Confirm';
+import Modal from '../Modal';
 
 interface Props {
   onCloseModal: () => void;
@@ -112,12 +116,7 @@ function ColumnForm({
           )}
         </div>
         {type === 'edit' && (
-          <button
-            type='button'
-            className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
-          >
-            삭제하기
-          </button>
+          <DeleteCardButton handleReset={handleReset} columnId={columnId} />
         )}
 
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>

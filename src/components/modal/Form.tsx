@@ -20,5 +20,6 @@ function Form({ onCloseModal, children }: Props) {
 Form.DashboardForm = FormComponents.DashboardForm;
 Form.TodoForm = FormComponents.TodoForm;
 Form.ColumnForm = FormComponents.ColumnForm;
+Form.CardViewDetail = FormComponents.CardViewDetail;
 
 export default Form;
