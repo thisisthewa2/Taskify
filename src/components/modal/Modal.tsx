@@ -43,7 +43,7 @@ function Window({ children, name }: BodyProps) {
   return createPortal(
     <div>
       <Backdrop />
-      <div className='modal'>
+      <div className='modal tablet:w-[45.6rem]'>
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </div>
     </div>,
