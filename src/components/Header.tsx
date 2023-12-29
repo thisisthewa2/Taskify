@@ -30,12 +30,10 @@ export default Header;
 
 function DefaultHeader() {
   const handleSignInClick = () => {
-    // 로그인 버튼을 클릭했을 때 signin 페이지로 이동
     router.push('/signin');
   };
 
   const handleSignUpClick = () => {
-    // 로그인 버튼을 클릭했을 때 signin 페이지로 이동
     router.push('/signup');
   };
 
