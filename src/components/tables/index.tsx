@@ -12,6 +12,7 @@ export interface DashboardInfoProps {
   data: MemberProps[] | InvitationProps[];
   setCurrentPage: (arg: number) => void;
   currentPage: number;
+  fetch: () => void;
 }
 
 interface InvitedDashboardsProps {
@@ -30,6 +31,7 @@ function Table(props: Props) {
       data={(props as DashboardInfoProps).data}
       setCurrentPage={props.setCurrentPage}
       currentPage={props.currentPage}
+      fetch={props.fetch}
     />
   ) : (
     <InvitedDashboardsTable

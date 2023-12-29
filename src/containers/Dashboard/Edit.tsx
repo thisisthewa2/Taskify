@@ -14,7 +14,7 @@ function DashboardEdit({ dashboardId }: Props) {
   const [currentMembersPage, setCurrentMembersPage] = useState(1);
   const [currentInvitationPage, setCurrentInvitationPage] = useState(1);
 
-  const { data: memberList } = useRequest<MembersProps>({
+  const { data: memberList, fetch: getMemberList } = useRequest<MembersProps>({
     options: {
       url: `members?page=${currentMembersPage}&size=5&dashboardId=${dashboardId}`,
       method: 'get',
@@ -22,13 +22,14 @@ function DashboardEdit({ dashboardId }: Props) {
     deps: [currentMembersPage, dashboardId],
   });
 
-  const { data: invitationList } = useRequest<InvitationsProps>({
-    options: {
-      url: `dashboards/${dashboardId}/invitations?page=${currentInvitationPage}&size=5`,
-      method: 'get',
-    },
-    deps: [currentInvitationPage, dashboardId],
-  });
+  const { data: invitationList, fetch: getInvitationList } =
+    useRequest<InvitationsProps>({
+      options: {
+        url: `dashboards/${dashboardId}/invitations?page=${currentInvitationPage}&size=5`,
+        method: 'get',
+      },
+      deps: [currentInvitationPage, dashboardId],
+    });
 
   if (!memberList || !invitationList) return;
   const { totalCount: membersTotalCount, members } = memberList;
@@ -47,6 +48,7 @@ function DashboardEdit({ dashboardId }: Props) {
         data={members}
         setCurrentPage={setCurrentMembersPage}
         currentPage={currentMembersPage}
+        fetch={getMemberList}
       />
       <Table
         type='invitation'
@@ -54,6 +56,7 @@ function DashboardEdit({ dashboardId }: Props) {
         totalCount={InvitationsCount}
         setCurrentPage={setCurrentInvitationPage}
         currentPage={currentInvitationPage}
+        fetch={getInvitationList}
       />
     </div>
   );
