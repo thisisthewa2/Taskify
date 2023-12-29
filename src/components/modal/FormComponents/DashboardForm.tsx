@@ -12,8 +12,6 @@ interface Props {
 function DashboardForm({ onCloseModal }: Props) {
   const [selectedColor, setSelectedColor] = useState('');
   const [dashboardName, setDashboardName] = useState('');
-  const [colorError, setColorError] = useState('');
-  const [nameError, setNameError] = useState('');
   const [canPost, setCanPost] = useState(false);
 
   const handleColorSelection = (color: string) => {
@@ -41,17 +39,11 @@ function DashboardForm({ onCloseModal }: Props) {
     let hasError = false;
 
     if (!selectedColor) {
-      setColorError('대시보드의 색상을 지정하세요.');
       hasError = true;
-    } else {
-      setColorError('');
     }
 
     if (dashboardName === '') {
-      setNameError('대시보드의 이름을 입력하세요.');
       hasError = true;
-    } else {
-      setNameError('');
     }
 
     if (hasError) {
@@ -91,12 +83,8 @@ function DashboardForm({ onCloseModal }: Props) {
             setDashboardName(e.target.value)
           }
         />
-        <div className='text-14 text-red'>
-          {nameError && <p>{nameError}</p>}
-        </div>
         <div className='my-20 text-14 text-red'>
           <ColorChip onSelectColor={handleColorSelection} />
-          {colorError && <p>{colorError}</p>}
         </div>
       </div>
 
