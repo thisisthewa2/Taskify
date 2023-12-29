@@ -8,16 +8,10 @@ import { MembersProps } from '../../api/mock';
 function DashboardPage() {
   const router = useRouter();
   const { dashboardId } = router.query as { dashboardId: string };
-  const [createdByMe, setCreatedByMe] = useState(false);
-  const [members, setMembers] = useState<MembersProps | undefined>(undefined);
 
   return (
-    <Layout createdByMe={createdByMe} members={members}>
-      <Dashboard
-        id={dashboardId}
-        setCreatedByMe={setCreatedByMe}
-        setMembers={setMembers}
-      />
+    <Layout>
+      <Dashboard id={dashboardId} />
     </Layout>
   );
 }

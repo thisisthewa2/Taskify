@@ -4,7 +4,7 @@ import { IconCheck } from '@/public/svgs';
 type ButtonIndex = number | null;
 
 interface ColorChipProps {
-  onSelectColor: (color: string) => void;
+  onSelectColor?: (color: string) => void | undefined;
 }
 
 export default function ColorChip({ onSelectColor }: ColorChipProps) {
@@ -12,11 +12,16 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
   const colors = ['#7AC555', '#760DDE', '#FFA500', '#76A5EA', '#E876EA'];
 
   const handleButtonClick = (index: ButtonIndex) => {
-    if (index !== null) {
-      //0번째 인덱스 선택 가능하도록...
+    if (onSelectColor && index !== null) {
       const selectedColor = colors[index];
-      setSelectedButton(index === selectedButton ? null : index);
-      onSelectColor(selectedColor); // 색상 선택 시 부모 컴포넌트로 선택된 색상 전달
+      if (index === selectedButton) {
+        // 같은 버튼을 두 번 눌렀을 때 선택 취소
+        setSelectedButton(null);
+        onSelectColor(''); // 선택된 색상을 ''로 설정
+      } else {
+        setSelectedButton(index);
+        onSelectColor(selectedColor);
+      }
     }
   };
 
@@ -26,7 +31,7 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
         <button
           type='button'
           key={index}
-          className={`flex-center relative h-28 w-28 rounded-full bg-${color} tablet:h-30 tablet:w-30`}
+          className={`flex-center relative h-28 w-28 rounded-full tablet:h-30 tablet:w-30`}
           onClick={() => handleButtonClick(index)}
           style={{
             position: 'relative',

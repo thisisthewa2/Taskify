@@ -18,7 +18,12 @@ export interface SigninType {
 
 function SigninContainer() {
   const router = useRouter();
-  const setLoginInfo = useSetAtom(loginAtom);
+  const [loginInfo, setLoginInfo] = useAtom(loginAtom);
+
+  if (loginInfo.isLoggedIn) {
+    router.push('/dashboard');
+  }
+
   const {
     handleSubmit: onSubmit,
     formState,
