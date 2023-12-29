@@ -2,6 +2,7 @@ import { DashboardProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
 import Logo from './logos/Logo';
+import Link from 'next/link';
 
 function SideMenu({ data }: { data: DashboardProps[] | undefined }) {
   return (
@@ -13,11 +14,13 @@ function SideMenu({ data }: { data: DashboardProps[] | undefined }) {
       {data?.map((dashBoard, key: number) => {
         return (
           <div key={key}>
-            <Card
-              title={dashBoard.title}
-              color={dashBoard.color}
-              createdByMe={dashBoard.createdByMe}
-            />
+            <Link href={`/dashboard/${dashBoard.id}`}>
+              <Card
+                title={dashBoard.title}
+                color={dashBoard.color}
+                createdByMe={dashBoard.createdByMe}
+              />
+            </Link>
           </div>
         );
       })}

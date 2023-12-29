@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import DashboardEdit from '@/containers/MyDashboard/edit';
+import DashboardEdit from '@/containers/Dashboard/Edit';
 import Layout from '@/components/Layout';
 
 function DashboardEditPage() {
