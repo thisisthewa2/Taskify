@@ -39,6 +39,7 @@ export interface InvitationProps {
   };
   invitee: {
     nickname: string;
+    email: string;
     id: number;
   };
   inviteAccepted: boolean;
@@ -76,6 +77,7 @@ export interface DashboardsInvitationProps {
   };
   invitee: {
     nickname: string;
+    email: string;
     id: number;
   };
   inviteAccepted: boolean;
@@ -194,6 +196,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       },
       invitee: {
         nickname: '임건우',
+        email: 'fkasehjio@fnjkd.com',
         id: 2,
       },
       inviteAccepted: false,
@@ -210,6 +213,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       },
       invitee: {
         nickname: '윤진',
+        email: 'fkasehjio@fnjkd.com',
         id: 2,
       },
       inviteAccepted: false,
@@ -226,6 +230,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       },
       invitee: {
         nickname: '강현지',
+        email: 'fkasehjio@fnjkd.com',
         id: 2,
       },
       inviteAccepted: false,
@@ -242,6 +247,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       },
       invitee: {
         nickname: '남민섭',
+        email: 'fkasehjio@fnjkd.com',
         id: 2,
       },
       inviteAccepted: false,
@@ -258,6 +264,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       },
       invitee: {
         nickname: '김다은',
+        email: 'fkasehjio@fnjkd.com',
         id: 2,
       },
       inviteAccepted: false,
@@ -274,6 +281,7 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       },
       invitee: {
         nickname: '김다은',
+        email: 'fkasehjio@fnjkd.com',
         id: 2,
       },
       inviteAccepted: true,

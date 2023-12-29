@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DashboardsInvitationProps, MemberProps } from '@/pages/api/mock';
 import { IconAddBox } from '@/public/svgs';
+import { DashboardInfoProps } from '.';
 import Members from '../Members';
 import { Button } from '../buttons';
 import ArrowButton from '../buttons/ArrowButton';
@@ -10,21 +11,18 @@ import ArrowButton from '../buttons/ArrowButton';
 // const { totalCount: totalCount2, invitations } =
 //   Mock_dashboards_dashboardId_invitations;
 
-interface Props {
-  type: 'invitation' | 'member';
-  totalCount: number;
-  data: MemberProps[] | DashboardsInvitationProps[];
-}
-
-function DashboardInfoTable({ type, totalCount, data }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
+function DashboardInfoTable({
+  type,
+  totalCount,
+  data,
+  setCurrentPage,
+}: DashboardInfoProps) {
   // const data = get /1-6/members page=currentPage size=5 해서 MemberList로 넘겨주기(dep = currentPage)
 
   return (
     <div className='flex flex-col rounded-lg bg-white px-16 pt-24'>
       <TableHeader
         type={type}
-        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalCount={totalCount}
       />
@@ -40,18 +38,13 @@ export default DashboardInfoTable;
 
 interface HeaderProps {
   type: string;
-  currentPage: number;
   setCurrentPage: (arg: number) => void;
   totalCount: number;
 }
 
-function TableHeader({
-  type,
-  currentPage,
-  setCurrentPage,
-  totalCount,
-}: HeaderProps) {
+function TableHeader({ type, setCurrentPage, totalCount }: HeaderProps) {
   const totalPage = Math.floor(totalCount / 5) + 1;
+  const currentPage = 1;
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);
@@ -108,8 +101,8 @@ function AccountInfo({
   let text;
   let profile;
 
-  if ('email' in data) {
-    text = data.email;
+  if ('nickname' in data) {
+    text = data.nickname;
     profile = [
       {
         id: data.id,
@@ -118,12 +111,12 @@ function AccountInfo({
       },
     ];
   } else {
-    text = data.invitee.nickname;
+    text = data.invitee.email;
     profile = [
       {
         id: data.invitee.id,
         profileImageUrl: undefined,
-        nickname: data.invitee.nickname,
+        nickname: data.invitee.email,
       },
     ];
   }
@@ -131,7 +124,7 @@ function AccountInfo({
   return (
     <div className='flex shrink-0 items-center justify-between border-b border-gray-3 py-12 last:border-b-0 tablet:py-16'>
       <div className='flex items-center gap-8'>
-        {'invitee' in data && <Members members={profile} />}
+        {'nickname' in data && <Members members={profile} />}
         <p className='body1-light'>{text}</p>
       </div>
       <div className='shrink-0'>

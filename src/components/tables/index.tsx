@@ -6,10 +6,11 @@ import {
 import DashboardInfoTable from './DashboardInfoTable';
 import InvitedDashboardsTable from './InvitedDashboardsTable';
 
-interface DashboardInfoProps {
+export interface DashboardInfoProps {
   type: 'member' | 'invitation';
   totalCount: number;
   data: MemberProps[] | DashboardsInvitationProps[];
+  setCurrentPage: (arg: number) => void;
 }
 
 interface InvitedDashboardsProps {
@@ -26,6 +27,7 @@ function Table(props: Props) {
       type={props.type}
       totalCount={props.totalCount}
       data={(props as DashboardInfoProps).data}
+      setCurrentPage={props.setCurrentPage}
     />
   ) : (
     <InvitedDashboardsTable

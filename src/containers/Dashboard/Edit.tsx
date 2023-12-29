@@ -1,57 +1,29 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { Mock_1_6_Invitations } from '@/pages/api/mock';
+import { MembersProps, Mock_1_6_Invitations } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Table from '@/components/tables';
 import { IconArrowBackward } from '@/public/svgs';
-
-const Mock_dashboards_dashboardId_invitations = {
-  totalCount: 0,
-  invitations: [
-    {
-      id: 0,
-      inviterUserId: 0,
-      teamId: 'string',
-      dashboard: {
-        title: 'string',
-        id: 0,
-      },
-      invitee: {
-        nickname: '김다은',
-        id: 0,
-      },
-      inviteAccepted: true,
-      createdAt: '2023-12-19T16:17:44.135Z',
-      updatedAt: '2023-12-19T16:17:44.135Z',
-    },
-    {
-      id: 0,
-      inviterUserId: 0,
-      teamId: 'string',
-      dashboard: {
-        title: 'string',
-        id: 0,
-      },
-      invitee: {
-        nickname: '김다은은',
-        id: 0,
-      },
-      inviteAccepted: true,
-      createdAt: '2023-12-19T16:17:44.135Z',
-      updatedAt: '2023-12-19T16:17:44.135Z',
-    },
-  ],
-};
 
 interface Props {
   dashboardId: string;
 }
 
 function DashboardEdit({ dashboardId }: Props) {
-  const { totalCount, invitations: data2 } =
-    Mock_dashboards_dashboardId_invitations;
   const { invitations: data3 } = Mock_1_6_Invitations;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data: memberList, fetch: getMemberList } = useRequest<MembersProps>({
+    options: {
+      url: `members?page=${currentPage}&size=5&dashboardId=${dashboardId}`,
+      method: 'get',
+    },
+    deps: [currentPage, dashboardId],
+  });
+
+  if (!memberList) return;
+  const { totalCount, members } = memberList;
 
   return (
     <div className='flex h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
@@ -60,8 +32,18 @@ function DashboardEdit({ dashboardId }: Props) {
         돌아가기
       </button>
       <TitleManageBox dashboardId={dashboardId} />
-      <Table type='member' totalCount={2} data={data2} />
-      <Table type='dashboard' data={data3} totalCount={6} />
+      <Table
+        type='member'
+        totalCount={totalCount}
+        data={members}
+        setCurrentPage={setCurrentPage}
+      />
+      <Table
+        type='invitation'
+        data={data3}
+        totalCount={6}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 }
