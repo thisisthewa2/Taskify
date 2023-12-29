@@ -1,7 +1,8 @@
+import { useAtom, useAtomValue } from 'jotai';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect } from 'react';
+import { FormEvent, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { CommentAtom } from '@/store/commentAtom';
 import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
@@ -36,8 +37,16 @@ export interface CommentsType {
   id: number;
 }
 
+interface CreateCommentType {
+  content: string;
+  cardId: number;
+  columnId: number;
+  dashboardId: number;
+}
+
 function CardViewDetail({ onCloseModal, cardData, title }: Props) {
-  console.log(cardData);
+  const [commentValue, setCommentValue] = useAtom(CommentAtom);
+
   const {
     tags,
     description,
@@ -45,6 +54,8 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     assignee,
     dueDate,
     id: cardId,
+    columnId,
+    dashboardId,
   } = cardData;
 
   const profile = [
@@ -64,12 +75,35 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
       },
     },
   );
-  console.log(commentList);
+  const { fetch: createComment } = useRequest<CreateCommentType>({
+    skip: true,
+    options: {
+      url: 'comments',
+      method: 'post',
+      data: {
+        content: commentValue.comment,
+        cardId: cardId,
+        columnId: columnId,
+        dashboardId: dashboardId,
+      },
+    },
+  });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { data } = await createComment();
+
+    if (data) {
+      setCommentValue({ comment: '' });
+    }
+  };
+
   useEffect(() => {
     getComments();
-  }, []);
+  }, [commentValue]);
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className='flex items-center justify-between'>
         <h2 className='heading1-bold text-gray-7'>새로운 일정 관리 Taskify</h2>
         <div className='flex items-center justify-between gap-24'>

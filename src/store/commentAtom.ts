@@ -8,7 +8,7 @@ const commentInit: commentInitType = {
   comment: '',
 };
 
-export const ColumnsAtom = atom(
+export const CommentAtom = atom(
   (get) => get(commentState),
   (get, set, update: commentInitType) => {
     set(commentState, { ...get(commentState), ...update });

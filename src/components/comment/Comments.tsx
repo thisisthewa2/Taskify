@@ -16,7 +16,7 @@ function Comments({ comment }: { comment: CommentsType }) {
       nickname: author.nickname,
     },
   ];
-  console.log(loginInfo);
+
   return (
     <div className='flex items-start justify-start gap-10'>
       <Members members={profile} />

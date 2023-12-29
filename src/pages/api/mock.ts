@@ -105,6 +105,7 @@ export interface CardProps {
   columnId: number;
   createdAt: string;
   updatedAt: string;
+  dashboardId: number;
 }
 
 export interface ColumnsProps {
