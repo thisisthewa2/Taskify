@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
-import { DashboardsProps } from '@/pages/api/mock';
+import { DashboardProps } from '@/pages/api/mock';
 import Header from './Header';
 import SideMenu from './SideMenu';
 
 interface Props {
   children: ReactNode;
-  dashboards?: DashboardsProps;
+  dashboards?: DashboardProps[] | [];
 }
 
 function Layout({ children, dashboards }: Props) {
