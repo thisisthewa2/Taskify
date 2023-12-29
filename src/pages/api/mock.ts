@@ -34,7 +34,11 @@ export interface InvitationsProps {
 
 export interface InvitationProps {
   id: number;
-  inviterUserId: number;
+  inviter: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
   teamId: string;
   dashboard: {
     title: string;
@@ -42,6 +46,7 @@ export interface InvitationProps {
   };
   invitee: {
     nickname: string;
+    email: string;
     id: number;
   };
   inviteAccepted: boolean;

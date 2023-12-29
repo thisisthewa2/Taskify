@@ -186,14 +186,14 @@ function TabletTitleUI() {
     </div>
   );
 }
-//이상하게도 api 상엔 초대를 보낼 때 invitee nickname과 inviteruseid를 보냄.. 초대보낸 이용자의 닉네임을 표기하고 싶은데..
+
 function DashboardValue({ data }: { data: InvitationProps }) {
   return (
     <div className='flex grid-cols-10 flex-col gap-10 tablet:grid tablet:items-center'>
       <p className='body1-light tablet:col-span-5 tablet:pl-8'>
         {data.dashboard.title}
       </p>
-      <p className='body1-light tablet:col-span-2'>{data.inviterUserId}</p>
+      <p className='body1-light tablet:col-span-2'>{data.inviter.nickname}</p>
       <TableButton
         className='hidden tablet:col-span-3 tablet:flex'
         data={data}
