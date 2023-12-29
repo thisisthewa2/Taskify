@@ -68,13 +68,13 @@ function SigninContainer() {
     });
 
     setAccessToken(accessToken);
-    router.push('/mydashboard');
+    router.push('/dashboard');
   };
 
   useEffect(() => {
     const loginInfo = localStorage.getItem('loginInfo');
     if (loginInfo) {
-      JSON.parse(loginInfo).isLoggedIn && router.push('/mydashboard');
+      JSON.parse(loginInfo).isLoggedIn && router.push('/dashboard');
     }
   }, []);
 
