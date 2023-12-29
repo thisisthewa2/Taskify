@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import MyDashboard from '@/containers/Dashboard';
-import MyDashboardLayout from '@/components/MyDashboardLayout';
+import Layout from '@/components/Layout';
 import { DashboardsProps } from '../api/mock';
 
 function MyDashboardPage() {
@@ -40,14 +40,14 @@ function MyDashboardPage() {
   }, [fetchData]);
 
   return (
-    <MyDashboardLayout dashboards={dashboards}>
+    <Layout dashboards={dashboards}>
       <MyDashboard
         cursorId={0}
         totalCount={totalCount}
         dashboards={dashboards}
         fetchDashboardsData={fetchDashboardsData}
       />
-    </MyDashboardLayout>
+    </Layout>
   );
 }
 

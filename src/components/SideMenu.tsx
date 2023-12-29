@@ -1,10 +1,10 @@
-import { DashboardProps } from '@/pages/api/mock';
+import Link from 'next/link';
+import { DashboardsProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from './DashBoardColorDot';
 import Logo from './logos/Logo';
-import Link from 'next/link';
 
-function SideMenu({ data }: { data: DashboardProps[] | undefined }) {
+function SideMenu({ data }: { data: DashboardsProps[] | undefined }) {
   return (
     <div className='h-auto w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
