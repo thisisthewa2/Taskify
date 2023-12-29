@@ -20,7 +20,7 @@ function SignInContainer() {
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
 
   if (loginInfo.isLoggedIn) {
-    router.push('/boards');
+    router.push('/dashboard');
   }
 
   const {
@@ -73,7 +73,7 @@ function SignInContainer() {
     });
 
     setAccessToken(accessToken);
-    router.push('/boards');
+    router.push('/dashboard');
   };
 
   return (
@@ -135,7 +135,7 @@ function SignInContainer() {
         </form>
         <div className='text-base mt-24 text-center font-normal'>
           회원이 아니신가요?
-          <Link className='ml-7 text-primary underline' href='/signUp'>
+          <Link className='ml-7 text-primary underline' href='/signup'>
             회원가입하기
           </Link>
         </div>
