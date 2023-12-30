@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import useRequest from '@/hooks/useRequest';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
-import DashBoardColorDot from '@/components/DashBoardColorDot';
+import DashBoardColorDot from '@/components/DashboardColorDot';
 import Logo from '@/components/logos/Logo';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
