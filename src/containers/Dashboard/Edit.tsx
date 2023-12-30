@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { InvitationsProps, MembersProps } from '@/pages/api/mock';
@@ -41,10 +42,12 @@ function DashboardEdit({ dashboardId }: Props) {
 
   return (
     <div className='flex max-h-fit min-h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
-      <button className='flex-center body1-normal mb-8 w-80 gap-6'>
-        <IconArrowBackward fill='#333236' />
-        돌아가기
-      </button>
+      <Link href='/dashboard/[dashboardId]' as={`/dashboard/${dashboardId}`}>
+        <button className='flex-center body1-normal mb-8 w-80 gap-6'>
+          <IconArrowBackward fill='#333236' />
+          돌아가기
+        </button>
+      </Link>
       <TitleManageBox dashboardId={dashboardId} />
       <Table
         type='member'

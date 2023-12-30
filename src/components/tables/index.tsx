@@ -1,8 +1,4 @@
-import {
-  DashboardsInvitationProps,
-  InvitationProps,
-  MemberProps,
-} from '@/pages/api/mock';
+import { InvitationProps, MemberProps } from '@/pages/api/mock';
 import DashboardInfoTable from './DashboardInfoTable';
 import InvitedDashboardsTable from './InvitedDashboardsTable';
 
@@ -24,7 +20,7 @@ interface InvitedDashboardsProps {
 type Props = DashboardInfoProps | InvitedDashboardsProps;
 
 function Table(props: Props) {
-  return props.type !== 'dashboard' ? ( //상단의 대시보드 목록
+  return props.type !== 'dashboard' ? (
     <DashboardInfoTable
       type={props.type}
       totalCount={props.totalCount}
