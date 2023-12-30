@@ -92,6 +92,11 @@ const config: Config = {
       full: '9999px',
     },
     spacing: PX_ENTRIES,
+    extend: {
+      boxShadow: {
+        popup: '0px 2px 8px 0px rgba(51, 50, 54, 0.10)',
+      },
+    },
   },
   plugins: [],
 };

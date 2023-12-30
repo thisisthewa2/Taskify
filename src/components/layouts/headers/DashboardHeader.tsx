@@ -1,8 +1,10 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { ReactNode, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
+import { removeAccessToken } from '@/services/utils/handleToken';
 import { DashboardProps, MembersProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
@@ -75,10 +77,55 @@ function ProfileInfo() {
   };
 
   return (
-    <Link href='/mypage' className='flex-center gap-12'>
-      <Members members={[myProfile]} totalCount={1} />
-      <div className='hidden tablet:block'>{myProfile.nickname}</div>
-    </Link>
+    <div className='flex-center group relative gap-12'>
+      <Link href='/mypage' className='flex-center gap-12'>
+        <Members members={[myProfile]} totalCount={1} />
+        <div className='hidden tablet:block'>{myProfile.nickname}</div>
+      </Link>
+      <ProfilePopup />
+    </div>
+  );
+}
+
+function ProfilePopup() {
+  const router = useRouter();
+  const setLoginInfo = useSetAtom(loginAtom);
+
+  const redirectMyPage = () => {
+    router.push('/mypage');
+  };
+
+  const logout = () => {
+    setLoginInfo({ isLoggedIn: false });
+    removeAccessToken();
+    router.push('/signin');
+  };
+
+  return (
+    <div className='absolute -right-3 top-28 hidden bg-transparent pt-20 group-hover:block'>
+      <div className='shadow-popup flex h-100 w-130 flex-col justify-center overflow-hidden rounded-sm bg-white'>
+        <ProfilePopupButton onClick={redirectMyPage}>
+          마이 페이지
+        </ProfilePopupButton>
+        <ProfilePopupButton onClick={logout}>로그아웃</ProfilePopupButton>
+      </div>
+    </div>
+  );
+}
+
+interface ProfilePopupButtonProps {
+  onClick: () => void;
+  children: ReactNode;
+}
+
+function ProfilePopupButton({ onClick, children }: ProfilePopupButtonProps) {
+  return (
+    <button
+      className='flex-center body1-normal h-50 w-full hover:bg-primary-light hover:text-primary'
+      onClick={onClick}
+    >
+      {children}
+    </button>
   );
 }
 
