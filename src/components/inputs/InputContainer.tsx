@@ -24,11 +24,11 @@ function InputContainer<T extends FieldValues>({
         id={field.name}
         placeholder={placeholder}
         {...field}
-        className='input mt-10'
+        className={`input mt-10 ${fieldState?.error && 'border-red'}`}
       />
-      <small className='body2-normal mt-5 text-red'>
+      <div className='body2-normal mt-5 h-10 text-red'>
         {fieldState?.error?.message}
-      </small>
+      </div>
     </div>
   );
 }
