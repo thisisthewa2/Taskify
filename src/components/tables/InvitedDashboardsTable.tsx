@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { axiosOptions } from '@/services/utils/fetch';
 import { InvitationProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
