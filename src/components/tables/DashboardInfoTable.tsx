@@ -23,6 +23,7 @@ function DashboardInfoTable({
         setCurrentPage={setCurrentPage}
         totalCount={totalCount}
         currentPage={currentPage}
+        fetch={fetch}
       />
       {totalCount > 0 &&
         data.map((account, key) => {
@@ -39,6 +40,7 @@ interface HeaderProps {
   setCurrentPage: (arg: number) => void;
   totalCount: number;
   currentPage: number;
+  fetch: () => void;
 }
 
 function TableHeader({
@@ -46,6 +48,7 @@ function TableHeader({
   setCurrentPage,
   totalCount,
   currentPage,
+  fetch,
 }: HeaderProps) {
   const totalPage = Math.floor(totalCount / 5) + 1;
 
@@ -68,7 +71,7 @@ function TableHeader({
             leftDisabled={currentPage === 1 ? true : false}
             rightDisabled={currentPage === totalPage ? true : false}
           />
-          {type === 'invitation' && <InvitingButton />}
+          {type === 'invitation' && <InvitingButton fetch={fetch} />}
         </div>
       </div>
       <p className='body1-light pb-18 pt-24 text-gray-4'>
@@ -78,11 +81,14 @@ function TableHeader({
   );
 }
 
-function InvitingButton() {
+function InvitingButton({ fetch }: { fetch: () => void }) {
+  const router = useRouter();
+  const { dashboardId } = router.query;
+
   return (
     <Modal>
       <>
-        <Modal.Open opens='모달'>
+        <Modal.Open opens='inviting modal'>
           <div className='absolute right-0 top-61 tablet:static'>
             <Button size='sm'>
               <div className='h-14 w-19 pr-5'>
@@ -97,9 +103,9 @@ function InvitingButton() {
             </Button>
           </div>
         </Modal.Open>
-        <Modal.Window name='모달'>
+        <Modal.Window name='inviting modal'>
           <Form>
-            <Form.ColumnForm />
+            <Form.InviteForm dashboardId={dashboardId} fetch={fetch} />
           </Form>
         </Modal.Window>
       </>

@@ -10,7 +10,6 @@ interface InvitedProps {
   totalCount: number | undefined; // TO FIX
 }
 
-// 초대목록 검색 기능: InvitedDashboardsTable에 포함시키자니 너무 길어져서 분리하면서 useEffect를 사용하게되었음..
 function useInvitedDashboardsSearch(data: InvitationProps[] | undefined) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState<InvitationProps[] | null>(
@@ -33,7 +32,7 @@ function useInvitedDashboardsSearch(data: InvitationProps[] | undefined) {
   };
 
   useEffect(() => {
-    if (data === undefined) return; // data가 undefined인 경우 처리
+    if (!data) return;
     getFilteredItems(searchTerm, data);
   }, [searchTerm, data]);
 
@@ -81,10 +80,10 @@ function InvitedDashboardsTable({ data }: InvitedProps) {
       <TabletTitleUI />
       {data.map((invitation: InvitationProps, key: number) => {
         if (
-          invitation?.inviteAccepted || // 이미 수락한 경우
-          (filteredItems && !filteredItems.includes(invitation)) // 필터링된 항목이 아닌 경우
+          invitation?.inviteAccepted ||
+          (filteredItems && !filteredItems.includes(invitation))
         ) {
-          return null; // 이미 수락하거나 거절한 경우는 보이지 않도록 처리
+          return null;
         }
         return <InvitedDashboard data={invitation} key={key} />;
       })}

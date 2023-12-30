@@ -1,7 +1,6 @@
 import { useAtomValue } from 'jotai';
-import router, { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
