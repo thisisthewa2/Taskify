@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai';
 import Image from 'next/image';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { CommentAtom } from '@/store/commentAtom';
 import { CardProps } from '@/pages/api/mock';
@@ -46,6 +46,7 @@ interface CreateCommentType {
 
 function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
+  const [commentId, setCommentId] = useState(0);
 
   const {
     tags,
@@ -70,7 +71,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     {
       skip: true,
       options: {
-        url: `comments?size=10&cardId=${cardId}`,
+        url: `comments?size=1&cardId=${cardId}`,
         method: 'get',
       },
     },
@@ -100,8 +101,8 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
 
   useEffect(() => {
     getComments();
-  }, [commentValue]);
-
+  }, [commentValue, commentId]);
+  console.log(commentList);
   return (
     <form onSubmit={handleSubmit}>
       <div className='flex items-center justify-between'>
@@ -141,7 +142,13 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
           <div className='flex flex-col items-start justify-start gap-10'>
             {commentList?.comments &&
               commentList.comments.map((comment) => {
-                return <Comments key={comment.id} comment={comment} />;
+                return (
+                  <Comments
+                    key={comment.id}
+                    comment={comment}
+                    setCommentId={setCommentId}
+                  />
+                );
               })}
           </div>
         </div>

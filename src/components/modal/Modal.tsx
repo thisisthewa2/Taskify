@@ -30,6 +30,11 @@ const ModalContext = createContext<ModalContextType>({
   open: () => {},
 });
 
+const WINDOW_STYLE = {
+  card: 'modal tablet:w-[45.6rem]',
+  rest: 'modal',
+};
+
 function Open({ children, opens: opensWindowName }: OpenProps) {
   const { open } = useContext(ModalContext);
 
@@ -43,7 +48,7 @@ function Window({ children, name }: BodyProps) {
   return createPortal(
     <div>
       <Backdrop />
-      <div className='modal tablet:w-[45.6rem]'>
+      <div className={name === 'card' ? WINDOW_STYLE.card : WINDOW_STYLE.rest}>
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </div>
     </div>,
