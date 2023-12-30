@@ -4,19 +4,19 @@ import Layout from '@/components/Layout';
 import { DashboardsProps } from '../api/mock';
 
 function MyDashboardPage() {
-  const { data: dashboardsData, fetch: fetchDashboardsData } =
-    useRequest<DashboardsProps>({
-      options: {
-        url: 'dashboards',
-        method: 'GET',
-        params: {
-          navigationMethod: 'pagination',
-          cursorId: 0,
-          page: 1,
-          size: 100,
-        },
-      },
-    });
+  // const { data: dashboardsData, fetch: fetchDashboardsData } =
+  //   useRequest<DashboardsProps>({
+  //     options: {
+  //       url: 'dashboards',
+  //       method: 'GET',
+  //       params: {
+  //         navigationMethod: 'pagination',
+  //         cursorId: 0,
+  //         page: 1,
+  //         size: 100,
+  //       },
+  //     },
+  //   });
 
   const dashboards = dashboardsData?.dashboards;
   const totalCount = dashboardsData?.totalCount; //대시보드 개수
