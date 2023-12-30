@@ -75,10 +75,10 @@ function ProfileInfo() {
   };
 
   return (
-    <div className='flex-center gap-12'>
+    <Link href='/mypage' className='flex-center gap-12'>
       <Members members={[myProfile]} totalCount={1} />
       <div className='hidden tablet:block'>{myProfile.nickname}</div>
-    </div>
+    </Link>
   );
 }
 
