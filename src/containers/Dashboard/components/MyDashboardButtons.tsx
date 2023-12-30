@@ -25,7 +25,6 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
       : startIndex + itemsPerPage;
 
   const handleModalClose = () => {};
-
   return (
     <div className='grid grid-flow-row gap-8 tablet:grid-cols-2 pc:grid-cols-3'>
       {currentPage == 1 && ( //페이지 번호가 1인 경우에만 대시 보드 추가 버튼 보이게
@@ -45,9 +44,9 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
           </>
         </Modal>
       )}
-      {totalCountAvailable &&
+      {data &&
         data
-          ?.slice(startIndex, endIndex) // 페이지 범위에 맞게 슬라이싱
+          .slice(startIndex, endIndex) // 페이지 범위에 맞게 슬라이싱
           .map((dashBoard, key: number) => (
             <div key={key}>
               <Link href={`dashboard/${dashBoard.id}`}>
@@ -55,7 +54,7 @@ function MyDashboardButtons({ data, totalCount }: ButtonProps) {
               </Link>
             </div>
           ))}
-      {totalCountAvailable && (
+      {totalCount && (
         <ArrowButtonPageChange
           totalCount={totalCount}
           currentPage={currentPage}
