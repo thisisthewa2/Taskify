@@ -1,9 +1,9 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { DashboardProps } from '@/pages/api/mock';
-import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
+import InputContainer from '@/components/inputs/InputContainer';
 
 interface Props {
   onCloseModal: () => void;

@@ -15,7 +15,7 @@ function InputContainer<T extends FieldValues>({
   placeholder,
   ...controls
 }: Props<T>) {
-  const { field } = useController(controls);
+  const { field, fieldState } = useController(controls);
 
   return (
     <div>
@@ -26,6 +26,9 @@ function InputContainer<T extends FieldValues>({
         {...field}
         className='input mt-10'
       />
+      <small className='body2-normal mt-5 text-red'>
+        {fieldState?.error?.message}
+      </small>
     </div>
   );
 }

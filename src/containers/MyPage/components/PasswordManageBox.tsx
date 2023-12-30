@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
-import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
+import InputContainer from '@/components/inputs/InputContainer';
 
 function PasswordManageBox() {
   return (
@@ -21,7 +21,7 @@ interface FormValues {
 }
 
 function Form() {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control, setError } = useForm<FormValues>({
     defaultValues: {
       password: '',
       newPassword: '',
