@@ -13,8 +13,7 @@ export interface DashboardInfoProps {
 
 interface InvitedDashboardsProps {
   type: 'dashboard';
-  totalCount: number | undefined;
-  data: InvitationProps[] | undefined;
+  data: InvitationProps[];
   fetch: () => void;
 }
 
@@ -31,9 +30,8 @@ function Table(props: Props) {
       fetch={props.fetch}
     />
   ) : (
-    <InvitedDashboardsTable //초대 받은 대시보드
+    <InvitedDashboardsTable //초대받은 대시보드
       data={(props as InvitedDashboardsProps).data}
-      totalCount={props.totalCount}
       fetch={props.fetch}
     />
   );

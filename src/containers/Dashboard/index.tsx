@@ -12,7 +12,6 @@ function MyDashboard() {
   const router = useRouter();
   const loginInfo = useAtomValue(loginAtom);
   const { isLoggedIn } = loginInfo;
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: dashboardsData, fetch: getDashboardsData } =
@@ -24,7 +23,7 @@ function MyDashboard() {
         params: {
           navigationMethod: 'pagination',
           page: currentPage,
-          size: currentPage === 1 ? 5 : 6,
+          size: 5, //currentPage === 1 ? 5 : 6,
         },
       },
     });
@@ -43,31 +42,21 @@ function MyDashboard() {
     }
   }, [isLoggedIn]);
 
-  if (
-    !dashboardsData ??
-    !invitationsData ??
-    !dashboardsData?.dashboards ??
-    !dashboardsData?.totalCount
-  )
-    return;
+  if (!dashboardsData || !invitationsData) return;
+  if (!dashboardsData?.dashboards ?? !invitationsData?.invitations) return;
   const { dashboards, totalCount } = dashboardsData;
-  const { invitations } = invitationsData;
+  const { invitations = [] } = invitationsData;
 
   return (
     <div className='flex max-h-fit min-h-screen w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
       <MyDashboardButtons
         data={dashboards}
         totalCount={totalCount}
-        fetch={getDashboardsData}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        fetch={getDashboardsData}
       />
-      <Table
-        type='dashboard'
-        data={invitations}
-        totalCount={invitations.length}
-        fetch={getInvitationsData}
-      />
+      <Table type='dashboard' data={invitations} fetch={getInvitationsData} />
     </div>
   );
 }

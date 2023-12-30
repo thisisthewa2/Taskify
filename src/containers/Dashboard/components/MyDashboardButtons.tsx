@@ -24,7 +24,7 @@ function MyDashboardButtons({
 }: ButtonProps) {
   return (
     <div className='grid grid-flow-row gap-8 tablet:grid-cols-2 pc:grid-cols-3'>
-      {currentPage == 1 && <NewDashboardButton fetch={fetch} />}
+      <NewDashboardButton fetch={fetch} />
       {data.map((dashBoard, key: number) => (
         <div key={key}>
           <Link href={`dashboard/${dashBoard.id}`}>
