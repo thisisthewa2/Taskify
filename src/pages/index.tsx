@@ -1,12 +1,7 @@
 import Landing from '@/containers/Landing';
-import Layout from '@/components/layouts/Layout';
 
 function LandingPage() {
-  return (
-    <Layout>
-      <Landing />
-    </Layout>
-  );
+  return <Landing />;
 }
 
 export default LandingPage;

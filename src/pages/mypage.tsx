@@ -1,12 +1,7 @@
 import MyPage from '@/containers/MyPage';
-import Layout from '@/components/layouts/Layout';
 
 function MyPagePage() {
-  return (
-    <Layout>
-      <MyPage />
-    </Layout>
-  );
+  return <MyPage />;
 }
 
 export default MyPagePage;

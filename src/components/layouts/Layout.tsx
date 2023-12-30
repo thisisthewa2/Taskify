@@ -18,6 +18,9 @@ function Layout({ children }: Props) {
     ? router.query.dashboardId[0]
     : router.query.dashboardId;
 
+  if (router.pathname === '/signin' || router.pathname === '/signup')
+    return <>{children}</>;
+
   return (
     <>
       {loginInfo.isLoggedIn ? (
