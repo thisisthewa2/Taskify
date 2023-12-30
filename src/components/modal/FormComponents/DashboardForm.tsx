@@ -7,7 +7,7 @@ import ColorChip from '@/components/chips/ColorChip';
 
 interface Props {
   onCloseModal: () => void;
-  fetch: () => void;
+  fetch?: () => void;
 }
 
 interface FormValues {
@@ -46,7 +46,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
     }
 
     onCloseModal();
-    fetch();
+    fetch?.();
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

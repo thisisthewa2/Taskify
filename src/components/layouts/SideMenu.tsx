@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import useRequest from '@/hooks/useRequest';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
+import DashBoardColorDot from '@/components/DashBoardColorDot';
 import Logo from '@/components/logos/Logo';
+import Form from '@/components/modal/Form';
+import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconCrown } from '@/public/svgs';
-import DashBoardColorDot from '../DashBoardColorDot';
 
 interface Props {
   dashboardId?: string;
@@ -53,7 +55,20 @@ function DashboardsHeader() {
       <p className='caption-bold hidden text-gray-5 tablet:inline'>
         Dash Boards
       </p>
-      <IconAddBox fill='gray' viewBox='0 0 21 21' />
+      <Modal>
+        <>
+          <Modal.Open opens='modal-form'>
+            <div className='cursor-pointer'>
+              <IconAddBox fill='gray' viewBox='0 0 21 21' />
+            </div>
+          </Modal.Open>
+          <Modal.Window name='modal-form'>
+            <Form>
+              <Form.DashboardForm />
+            </Form>
+          </Modal.Window>
+        </>
+      </Modal>
     </div>
   );
 }
