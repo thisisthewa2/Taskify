@@ -11,7 +11,7 @@ function ArrowButtonPageChange({
   currentPage,
   setCurrentPage,
 }: Props) {
-  const totalPage = Math.floor((totalCount - 5) / 6) + 2;
+  const totalPage = totalCount > 5 ? Math.ceil((totalCount - 5) / 6) + 1 : 1;
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);

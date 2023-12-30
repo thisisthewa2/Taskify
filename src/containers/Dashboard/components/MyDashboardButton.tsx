@@ -8,9 +8,9 @@ function MyDashboardButton({ data }: { data: DashboardProps }) {
   return (
     <DashboardButton size='lg'>
       <div className='flex w-11/12 items-center justify-between '>
-        <div className='flex items-center pr-12'>
+        <div className='flex items-center'>
           <DashBoardColorDot color={color} />
-          <p className='heading3-normal px-6 text-gray-6'>{title}</p>
+          <p className='heading3-normal pl-6 pr-8 text-gray-6'>{title}</p>
           <IconCrown
             className={createdByMe ? 'inline flex-shrink-0' : 'hidden'}
           />
