@@ -32,11 +32,13 @@ function MyDashboardButtons({
           </Link>
         </div>
       ))}
-      <ArrowButtonPageChange
-        totalCount={totalCount}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {totalCount > 0 && (
+        <ArrowButtonPageChange
+          totalCount={totalCount}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </div>
   );
 }

@@ -16,7 +16,7 @@ interface FormValues {
 }
 
 function DashboardForm({ onCloseModal, fetch }: Props) {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control, formState } = useForm<FormValues>({
     defaultValues: {
       dashboardName: '',
       selectedColor: '',
@@ -85,7 +85,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
         <Button.Secondary size='lg' onClick={handleClick}>
           취소
         </Button.Secondary>
-        <Button size='lg' type='submit'>
+        <Button size='lg' type='submit' disabled={!formState.isValid}>
           생성
         </Button>
       </div>

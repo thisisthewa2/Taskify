@@ -17,6 +17,7 @@ function MyDashboard() {
 
   const { data: dashboardsData, fetch: getDashboardsData } =
     useRequest<DashboardsProps>({
+      deps: [currentPage],
       options: {
         url: 'dashboards',
         method: 'get',
@@ -36,17 +37,17 @@ function MyDashboard() {
       },
     });
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     router.push('/signin');
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push('/signin');
+    }
+  }, [isLoggedIn]);
 
   if (
-    !dashboardsData ||
-    !invitationsData ||
-    !dashboardsData.dashboards ||
-    !dashboardsData.totalCount
+    !dashboardsData ??
+    !invitationsData ??
+    !dashboardsData?.dashboards ??
+    !dashboardsData?.totalCount
   )
     return;
   const { dashboards, totalCount } = dashboardsData;
@@ -64,7 +65,8 @@ function MyDashboard() {
       <Table
         type='dashboard'
         data={invitations}
-        totalCount={invitations?.length}
+        totalCount={invitations.length}
+        fetch={getInvitationsData}
       />
     </div>
   );

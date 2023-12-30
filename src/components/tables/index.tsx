@@ -15,6 +15,7 @@ interface InvitedDashboardsProps {
   type: 'dashboard';
   totalCount: number | undefined;
   data: InvitationProps[] | undefined;
+  fetch: () => void;
 }
 
 type Props = DashboardInfoProps | InvitedDashboardsProps;
@@ -33,6 +34,7 @@ function Table(props: Props) {
     <InvitedDashboardsTable //초대 받은 대시보드
       data={(props as InvitedDashboardsProps).data}
       totalCount={props.totalCount}
+      fetch={props.fetch}
     />
   );
 }

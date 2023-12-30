@@ -8,6 +8,7 @@ import { Button } from '../buttons';
 interface InvitedProps {
   data: InvitationProps[] | undefined;
   totalCount: number | undefined; // TO FIX
+  fetch: () => void;
 }
 
 function useInvitedDashboardsSearch(data: InvitationProps[] | undefined) {
@@ -43,7 +44,7 @@ function useInvitedDashboardsSearch(data: InvitationProps[] | undefined) {
   };
 }
 
-function InvitedDashboardsTable({ data }: InvitedProps) {
+function InvitedDashboardsTable({ data, fetch }: InvitedProps) {
   const { searchTerm, handleSearchChange, filteredItems } =
     useInvitedDashboardsSearch(data);
 
@@ -85,7 +86,7 @@ function InvitedDashboardsTable({ data }: InvitedProps) {
         ) {
           return null;
         }
-        return <InvitedDashboard data={invitation} key={key} />;
+        return <InvitedDashboard data={invitation} key={key} fetch={fetch} />;
       })}
     </div>
   );
@@ -102,56 +103,53 @@ function Empty() {
   );
 }
 
-function InvitedDashboard({ data }: { data: InvitationProps }) {
+interface Props {
+  data: InvitationProps;
+  fetch: () => void;
+}
+
+function InvitedDashboard({ data, fetch }: Props) {
   return (
     <div className='flex flex-col gap-16 border-b border-gray-3 py-16 last:border-b-0 tablet:py-20'>
       <div className='flex gap-16 tablet:flex-col'>
         <MobileTitleUI />
-        <DashboardValue data={data} />
+        <DashboardValue data={data} fetch={fetch} />
       </div>
-      <TableButton className='flex tablet:hidden' data={data} />
+      <TableButton data={data} fetch={fetch} className='flex tablet:hidden' />
     </div>
   );
 }
 
-function TableButton({
-  className,
-  data,
-}: {
+interface TableButtonProps extends Props {
   className: string;
-  data: InvitationProps;
-}) {
+}
+
+function TableButton({ data, fetch, className }: TableButtonProps) {
   const router = useRouter();
 
-  const { fetch: putData } = useRequest<Boolean>({
+  const { fetch: putData, error } = useRequest<Boolean>({
     skip: true,
     options: { url: `invitations/${data.id}`, method: 'put' },
   });
 
   const acceptInvitation = async () => {
-    try {
-      await putData({
-        data: {
-          inviteAccepted: true,
-        },
-      });
-      // router.reload(); // 페이지 전체 다시 렌더링
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    await putData({
+      data: {
+        inviteAccepted: true,
+      },
+    });
+    if (error) console.error('Error:', error);
+    await fetch();
   };
 
   const rejectInvitation = async () => {
-    try {
-      await putData({
-        data: {
-          inviteAccepted: false,
-        },
-      });
-      // router.reload(); // 페이지 전체 다시 렌더링
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    await putData({
+      data: {
+        inviteAccepted: false,
+      },
+    });
+    if (error) console.error('Error:', error);
+    await fetch();
   };
 
   return (
@@ -185,7 +183,7 @@ function TabletTitleUI() {
   );
 }
 
-function DashboardValue({ data }: { data: InvitationProps }) {
+function DashboardValue({ data, fetch }: Props) {
   return (
     <div className='flex grid-cols-10 flex-col gap-10 tablet:grid tablet:items-center'>
       <p className='body1-light tablet:col-span-5 tablet:pl-8'>
@@ -195,6 +193,7 @@ function DashboardValue({ data }: { data: InvitationProps }) {
       <TableButton
         className='hidden tablet:col-span-3 tablet:flex'
         data={data}
+        fetch={fetch}
       />
     </div>
   );
