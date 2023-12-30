@@ -46,7 +46,7 @@ function DashboardHeader({ dashboardId }: Props) {
   }, [dashboardId]);
 
   return (
-    <div className='flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
+    <div className='sticky top-0 flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
       <div className='heading2-bold pl-4 pt-4'>{title}</div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
         {dashboardId && (
