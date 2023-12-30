@@ -1,67 +1,66 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { Mock_1_6_Invitations } from '@/pages/api/mock';
+import { InvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Table from '@/components/tables';
 import { IconArrowBackward } from '@/public/svgs';
-
-const Mock_dashboards_dashboardId_invitations = {
-  totalCount: 0,
-  invitations: [
-    {
-      id: 0,
-      inviterUserId: 0,
-      teamId: 'string',
-      dashboard: {
-        title: 'string',
-        id: 0,
-      },
-      invitee: {
-        nickname: '김다은',
-        id: 0,
-      },
-      inviteAccepted: true,
-      createdAt: '2023-12-19T16:17:44.135Z',
-      updatedAt: '2023-12-19T16:17:44.135Z',
-    },
-    {
-      id: 0,
-      inviterUserId: 0,
-      teamId: 'string',
-      dashboard: {
-        title: 'string',
-        id: 0,
-      },
-      invitee: {
-        nickname: '김다은은',
-        id: 0,
-      },
-      inviteAccepted: true,
-      createdAt: '2023-12-19T16:17:44.135Z',
-      updatedAt: '2023-12-19T16:17:44.135Z',
-    },
-  ],
-};
 
 interface Props {
   dashboardId: string;
 }
 
 function DashboardEdit({ dashboardId }: Props) {
-  const { totalCount, invitations: data2 } =
-    Mock_dashboards_dashboardId_invitations;
-  const { invitations: data3 } = Mock_1_6_Invitations;
+  const [currentMembersPage, setCurrentMembersPage] = useState(1);
+  const [currentInvitationPage, setCurrentInvitationPage] = useState(1);
+
+  const { data: memberList, fetch: getMemberList } = useRequest<MembersProps>({
+    skip: !dashboardId,
+    options: {
+      url: `members`,
+      params: { page: currentMembersPage, size: 5, dashboardId },
+      method: 'get',
+    },
+    deps: [currentMembersPage, dashboardId],
+  });
+
+  const { data: invitationList, fetch: getInvitationList } =
+    useRequest<InvitationsProps>({
+      skip: !dashboardId,
+      options: {
+        url: `dashboards/${dashboardId}/invitations?page=${currentInvitationPage}&size=5`,
+        method: 'get',
+      },
+      deps: [currentInvitationPage, dashboardId],
+    });
+
+  if (!memberList || !invitationList) return;
+  const { totalCount: membersTotalCount, members } = memberList;
+  const { totalCount: invitationsCount, invitations } = invitationList;
 
   return (
-    <div className='flex h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
+    <div className='flex max-h-fit min-h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
       <button className='flex-center body1-normal mb-8 w-80 gap-6'>
         <IconArrowBackward fill='#333236' />
         돌아가기
       </button>
       <TitleManageBox dashboardId={dashboardId} />
-      <Table type='member' totalCount={2} data={data2} />
-      <Table type='dashboard' data={data3} totalCount={6} />
+      <Table
+        type='member'
+        totalCount={membersTotalCount}
+        data={members}
+        setCurrentPage={setCurrentMembersPage}
+        currentPage={currentMembersPage}
+        fetch={getMemberList}
+      />
+      <Table
+        type='invitation'
+        data={invitations}
+        totalCount={invitationsCount}
+        setCurrentPage={setCurrentInvitationPage}
+        currentPage={currentInvitationPage}
+        fetch={getInvitationList}
+      />
     </div>
   );
 }
