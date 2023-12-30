@@ -1,6 +1,5 @@
 import { useAtomValue } from 'jotai';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
@@ -9,12 +8,11 @@ import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
 import { IconAddBox, IconSettings } from '@/public/svgs';
 
-function DashboardHeader() {
-  const router = useRouter();
-  const dashboardId = Array.isArray(router.query.dashboardId)
-    ? router.query.dashboardId[0]
-    : router.query.dashboardId;
+interface Props {
+  dashboardId?: string;
+}
 
+function DashboardHeader({ dashboardId }: Props) {
   const { data: dashboardInfo, fetch: getDashboardInfo } =
     useRequest<DashboardProps>({
       skip: true,

@@ -1,17 +1,35 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import useRequest from '@/hooks/useRequest';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from '../DashBoardColorDot';
 import Logo from '../logos/Logo';
 
-function SideMenu({ data }: { data: DashboardProps[] | [] | undefined }) {
+interface Props {
+  dashboardId?: string;
+}
+
+function SideMenu({ dashboardId }: Props) {
+  const { data } = useRequest<DashboardsProps>({
+    options: {
+      url: 'dashboards',
+      method: 'get',
+      params: {
+        navigationMethod: 'pagination',
+        page: 1,
+        size: 10,
+      },
+    },
+  });
+
   return (
     <div className='h-auto w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
       <SideMenuLogo />
       <div className='py-20'>
         <DashBoards />
       </div>
-      {data?.map((dashboard: DashboardProps, index: number) => (
+      {data?.dashboards?.map((dashboard: DashboardProps, index: number) => (
         <div key={index}>
           <Link href={`/dashboard/${dashboard.id}`}>
             <Card
