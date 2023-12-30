@@ -1,8 +1,8 @@
+import searchInvitedDashboards from '@/hooks/searchInvitedDashboards';
 import useRequest from '@/hooks/useRequest';
 import { InvitationProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
-import searchInvitedDashboards from './searchInvitedDashboards';
 
 interface DashboardsProps {
   data: InvitationProps[];
