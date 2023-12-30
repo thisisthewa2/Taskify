@@ -8,33 +8,59 @@ import { DashboardsProps } from '@/pages/api/mock';
 import Table from '@/components/tables';
 import MyDashboardButtons from './components/MyDashboardButtons';
 
-function MyDashboard({ cursorId, totalCount, dashboards }: DashboardsProps) {
-  const loginInfo = useAtomValue(loginAtom);
-
+function MyDashboard() {
   const router = useRouter();
+  const loginInfo = useAtomValue(loginAtom);
+  const { isLoggedIn } = loginInfo;
 
-  const isLoggedIn = loginInfo.isLoggedIn;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: invitationsData, fetch: fetchInvitationsData } =
-    useRequest<InvitationsProps>({
+  const { data: dashboardsData, fetch: getDashboardsData } =
+    useRequest<DashboardsProps>({
       options: {
-        url: 'invitations',
-        method: 'GET',
+        url: 'dashboards',
+        method: 'get',
+        params: {
+          navigationMethod: 'pagination',
+          page: currentPage,
+          size: currentPage === 1 ? 5 : 6,
+        },
       },
     });
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.push('/signin');
-    }
-    fetchInvitationsData();
-  }, []);
+  const { data: invitationsData, fetch: getInvitationsData } =
+    useRequest<InvitationsProps>({
+      options: {
+        url: 'invitations',
+        method: 'get',
+      },
+    });
 
-  const invitations = invitationsData?.invitations;
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     router.push('/signin');
+  //   }
+  // }, [isLoggedIn]);
+
+  if (
+    !dashboardsData ||
+    !invitationsData ||
+    !dashboardsData.dashboards ||
+    !dashboardsData.totalCount
+  )
+    return;
+  const { dashboards, totalCount } = dashboardsData;
+  const { invitations } = invitationsData;
 
   return (
     <div className='flex max-h-fit min-h-screen w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
-      <MyDashboardButtons data={dashboards} totalCount={totalCount} />
+      <MyDashboardButtons
+        data={dashboards}
+        totalCount={totalCount}
+        fetch={getDashboardsData}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
       <Table
         type='dashboard'
         data={invitations}
