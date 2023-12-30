@@ -31,10 +31,10 @@ function useInvitedDashboardsSearch(data: InvitationProps[] | undefined) {
     setSearchTerm(value);
   };
 
-  useEffect(() => {
-    if (!data) return;
-    getFilteredItems(searchTerm, data);
-  }, [searchTerm, data]);
+  // useEffect(() => {
+  //   if (!data) return;
+  //   getFilteredItems(searchTerm, data);
+  // }, [searchTerm, data]);
 
   return {
     searchTerm,
@@ -135,7 +135,7 @@ function TableButton({
           inviteAccepted: true,
         },
       });
-      router.reload(); // 페이지 전체 다시 렌더링
+      // router.reload(); // 페이지 전체 다시 렌더링
     } catch (error) {
       console.error('Error:', error);
     }
@@ -148,7 +148,7 @@ function TableButton({
           inviteAccepted: false,
         },
       });
-      router.reload(); // 페이지 전체 다시 렌더링
+      // router.reload(); // 페이지 전체 다시 렌더링
     } catch (error) {
       console.error('Error:', error);
     }
