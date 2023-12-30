@@ -13,21 +13,6 @@ function MyDashboard() {
   const loginInfo = useAtomValue(loginAtom);
   const { isLoggedIn } = loginInfo;
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { data: dashboardsData, fetch: getDashboardsData } =
-    useRequest<DashboardsProps>({
-      options: {
-        url: 'dashboards',
-        method: 'get',
-        params: {
-          navigationMethod: 'pagination',
-          page: currentPage,
-          size: currentPage === 1 ? 5 : 6,
-        },
-      },
-    });
-
   const { data: invitationsData, fetch: getInvitationsData } =
     useRequest<InvitationsProps>({
       options: {
@@ -36,36 +21,19 @@ function MyDashboard() {
       },
     });
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     router.push('/signin');
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push('/signin');
+    }
+  }, [isLoggedIn]);
 
-  if (
-    !dashboardsData ||
-    !invitationsData ||
-    !dashboardsData.dashboards ||
-    !dashboardsData.totalCount
-  )
-    return;
-  const { dashboards, totalCount } = dashboardsData;
-  const { invitations } = invitationsData;
+  if (!invitationsData ?? !invitationsData?.invitations) return;
+  const { invitations = [] } = invitationsData;
 
   return (
     <div className='flex max-h-fit min-h-screen w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
-      <MyDashboardButtons
-        data={dashboards}
-        totalCount={totalCount}
-        fetch={getDashboardsData}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
-      <Table
-        type='dashboard'
-        data={invitations}
-        totalCount={invitations?.length}
-      />
+      <MyDashboardButtons />
+      <Table type='dashboard' data={invitations} fetch={getInvitationsData} />
     </div>
   );
 }

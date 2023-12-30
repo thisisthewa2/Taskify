@@ -1,4 +1,4 @@
-function DashBoardColorDot({ color }: { color: string }) {
+function DashboardColorDot({ color }: { color: string }) {
   return (
     <div className='flex p-16 tablet:px-12 tablet:py-0 '>
       <div
@@ -9,4 +9,4 @@ function DashBoardColorDot({ color }: { color: string }) {
   );
 }
 
-export default DashBoardColorDot;
+export default DashboardColorDot;
