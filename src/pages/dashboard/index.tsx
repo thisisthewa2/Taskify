@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import MyDashboard from '@/containers/Dashboard';
+import Header from '@/components/Header';
 import Layout from '@/components/Layout';
 import { DashboardsProps } from '../api/mock';
 
@@ -11,6 +12,7 @@ function MyDashboardPage() {
     error,
     fetch: fetchDashboardsData,
   } = useRequest<DashboardsProps>({
+    skip: true,
     options: {
       url: 'dashboards',
       method: 'GET',
@@ -26,18 +28,9 @@ function MyDashboardPage() {
   const dashboards = dashboardsData?.dashboards;
   const totalCount = dashboardsData?.totalCount; //대시보드 개수
 
-  const fetchData = useCallback(async () => {
-    if (!dashboardsData) return;
-    try {
-      await fetchDashboardsData(); // 대시보드 데이터 갱신
-    } catch (error) {
-      console.error('Error fetching dashboards:', error);
-    }
-  }, [dashboardsData, fetchDashboardsData]);
-
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchDashboardsData();
+  }, []);
 
   return (
     <Layout dashboards={dashboards}>

@@ -27,13 +27,14 @@ function MyDashboard({ cursorId, totalCount, dashboards }: DashboardsProps) {
     },
   });
 
-  const invitations = invitationsData?.invitations;
-
   useEffect(() => {
     if (!isLoggedIn) {
       router.push('/signin');
     }
-  }, [isLoggedIn, router]);
+    fetchInvitationsData();
+  }, []);
+
+  const invitations = invitationsData?.invitations;
 
   return (
     <div className='flex max-h-fit min-h-screen w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
