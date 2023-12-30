@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import useRequest from '@/hooks/useRequest';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
+import Logo from '@/components/logos/Logo';
 import { IconAddBox, IconCrown } from '@/public/svgs';
 import DashBoardColorDot from '../DashBoardColorDot';
-import Logo from '../logos/Logo';
 
 interface Props {
   dashboardId?: string;
@@ -24,39 +23,33 @@ function SideMenu({ dashboardId }: Props) {
   });
 
   return (
-    <div className='h-auto w-67 border-r-[1px] border-gray-3 bg-white px-12 tablet:w-160 pc:w-300'>
-      <SideMenuLogo />
-      <div className='py-20'>
-        <DashBoards />
+    <div className='flex-center h-full w-67 flex-shrink-0 flex-col overflow-y-scroll border-r border-gray-3 bg-white px-12 py-20 tablet:w-160 pc:w-300'>
+      <div className='w-full pb-60 pl-12'>
+        <Logo />
       </div>
-      {data?.dashboards?.map((dashboard: DashboardProps, index: number) => (
-        <div key={index}>
-          <Link href={`/dashboard/${dashboard.id}`}>
-            <Card
-              title={dashboard.title || ''}
+      <DashboardsHeader />
+      <ul className='flex w-full flex-col gap-5'>
+        {data?.dashboards?.map((dashboard) => (
+          <li key={dashboard.id}>
+            <DashboardCard
+              title={dashboard.title}
               color={dashboard.color}
-              createdByMe={dashboard.createdByMe || false}
+              createdByMe={dashboard.createdByMe}
+              id={dashboard.id}
+              selected={dashboard.id === Number(dashboardId)}
             />
-          </Link>
-        </div>
-      ))}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
 export default SideMenu;
 
-function SideMenuLogo() {
+function DashboardsHeader() {
   return (
-    <div className='py-20 pl-12'>
-      <Logo />
-    </div>
-  );
-}
-
-function DashBoards() {
-  return (
-    <div className='flex justify-between px-12 py-18'>
+    <div className='flex w-full justify-between px-12 pb-18'>
       <p className='caption-bold hidden text-gray-5 tablet:inline'>
         Dash Boards
       </p>
@@ -65,9 +58,24 @@ function DashBoards() {
   );
 }
 
-function Card({ title, color, createdByMe }: DashboardProps) {
+interface DashboardCardProps extends DashboardProps {
+  selected: boolean;
+}
+
+function DashboardCard({
+  title,
+  color,
+  createdByMe,
+  id,
+  selected = false,
+}: DashboardCardProps) {
   return (
-    <div className='flex-center w-full py-12 tablet:justify-start'>
+    <Link
+      href={`/dashboard/${id}`}
+      className={`flex-center h-40 w-full rounded-sm hover:bg-primary-light tablet:h-45 tablet:justify-start ${
+        selected && `bg-primary-light`
+      }`}
+    >
       <DashBoardColorDot color={color} />
       <div className='hidden items-center pr-12 tablet:flex'>
         <p className='heading3-normal pc:heading2-normal px-6 text-gray-5'>
@@ -77,6 +85,6 @@ function Card({ title, color, createdByMe }: DashboardProps) {
           className={createdByMe ? 'inline flex-shrink-0' : 'hidden'}
         />
       </div>
-    </div>
+    </Link>
   );
 }
