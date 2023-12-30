@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
@@ -19,22 +19,43 @@ function Header() {
 export default Header;
 
 function DefaultHeader() {
+  const handleSignInClick = () => {
+    router.push('/signin');
+  };
+
+  const handleSignUpClick = () => {
+    router.push('/signup');
+  };
+
   return (
     <div className='flex h-60 w-full max-w-[120rem] items-center justify-between bg-white px-24 tablet:h-70 tablet:pl-16 tablet:pr-40 pc:pr-80'>
       <div className='pl-4 pt-4'>
         <Logo />
       </div>
       <div className='flex gap-20 tablet:gap-36'>
-        <TransparentButton>로그인</TransparentButton>
-        <TransparentButton>회원가입</TransparentButton>
+        <TransparentButton onClick={handleSignInClick}>
+          로그인
+        </TransparentButton>
+        <TransparentButton onClick={handleSignUpClick}>
+          회원가입
+        </TransparentButton>
       </div>
     </div>
   );
 }
 
-function TransparentButton({ children }: { children: string }) {
+function TransparentButton({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: string;
+}) {
   return (
-    <button className='button body1-normal hover:body1-bold text-gray-7'>
+    <button
+      className='button body1-normal hover:body1-bold text-gray-7'
+      onClick={onClick}
+    >
       {children}
     </button>
   );
