@@ -6,6 +6,8 @@ import { loginAtom } from '@/store/loginAtom';
 import { DashboardProps, MembersProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
+import Form from '@/components/modal/Form';
+import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconSettings } from '@/public/svgs';
 
 interface Props {
@@ -123,12 +125,33 @@ function DashboardManageButton({
           </Button.Outline>
         </Link>
       )}
-      <Button.Outline size='sm'>
-        <div className='hidden pr-8 tablet:block'>
-          <IconAddBox fill='#787486' />
-        </div>
-        초대하기
-      </Button.Outline>
+      <InvitationButton dashboardId={dashboardId} />
     </div>
+  );
+}
+
+interface InvitationButtonProps {
+  dashboardId: string;
+}
+
+function InvitationButton({ dashboardId }: InvitationButtonProps) {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='inviting modal'>
+          <Button.Outline size='sm'>
+            <div className='hidden pr-8 tablet:block'>
+              <IconAddBox fill='#787486' />
+            </div>
+            초대하기
+          </Button.Outline>
+        </Modal.Open>
+        <Modal.Window name='inviting modal'>
+          <Form>
+            <Form.InviteForm dashboardId={dashboardId} />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
   );
 }
