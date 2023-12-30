@@ -15,18 +15,13 @@ function MyDashboard({ cursorId, totalCount, dashboards }: DashboardsProps) {
 
   const isLoggedIn = loginInfo.isLoggedIn;
 
-  const {
-    data: invitationsData,
-    isLoading,
-    error,
-    fetch: fetchInvitationsData,
-  } = useRequest<InvitationsProps>({
-    skip: true,
-    options: {
-      url: 'invitations',
-      method: 'GET',
-    },
-  });
+  const { data: invitationsData, fetch: fetchInvitationsData } =
+    useRequest<InvitationsProps>({
+      options: {
+        url: 'invitations',
+        method: 'GET',
+      },
+    });
 
   useEffect(() => {
     if (!isLoggedIn) {
