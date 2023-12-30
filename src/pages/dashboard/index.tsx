@@ -1,6 +1,6 @@
 import useRequest from '@/hooks/useRequest';
 import MyDashboard from '@/containers/Dashboard';
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/Layout';
 import { DashboardsProps } from '../api/mock';
 
 function MyDashboardPage() {

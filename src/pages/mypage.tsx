@@ -1,5 +1,5 @@
 import MyPage from '@/containers/MyPage';
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/Layout';
 
 function MyPagePage() {
   return (

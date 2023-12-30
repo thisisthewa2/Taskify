@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
-import DashBoardColorDot from './DashBoardColorDot';
-import Logo from './logos/Logo';
+import DashBoardColorDot from '../DashBoardColorDot';
+import Logo from '../logos/Logo';
 
 function SideMenu({ data }: { data: DashboardProps[] | [] | undefined }) {
   return (

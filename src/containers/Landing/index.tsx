@@ -5,7 +5,7 @@ import DescriptionSection from '@/containers/Landing/components/DescriptionSecti
 import FeatureContainer from '@/containers/Landing/components/FeatureContainer';
 import Footer from '@/containers/Landing/components/Footer';
 import MainSection from '@/containers/Landing/components/MainSection';
-import Header from '@/components/Header';
+import Header from '@/components/layouts/headers/DashboardHeader';
 import SubDescriptionSection from './components/SubDescription';
 
 export default function Landing() {
