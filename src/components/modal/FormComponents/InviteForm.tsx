@@ -2,9 +2,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
-import InputContainer from '@/containers/MyPage/components/InputContainer';
+import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
-import Input from '@/components/inputs/Input';
 
 interface FormValue {
   email: string;
@@ -15,6 +14,13 @@ interface Props {
   onCloseModal: () => void;
   fetch: () => void;
 }
+
+const errorType: Record<number, string> = {
+  400: '이메일 형식이 올바르지 않습니다.',
+  403: '대시보드 초대 권한이 없습니다.',
+  404: '대시보드 혹은 해당 멤버가 존재하지 않습니다.',
+  409: '이미 대시보드에 초대된 멤버입니다.',
+};
 
 function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
   const [errorMessage, setErrorMessage] = useState('');
@@ -45,11 +51,8 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
     }
 
     if (!axios.isAxiosError(error)) return;
-
-    if (error.response?.status === 400) {
-      setErrorMessage(error.response.data.message);
-    } else if (error.response?.status === 404) {
-      setErrorMessage(error.response.data.message);
+    if (error.response?.status) {
+      setErrorMessage(errorType[error.response.status]);
     }
   };
 

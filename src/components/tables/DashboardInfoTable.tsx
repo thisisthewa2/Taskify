@@ -88,7 +88,7 @@ function InvitingButton({ fetch }: { fetch: () => void }) {
   return (
     <Modal>
       <>
-        <Modal.Open opens='모달'>
+        <Modal.Open opens='inviting modal'>
           <div className='absolute right-0 top-61 tablet:static'>
             <Button size='sm'>
               <div className='h-14 w-19 pr-5'>
@@ -103,7 +103,7 @@ function InvitingButton({ fetch }: { fetch: () => void }) {
             </Button>
           </div>
         </Modal.Open>
-        <Modal.Window name='모달'>
+        <Modal.Window name='inviting modal'>
           <Form>
             <Form.InviteForm dashboardId={dashboardId} fetch={fetch} />
           </Form>

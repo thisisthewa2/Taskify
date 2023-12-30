@@ -28,7 +28,8 @@ function DashboardEdit({ dashboardId }: Props) {
     useRequest<InvitationsProps>({
       skip: !dashboardId,
       options: {
-        url: `dashboards/${dashboardId}/invitations?page=${currentInvitationPage}&size=5`,
+        url: `dashboards/${dashboardId}/invitations`,
+        params: { page: currentInvitationPage, size: 5 },
         method: 'get',
       },
       deps: [currentInvitationPage, dashboardId],

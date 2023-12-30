@@ -4,9 +4,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { loginAtom } from '@/store/loginAtom';
+import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
 import ImageDrop from '@/components/image-drop/ImageDrop';
-import InputContainer from './InputContainer';
 
 function ProfileManageBox() {
   return (
