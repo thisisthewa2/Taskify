@@ -1,9 +1,9 @@
 import { axiosOptions } from '@/services/utils/fetch';
 
 export interface DashboardsProps {
-  cursorId: number | undefined;
-  totalCount: number | undefined;
-  dashboards: DashboardProps[] | undefined;
+  cursorId: number | null;
+  totalCount: number;
+  dashboards: DashboardProps[] | [];
   fetchDashboardsData?: (args?: axiosOptions) => Promise<any> | undefined;
 }
 
@@ -28,7 +28,12 @@ export interface GetDashboardInfoType {
 }
 
 export interface InvitationsProps {
-  invitations: InvitationProps[];
+  invitations: InvitationProps[] | [];
+  cursorId: null | number;
+}
+
+export interface DashboardIdInvitationsProps {
+  invitations: InvitationProps[] | [];
   totalCount: number;
 }
 
@@ -190,7 +195,7 @@ export const Mock_1_6_dashboards: DashboardsProps = {
   ],
 };
 
-export const Mock_1_6_Invitations: InvitationsProps = {
+export const Mock_1_6_Invitations: DashboardIdInvitationsProps = {
   invitations: [
     {
       id: 604,
@@ -319,5 +324,5 @@ export const Mock_1_6_Invitations: InvitationsProps = {
       updatedAt: '2023-12-19T05:41:19.594Z',
     },
   ],
-  totalCount: 7,
+  totalCount: 1,
 };

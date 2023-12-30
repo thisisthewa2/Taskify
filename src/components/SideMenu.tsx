@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import { IconAddBox, IconCrown } from '@/public/svgs';
-import DashBoardColorDot from './DashBoardColorDot';
+import DashboardColorDot from './DashboardColorDot';
 import Logo from './logos/Logo';
 
 function SideMenu({ data }: { data: DashboardProps[] | [] | undefined }) {
@@ -50,7 +50,7 @@ function DashBoards() {
 function Card({ title, color, createdByMe }: DashboardProps) {
   return (
     <div className='flex-center w-full py-12 tablet:justify-start'>
-      <DashBoardColorDot color={color} />
+      <DashboardColorDot color={color} />
       <div className='hidden items-center pr-12 tablet:flex'>
         <p className='heading3-normal pc:heading2-normal px-6 text-gray-5'>
           {title}
