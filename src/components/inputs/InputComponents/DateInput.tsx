@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import dateFormat from '@/utils/dateFormat';
 import { IconCalendar, IconGreater, IconLess } from '@/public/svgs';
 
-function DateInput({ required }: { required: boolean }) {
+function DateInput({
+  required,
+  handleSetDate,
+}: {
+  required: boolean;
+  handleSetDate: (date: string) => void;
+}) {
   const handleChange = (e: React.ChangeEvent) => {
     e.preventDefault();
   };
@@ -82,7 +89,10 @@ function DateInput({ required }: { required: boolean }) {
       placeholderText='날짜를 입력해 주세요'
       showIcon
       selected={value}
-      onChange={(date: Date) => setValue(date)}
+      onChange={(date: Date) => {
+        handleSetDate(dateFormat(date));
+        setValue(date);
+      }}
       icon={<IconCalendar />}
       onChangeRaw={handleChange}
       required={required}
