@@ -56,18 +56,18 @@ export interface InvitationProps {
 
 export interface MembersProps {
   members: MemberProps[];
-  totalCount: number;
+  totalCount?: number;
 }
 
 export interface MemberProps {
   id: number;
-  userId: number;
-  email: string;
+  userId?: number;
+  email?: string;
   nickname: string;
   profileImageUrl?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  isOwner: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  isOwner?: boolean;
 }
 
 export interface DashboardsInvitationsProps {

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { generateColor } from '@/utils/generateColor';
-import { MemberProps } from '@/pages/api/mock';
+import { MembersProps } from '@/pages/api/mock';
 
 const INDEX_POSITION = [
   'right-0 flex',
@@ -18,20 +18,10 @@ const CONTAINER_SIZE = [
   'w-100 pc:w-160',
 ];
 
-export interface Member {
-  id: number;
-  profileImageUrl?: string | null;
-  nickname: string;
-}
-
-interface Props {
-  members: Member[] | MemberProps[];
-}
-
-function Members({ members }: Props) {
+function Members({ members, totalCount = 1 }: MembersProps) {
   const extraCount = {
-    pc: members.length > 5 ? members.length - 4 : 0,
-    tablet: members.length > 3 ? members.length - 2 : 0,
+    pc: totalCount > 5 ? totalCount - 4 : 0,
+    tablet: totalCount > 3 ? totalCount - 2 : 0,
   };
   const slicedMembers = members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
