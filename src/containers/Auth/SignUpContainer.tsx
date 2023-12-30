@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
+import { setAccessToken } from '@/services/utils/handleToken';
 import { Button } from '@/components/buttons';
 import AuthInput from '@/components/inputs/AuthInput';
 import MainLogo from '@/components/logos/MainLogo';
@@ -29,7 +30,7 @@ function SignUpContainer() {
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
 
   if (loginInfo.isLoggedIn) {
-    router.push('/boards');
+    router.push('/dashboard');
   }
 
   const [isCheckBox, setIsCheckBox] = useState(false);
@@ -56,10 +57,18 @@ function SignUpContainer() {
 
   const isSignUp = isDirty && isValid && isCheckBox; //버튼 활성화
 
-  const { fetch } = useRequest({
+  const { fetch: signup } = useRequest({
     skip: true,
     options: {
       url: 'users',
+      method: 'post',
+    },
+  });
+
+  const { fetch: signin } = useRequest({
+    skip: true,
+    options: {
+      url: 'auth/login',
       method: 'post',
     },
   });
@@ -69,15 +78,28 @@ function SignUpContainer() {
 
     if (!(email && password && nickname)) return;
 
-    const { data, error } = await fetch({
+    const { data: signupData, error } = await signup({
       data: { email, nickname, password },
     });
 
-    if (data) {
+    if (signupData) {
       setToast(true);
+
+      const { data: signinData } = await signin({ data: { email, password } });
+      const { accessToken, user } = signinData;
+
+      setLoginInfo({
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        profileImageUrl: user.profileImageUrl,
+      });
+
+      setAccessToken(accessToken);
+
       setTimeout(() => {
         setToast(false);
-        router.push('/signIn');
+        router.push('/dashboard');
       }, 2000);
 
       return;
@@ -215,7 +237,7 @@ function SignUpContainer() {
         </form>
         <div className='mt-24 text-center text-16 font-normal'>
           이미 가입하셨나요?
-          <Link className='ml-7 text-primary underline' href='/signIn'>
+          <Link className='ml-7 text-primary underline' href='/signin'>
             로그인하기
           </Link>
         </div>

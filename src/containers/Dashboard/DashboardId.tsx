@@ -16,11 +16,9 @@ import DashboardColumn from './components/DashboardColumn';
 
 interface DashboardProps {
   id: string;
-  setCreatedByMe: (arg: boolean) => void;
-  setMembers: Dispatch<SetStateAction<MembersProps | undefined>>;
 }
 
-function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
+function Dashboard({ id }: DashboardProps) {
   const { columnTitle } = useAtomValue(ColumnsAtom);
   const { data: columnsResponse, fetch: getColumns } = useRequest<
     ColumnsProps | undefined
@@ -42,26 +40,11 @@ function Dashboard({ id, setCreatedByMe, setMembers }: DashboardProps) {
     },
   });
 
-  const { data: memberList, fetch: getMemberList } = useRequest<
-    MembersProps | undefined
-  >({
-    skip: true,
-    options: {
-      url: `members?page=1&size=4&dashboardId=${id}`,
-      method: 'get',
-    },
-  });
-
   useEffect(() => {
     if (!id) return;
     getColumns();
     getDashboardInfo();
-    getMemberList();
-    if (dashboardInfo?.createdByMe && memberList) {
-      setCreatedByMe(true);
-      setMembers(memberList);
-    }
-  }, [id, dashboardInfo?.createdByMe, columnTitle, memberList?.totalCount]);
+  }, [id, dashboardInfo?.createdByMe, columnTitle]);
 
   if (!columnsResponse || !columnsResponse.result || !dashboardInfo) return;
 

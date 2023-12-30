@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
+import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
-import InputContainer from './InputContainer';
 
 function PasswordManageBox() {
   return (

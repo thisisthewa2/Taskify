@@ -1,14 +1,13 @@
-import { useState } from 'react';
-import { DashboardsInvitationProps, MemberProps } from '@/pages/api/mock';
+import { useRouter } from 'next/router';
+import useRequest from '@/hooks/useRequest';
+import { InvitationProps, MemberProps } from '@/pages/api/mock';
 import { IconAddBox } from '@/public/svgs';
+import { DashboardInfoProps } from '.';
 import Members from '../Members';
 import { Button } from '../buttons';
 import ArrowButton from '../buttons/ArrowButton';
-
-//예시 데이터
-// const { totalCount, members } = Mock_members;
-// const { totalCount: totalCount2, invitations } =
-//   Mock_dashboards_dashboardId_invitations;
+import Form from '../modal/Form';;
+import Modal from '../modal/Modal';
 
 interface Props {
   type: 'invitation' | 'member';
@@ -18,19 +17,28 @@ interface Props {
 
 function DashboardInfoTable({ type, totalCount, data }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
-  // const data = get /1-6/members page=currentPage size=5 해서 MemberList로 넘겨주기(dep = currentPage)
+
+function DashboardInfoTable({
+  type,
+  totalCount,
+  data,
+  setCurrentPage,
+  currentPage,
+  fetch,
+}: DashboardInfoProps) {
 
   return (
     <div className='flex flex-col rounded-lg bg-white px-16 pt-24'>
       <TableHeader
         type={type}
-        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalCount={totalCount}
+        currentPage={currentPage}
+        fetch={fetch}
       />
       {totalCount > 0 &&
         data.map((account, key) => {
-          return <AccountInfo data={account} key={key} />;
+          return <AccountInfo data={account} key={key} fetch={fetch} />;
         })}
     </div>
   );
@@ -40,18 +48,20 @@ export default DashboardInfoTable;
 
 interface HeaderProps {
   type: string;
-  currentPage: number;
   setCurrentPage: (arg: number) => void;
   totalCount: number;
+  currentPage: number;
+  fetch: () => void;
 }
 
 function TableHeader({
   type,
-  currentPage,
   setCurrentPage,
   totalCount,
+  currentPage,
+  fetch,
 }: HeaderProps) {
-  const totalPage = Math.floor(totalCount / 5) + 1;
+  const totalPage = Math.ceil(totalCount / 6); // 한 페이지에 6개씩 표시
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);
@@ -66,13 +76,13 @@ function TableHeader({
           <p className='body2-light'>
             {totalPage} 페이지 중 {currentPage}
           </p>
-          <ArrowButton
+          <Button.Arrow
             onLeftClick={handleLeftClick}
             onRightClick={handleRightClick}
             leftDisabled={currentPage === 1 ? true : false}
             rightDisabled={currentPage === totalPage ? true : false}
           />
-          {type === 'invitation' && <InvitingButton />}
+          {type === 'invitation' && <InvitingButton fetch={fetch} />}
         </div>
       </div>
       <p className='body1-light pb-18 pt-24 text-gray-4'>
@@ -82,60 +92,95 @@ function TableHeader({
   );
 }
 
-function InvitingButton() {
+function InvitingButton({ fetch }: { fetch: () => void }) {
+  const router = useRouter();
+  const { dashboardId } = router.query;
+
   return (
-    <div className='absolute right-0 top-61 tablet:static'>
-      <Button size='sm'>
-        <div className='h-14 w-19 pr-5'>
-          <IconAddBox
-            width='100%'
-            height='100%'
-            viewBox='0 0 19 19'
-            fill='white'
-          />
-        </div>
-        초대하기
-      </Button>
-    </div>
+    <Modal>
+      <>
+        <Modal.Open opens='inviting modal'>
+          <div className='absolute right-0 top-61 tablet:static'>
+            <Button size='sm'>
+              <div className='h-14 w-19 pr-5'>
+                <IconAddBox
+                  width='100%'
+                  height='100%'
+                  viewBox='0 0 19 19'
+                  fill='white'
+                />
+              </div>
+              초대하기
+            </Button>
+          </div>
+        </Modal.Open>
+        <Modal.Window name='inviting modal'>
+          <Form>
+            <Form.InviteForm dashboardId={dashboardId} fetch={fetch} />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
   );
 }
 
-function AccountInfo({
-  data,
-}: {
-  data: MemberProps | DashboardsInvitationProps;
-}) {
-  let text;
-  let profile;
+interface Props {
+  data: MemberProps | InvitationProps;
+  fetch: () => void;
+}
 
-  if ('email' in data) {
-    text = data.email;
-    profile = [
-      {
-        id: data.id,
-        profileImageUrl: data.profileImageUrl || undefined,
-        nickname: data.nickname,
-      },
-    ];
+function AccountInfo({ data, fetch }: Props) {
+  const router = useRouter();
+  const { dashboardId } = router.query;
+  let text, id, nickname, profileImageUrl;
+
+  if ('nickname' in data) {
+    ({ id, profileImageUrl = undefined, nickname, nickname: text } = data);
   } else {
-    text = data.invitee.nickname;
-    profile = [
-      {
-        id: data.invitee.id,
-        profileImageUrl: undefined,
-        nickname: data.invitee.nickname,
-      },
-    ];
+    ({ id, nickname, email: text } = data.invitee);
+    profileImageUrl = undefined;
   }
+
+  const profile = [
+    {
+      id,
+      profileImageUrl,
+      nickname,
+    },
+  ];
+
+  const { id: fetchId } = data;
+  const { fetch: deleteMember } = useRequest({
+    skip: true,
+    options: {
+      url: `members/${fetchId}`,
+      method: 'delete',
+    },
+  });
+
+  const { fetch: deleteInvitation } = useRequest({
+    skip: true,
+    options: {
+      url: `dashboards/${dashboardId}/invitations/${fetchId}`,
+      method: 'delete',
+    },
+  });
+
+  const handleClick = async () => {
+    'nickname' in data ? await deleteMember() : await deleteInvitation();
+    fetch();
+  };
 
   return (
     <div className='flex shrink-0 items-center justify-between border-b border-gray-3 py-12 last:border-b-0 tablet:py-16'>
       <div className='flex items-center gap-8'>
-        {'invitee' in data && <Members members={profile} />}
+        {'nickname' in data && <Members members={profile} />}
         <p className='body1-light'>{text}</p>
       </div>
       <div className='shrink-0'>
-        <Button.Secondary size='sm'>취소</Button.Secondary>
+        <Button.Secondary size='sm' onClick={handleClick}>
+          {'nickname' in data ? '삭제' : '취소'}
+        </Button.Secondary>
       </div>
     </div>
   );

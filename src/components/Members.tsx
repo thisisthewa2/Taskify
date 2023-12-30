@@ -20,7 +20,7 @@ const CONTAINER_SIZE = [
 
 export interface Member {
   id: number;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
   nickname: string;
 }
 

@@ -1,32 +1,47 @@
-import { Mock_1_6_Invitations, Mock_1_6_dashboards } from '@/pages/api/mock';
+import { useAtomValue } from 'jotai';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import useRequest from '@/hooks/useRequest';
+import { loginAtom } from '@/store/loginAtom';
+import { InvitationsProps } from '@/pages/api/mock';
+import { DashboardsProps } from '@/pages/api/mock';
 import Table from '@/components/tables';
 import MyDashboardButtons from './components/MyDashboardButtons';
 
-function MyDashboard() {
-  /* 대시보드 존재할 때 */
-  const { dashboards, totalCount } = Mock_1_6_dashboards;
-  const dashboardTop5 = dashboards.slice(0, 5); // get 처음에는 데이터 5개만 받아오는 듯 합니다. 확실한 건 api 연결하고 확인..
-  const { invitations } = Mock_1_6_Invitations;
+function MyDashboard({ cursorId, totalCount, dashboards }: DashboardsProps) {
+  const loginInfo = useAtomValue(loginAtom);
 
-  /* 대시보드 비어있을 때 */
-  const emptyData = {
-    cursorId: 5,
-    totalCount: 0,
-    dashboards: [],
-  };
+  const router = useRouter();
 
-  const emptyInvitedData = {
-    cursorId: 3,
-    invitations: [],
-  };
+  const isLoggedIn = loginInfo.isLoggedIn;
+
+  const {
+    data: invitationsData,
+    isLoading,
+    error,
+    fetch: fetchInvitationsData,
+  } = useRequest<InvitationsProps>({
+    options: {
+      url: 'invitations',
+      method: 'GET',
+    },
+  });
+
+  const invitations = invitationsData?.invitations;
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push('/signin');
+    }
+  }, [isLoggedIn, router]);
 
   return (
-    <div className='flex w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
-      <MyDashboardButtons data={emptyData.dashboards} totalCount={0} />
+    <div className='flex max-h-fit min-h-screen w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>
+      <MyDashboardButtons data={dashboards} totalCount={totalCount} />
       <Table
         type='dashboard'
         data={invitations}
-        totalCount={emptyInvitedData.invitations.length}
+        totalCount={invitations?.length}
       />
     </div>
   );

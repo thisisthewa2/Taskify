@@ -6,29 +6,35 @@ import {
 import DashboardInfoTable from './DashboardInfoTable';
 import InvitedDashboardsTable from './InvitedDashboardsTable';
 
-interface DashboardInfoProps {
+export interface DashboardInfoProps {
   type: 'member' | 'invitation';
   totalCount: number;
-  data: MemberProps[] | DashboardsInvitationProps[];
+  data: MemberProps[] | InvitationProps[];
+  setCurrentPage: (arg: number) => void;
+  currentPage: number;
+  fetch: () => void;
 }
 
 interface InvitedDashboardsProps {
   type: 'dashboard';
-  totalCount: number;
-  data: InvitationProps[];
+  totalCount: number | undefined;
+  data: InvitationProps[] | undefined;
 }
 
 type Props = DashboardInfoProps | InvitedDashboardsProps;
 
 function Table(props: Props) {
-  return props.type !== 'dashboard' ? (
+  return props.type !== 'dashboard' ? ( //상단의 대시보드 목록
     <DashboardInfoTable
       type={props.type}
       totalCount={props.totalCount}
       data={(props as DashboardInfoProps).data}
+      setCurrentPage={props.setCurrentPage}
+      currentPage={props.currentPage}
+      fetch={props.fetch}
     />
   ) : (
-    <InvitedDashboardsTable
+    <InvitedDashboardsTable //초대 받은 대시보드
       data={(props as InvitedDashboardsProps).data}
       totalCount={props.totalCount}
     />
