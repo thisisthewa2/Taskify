@@ -12,7 +12,7 @@ function LandingHeader() {
   };
 
   return (
-    <div className='flex h-60 w-full max-w-[120rem] items-center justify-between bg-white px-24 tablet:h-70 tablet:pl-16 tablet:pr-40 pc:pr-80'>
+    <div className='flex h-60 w-full items-center justify-between bg-white px-24 tablet:h-70 tablet:pl-16 tablet:pr-40 pc:pr-80'>
       <div className='pl-4 pt-4'>
         <Logo />
       </div>
