@@ -15,7 +15,6 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
     if (onSelectColor && index !== null) {
       const selectedColor = colors[index];
       if (index === selectedButton) {
-        // 같은 버튼을 두 번 눌렀을 때 선택 취소
         setSelectedButton(null);
         onSelectColor(''); // 선택된 색상을 ''로 설정
       } else {
@@ -35,7 +34,7 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
           onClick={() => handleButtonClick(index)}
           style={{
             position: 'relative',
-            backgroundColor: color, // inline 스타일로 배경색 적용
+            backgroundColor: color,
           }}
         >
           {index === selectedButton && (
