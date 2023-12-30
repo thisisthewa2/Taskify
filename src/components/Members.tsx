@@ -18,7 +18,7 @@ const CONTAINER_SIZE = [
   'w-100 pc:w-160',
 ];
 
-function Members({ members, totalCount = 1 }: MembersProps) {
+function Members({ members, totalCount }: MembersProps) {
   const extraCount = {
     pc: totalCount > 5 ? totalCount - 4 : 0,
     tablet: totalCount > 3 ? totalCount - 2 : 0,

@@ -76,7 +76,7 @@ function ProfileInfo() {
 
   return (
     <div className='flex-center gap-12'>
-      <Members members={[myProfile]} />
+      <Members members={[myProfile]} totalCount={1} />
       <div className='hidden tablet:block'>{myProfile.nickname}</div>
     </div>
   );

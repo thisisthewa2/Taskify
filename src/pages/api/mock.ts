@@ -56,7 +56,7 @@ export interface InvitationProps {
 
 export interface MembersProps {
   members: MemberProps[];
-  totalCount?: number;
+  totalCount: number;
 }
 
 export interface MemberProps {
