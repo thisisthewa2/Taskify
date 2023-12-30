@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { loginAtom } from '@/store/loginAtom';
+import Footer from './Footer';
 import SideMenu from './SideMenu';
 import DashboardHeader from './headers/DashboardHeader';
 import LandingHeader from './headers/LandingHeader';
@@ -31,6 +32,7 @@ function Layout({ children }: Props) {
         <>
           <LandingHeader />
           {children}
+          <Footer />
         </>
       )}
     </>
