@@ -5,8 +5,18 @@ import { IconAddBox } from '@/public/svgs';
 import { DashboardInfoProps } from '.';
 import Members from '../Members';
 import { Button } from '../buttons';
-import Form from '../modal/Form';
+import ArrowButton from '../buttons/ArrowButton';
+import Form from '../modal/Form';;
 import Modal from '../modal/Modal';
+
+interface Props {
+  type: 'invitation' | 'member';
+  totalCount: number;
+  data: MemberProps[] | DashboardsInvitationProps[];
+}
+
+function DashboardInfoTable({ type, totalCount, data }: Props) {
+  const [currentPage, setCurrentPage] = useState(1);
 
 function DashboardInfoTable({
   type,
@@ -16,6 +26,7 @@ function DashboardInfoTable({
   currentPage,
   fetch,
 }: DashboardInfoProps) {
+
   return (
     <div className='flex flex-col rounded-lg bg-white px-16 pt-24'>
       <TableHeader
@@ -50,7 +61,7 @@ function TableHeader({
   currentPage,
   fetch,
 }: HeaderProps) {
-  const totalPage = Math.floor(totalCount / 5) + 1;
+  const totalPage = Math.ceil(totalCount / 6); // 한 페이지에 6개씩 표시
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);

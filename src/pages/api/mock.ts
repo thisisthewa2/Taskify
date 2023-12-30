@@ -1,13 +1,16 @@
+import { axiosOptions } from '@/services/utils/fetch';
+
 export interface DashboardsProps {
-  cursorId: number;
-  totalCount: number;
-  dashboards: DashboardProps[];
+  cursorId: number | undefined;
+  totalCount: number | undefined;
+  dashboards: DashboardProps[] | undefined;
+  fetchDashboardsData?: (args?: axiosOptions) => Promise<any> | undefined;
 }
 
 export interface DashboardProps {
   id?: number;
   title?: string;
-  color: 'green' | 'primary' | 'orange' | 'blue' | 'pink';
+  color: string;
   createdAt?: string;
   updatedAt?: string;
   createdByMe?: boolean;

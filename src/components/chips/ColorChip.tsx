@@ -29,6 +29,7 @@ export default function ColorChip({ onSelectColor }: ColorChipProps) {
     <div className='flex gap-10'>
       {colors.map((color: string, index: number) => (
         <button
+          type='button'
           key={index}
           className={`flex-center relative h-28 w-28 rounded-full tablet:h-30 tablet:w-30`}
           onClick={() => handleButtonClick(index)}

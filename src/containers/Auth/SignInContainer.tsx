@@ -1,6 +1,7 @@
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
@@ -10,12 +11,12 @@ import AuthInput from '@/components/inputs/AuthInput';
 import MainLogo from '@/components/logos/MainLogo';
 import { ERROR_MESSAGES, REG_EXP } from './validation';
 
-export interface SignInType {
+export interface SigninType {
   email: string;
   password: string;
 }
 
-function SignInContainer() {
+function SigninContainer() {
   const router = useRouter();
   const [loginInfo, setLoginInfo] = useAtom(loginAtom);
 
@@ -28,13 +29,12 @@ function SignInContainer() {
     formState,
     setError,
     control,
-  } = useForm<SignInType>({
+  } = useForm<SigninType>({
     defaultValues: { email: '', password: '' },
     mode: 'onBlur',
   });
 
-  const { isDirty, isValid } = formState;
-  const isSignIn = isDirty && isValid; //버튼 활성화
+  const { email: isEmail, password: isPassword } = formState.dirtyFields;
 
   const { fetch } = useRequest({
     skip: true,
@@ -44,7 +44,7 @@ function SignInContainer() {
     },
   });
 
-  const handleSubmit: SubmitHandler<SignInType> = async (formData) => {
+  const handleSubmit: SubmitHandler<SigninType> = async (formData) => {
     const { email, password } = formData;
 
     if (!(email && password)) return;
@@ -76,9 +76,16 @@ function SignInContainer() {
     router.push('/dashboard');
   };
 
+  useEffect(() => {
+    const loginInfo = localStorage.getItem('loginInfo');
+    if (loginInfo) {
+      JSON.parse(loginInfo).isLoggedIn && router.push('/dashboard');
+    }
+  }, []);
+
   return (
-    <div className='bg-white'>
-      <div className='flex-center mx-auto my-0 max-h-fit min-h-screen w-full max-w-xl flex-col px-12 py-15 text-center'>
+    <div className='h-screen bg-white'>
+      <div className='mx-auto my-0 w-full max-w-xl px-12 pt-143 text-center'>
         <Link
           className='mx-auto my-0 inline-block w-120 tablet:w-200'
           href={'/'}
@@ -86,7 +93,7 @@ function SignInContainer() {
           <MainLogo />
         </Link>
         <h3 className='mt-10 text-20 font-normal'>오늘도 만나서 반가워요!</h3>
-        <form className='mt-38 w-full' onSubmit={onSubmit(handleSubmit)}>
+        <form className='mt-38' onSubmit={onSubmit(handleSubmit)}>
           <div className='mb-16 flex h-95 flex-col items-start justify-start'>
             <label className='mb-8 text-16 font-normal' htmlFor='email'>
               이메일
@@ -129,7 +136,7 @@ function SignInContainer() {
               )}
             />
           </div>
-          <Button size='full' disabled={!isSignIn}>
+          <Button size='full' disabled={!(isEmail && isPassword)}>
             로그인
           </Button>
         </form>
@@ -144,4 +151,4 @@ function SignInContainer() {
   );
 }
 
-export default SignInContainer;
+export default SigninContainer;
