@@ -148,7 +148,7 @@ function DashboardInfo({
       />
       {memberList && (
         <Members
-          members={memberList?.members}
+          members={memberList.members}
           totalCount={memberList.totalCount}
         />
       )}
