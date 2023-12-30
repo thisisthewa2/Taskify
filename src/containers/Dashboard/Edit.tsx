@@ -17,7 +17,8 @@ function DashboardEdit({ dashboardId }: Props) {
   const { data: memberList, fetch: getMemberList } = useRequest<MembersProps>({
     skip: !dashboardId,
     options: {
-      url: `members?page=${currentMembersPage}&size=5&dashboardId=${dashboardId}`,
+      url: `members`,
+      params: { page: currentMembersPage, size: 5, dashboardId },
       method: 'get',
     },
     deps: [currentMembersPage, dashboardId],
@@ -35,7 +36,7 @@ function DashboardEdit({ dashboardId }: Props) {
 
   if (!memberList || !invitationList) return;
   const { totalCount: membersTotalCount, members } = memberList;
-  const { totalCount: InvitationsCount, invitations } = invitationList;
+  const { totalCount: invitationsCount, invitations } = invitationList;
 
   return (
     <div className='flex max-h-fit min-h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
@@ -55,7 +56,7 @@ function DashboardEdit({ dashboardId }: Props) {
       <Table
         type='invitation'
         data={invitations}
-        totalCount={InvitationsCount}
+        totalCount={invitationsCount}
         setCurrentPage={setCurrentInvitationPage}
         currentPage={currentInvitationPage}
         fetch={getInvitationList}

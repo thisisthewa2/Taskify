@@ -5,7 +5,6 @@ import { IconAddBox } from '@/public/svgs';
 import { DashboardInfoProps } from '.';
 import Members from '../Members';
 import { Button } from '../buttons';
-import ArrowButton from '../buttons/ArrowButton';
 import Form from '../modal/Form';
 import Modal from '../modal/Modal';
 
@@ -66,7 +65,7 @@ function TableHeader({
           <p className='body2-light'>
             {totalPage} 페이지 중 {currentPage}
           </p>
-          <ArrowButton
+          <Button.Arrow
             onLeftClick={handleLeftClick}
             onRightClick={handleRightClick}
             leftDisabled={currentPage === 1 ? true : false}
