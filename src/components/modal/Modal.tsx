@@ -1,14 +1,18 @@
+import { useAtom } from 'jotai';
 import React, {
   cloneElement,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { ModalAtom } from '@/store/modalAtom';
 
 type ModalContextType = {
-  openName: string;
-  close: () => void;
+  openNames: string[];
+  close: (name: string) => void;
+  closeAll: () => void;
   open: (name: string) => void;
 };
 
@@ -25,9 +29,10 @@ interface BodyProps extends ModalProps {
 }
 
 const ModalContext = createContext<ModalContextType>({
-  openName: '',
-  close: () => {},
+  openNames: [],
   open: () => {},
+  close: () => {},
+  closeAll: () => {},
 });
 
 function Open({ children, opens: opensWindowName }: OpenProps) {
@@ -37,14 +42,14 @@ function Open({ children, opens: opensWindowName }: OpenProps) {
 }
 
 function Window({ children, name }: BodyProps) {
-  const { openName, close } = useContext(ModalContext);
-  if (name !== openName) return null;
+  const { openNames, close, closeAll } = useContext(ModalContext);
+  if (!openNames.includes(name)) return null;
 
   return createPortal(
     <div>
       <Backdrop />
       <div className='modal'>
-        <div>{cloneElement(children, { onCloseModal: close })}</div>
+        <div>{cloneElement(children, { onCloseModal: () => closeAll() })}</div>
       </div>
     </div>,
     document.body,
@@ -58,13 +63,33 @@ function Backdrop() {
 }
 
 function Modal({ children }: ModalProps) {
-  const [openName, setOpenName] = useState('');
+  const [openNames, setOpenNames] = useAtom(ModalAtom);
+  const open = (name: string) => {
+    openNames.openName.forEach((value) => console.log('open:' + value));
 
-  const close = () => setOpenName('');
-  const open = (name: string) => setOpenName(name);
+    if (!openNames.openName.includes(name)) {
+      setOpenNames({ openName: [...openNames.openName, name] });
+    }
+  };
+
+  const close = (name: string) => {
+    setOpenNames({ openName: openNames.openName.filter((n) => n !== name) });
+  };
+
+  const closeAll = () => {
+    setOpenNames({ openName: [] });
+  };
+
+  useEffect(() => {
+    openNames.openName.forEach((value) =>
+      console.log('Updated openNames: ' + value),
+    );
+  }, [openNames]);
 
   return (
-    <ModalContext.Provider value={{ openName, close, open }}>
+    <ModalContext.Provider
+      value={{ openNames: openNames.openName, close, closeAll, open }}
+    >
       {children}
     </ModalContext.Provider>
   );
