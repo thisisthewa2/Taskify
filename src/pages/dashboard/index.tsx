@@ -1,12 +1,7 @@
 import MyDashboard from '@/containers/Dashboard';
-import Layout from '@/components/Layout';
 
 function MyDashboardPage() {
-  return (
-    <Layout>
-      <MyDashboard />
-    </Layout>
-  );
+  return <MyDashboard />;
 }
 
 export default MyDashboardPage;

@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import DashboardEdit from '@/containers/Dashboard/Edit';
-import Layout from '@/components/Layout';
 
 function DashboardEditPage() {
   const router = useRouter();
@@ -8,11 +7,7 @@ function DashboardEditPage() {
     ? router.query.dashboardId[0]
     : router.query.dashboardId;
 
-  return (
-    <Layout>
-      <DashboardEdit dashboardId={dashboardId ?? ''} />
-    </Layout>
-  );
+  return <DashboardEdit dashboardId={dashboardId ?? ''} />;
 }
 
 export default DashboardEditPage;

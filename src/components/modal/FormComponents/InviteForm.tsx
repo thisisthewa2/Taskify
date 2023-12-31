@@ -12,7 +12,7 @@ interface FormValue {
 interface Props {
   dashboardId: string;
   onCloseModal: () => void;
-  fetch: () => void;
+  fetch?: () => void;
 }
 
 const errorType: Record<number, string> = {
@@ -47,7 +47,7 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
     if (data) {
       setErrorMessage('');
       onCloseModal();
-      fetch();
+      fetch?.();
     }
 
     if (!axios.isAxiosError(error)) return;
