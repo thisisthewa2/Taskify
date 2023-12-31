@@ -116,13 +116,11 @@ function ColumnForm({
           )}
         </div>
         {type === 'edit' && (
-          <Modal>
-            <DeleteCardButton handleReset={handleReset} columnId={columnId} />
-          </Modal>
+          <DeleteCardButton handleReset={handleReset} columnId={columnId} />
         )}
 
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
-          <Button.Secondary size='lg' onClick={handleReset}>
+          <Button.Secondary type='button' size='lg' onClick={handleReset}>
             취소
           </Button.Secondary>
           <Button size='lg'>생성</Button>
