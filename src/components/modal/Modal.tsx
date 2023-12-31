@@ -1,11 +1,5 @@
 import { useAtom } from 'jotai';
-import React, {
-  cloneElement,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { cloneElement, createContext, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { ModalAtom } from '@/store/modalAtom';
 
@@ -49,7 +43,12 @@ function Window({ children, name }: BodyProps) {
     <div>
       <Backdrop />
       <div className='modal'>
-        <div>{cloneElement(children, { onCloseModal: () => closeAll() })}</div>
+        <div>
+          {cloneElement(children, {
+            onCloseModal: () => close(name),
+            onCloseAllModal: closeAll,
+          })}
+        </div>
       </div>
     </div>,
     document.body,
@@ -65,8 +64,6 @@ function Backdrop() {
 function Modal({ children }: ModalProps) {
   const [openNames, setOpenNames] = useAtom(ModalAtom);
   const open = (name: string) => {
-    openNames.openName.forEach((value) => console.log('open:' + value));
-
     if (!openNames.openName.includes(name)) {
       setOpenNames({ openName: [...openNames.openName, name] });
     }
@@ -79,12 +76,6 @@ function Modal({ children }: ModalProps) {
   const closeAll = () => {
     setOpenNames({ openName: [] });
   };
-
-  useEffect(() => {
-    openNames.openName.forEach((value) =>
-      console.log('Updated openNames: ' + value),
-    );
-  }, [openNames]);
 
   return (
     <ModalContext.Provider
