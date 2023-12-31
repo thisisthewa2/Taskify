@@ -21,9 +21,14 @@ function DeleteConfirm({ onCloseModal, columnId }: Props) {
   });
 
   const handleDelete = () => {
-    deleteColumn();
-    onCloseModal();
-    setColumnTitle({ columnTitle: '삭제' });
+    deleteColumn()
+      .then(() => {
+        onCloseModal();
+        setColumnTitle({ columnTitle: '삭제' });
+      })
+      .catch((error) => {
+        console.error('Failed to delete column:', error);
+      });
   };
   return (
     <>
