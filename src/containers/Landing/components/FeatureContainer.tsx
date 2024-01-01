@@ -1,6 +1,6 @@
-import InviteImage from '@/public/pngs/invite.png';
-import MemberImage from '@/public/pngs/members.png';
-import SettingImage from '@/public/pngs/setting.png';
+import InviteImage from '@/public/webps/invite.webp';
+import MemberImage from '@/public/webps/members.webp';
+import SettingImage from '@/public/webps/setting.webp';
 import FeatureSection from './FeatureSection';
 
 function FeatureContainer() {
