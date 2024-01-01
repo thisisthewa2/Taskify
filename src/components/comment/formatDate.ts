@@ -1,5 +1,8 @@
 export function formatDate(at: Date) {
-  const date = new Date(at)
+  const utcDate = new Date(at);
+  const kstDate = new Date(utcDate.getTime() - 9 * 60 * 60 * 1000);
+
+  const date = kstDate
     .toLocaleString('ko-KR', {
       year: 'numeric',
       month: '2-digit',
