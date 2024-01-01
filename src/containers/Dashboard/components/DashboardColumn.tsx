@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { CardProps, CardsProps } from '@/pages/api/mock';
@@ -23,6 +23,7 @@ function DashboardColumn({ title, columnId }: Props) {
   const size = 5;
 
   const { data: initialCardList } = useRequest<CardsProps>({
+    deps: [columnId],
     skip: !columnId,
     options: {
       url: `cards`,
@@ -63,28 +64,26 @@ function DashboardColumn({ title, columnId }: Props) {
     setCurrentCursorId(initialCardList.cursorId);
   }, [initialCardList]);
 
-  if (!cardList || !cardList.cards) return;
+  if (!initialCardList || initialCardList.cards === undefined) return;
 
   return (
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
       <ColumnInfo
         title={title}
-        totalCount={cardList.totalCount}
+        totalCount={initialCardList.totalCount}
         columnId={columnId}
       />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
         <Modal>
           <AddCardButton />
         </Modal>
-        {cardList.totalCount !== 0 &&
+        {initialCardList.totalCount !== 0 &&
           list.map((card: CardProps, key: number) => {
             return <Card data={card} key={key} />;
           })}
         {visible && <SeeMore handleClick={handleClick} />}
         {visible && (
-          <p ref={containerRef} className='hidden pc:inline'>
-            무한 렌더링
-          </p>
+          <div ref={containerRef} className='hidden h-10 pc:inline' />
         )}
       </div>
     </div>
