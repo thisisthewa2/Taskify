@@ -71,7 +71,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     {
       skip: true,
       options: {
-        url: `comments?size=1&cardId=${cardId}`,
+        url: `comments?size=10&cardId=${cardId}`,
         method: 'get',
       },
     },
@@ -102,7 +102,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   useEffect(() => {
     getComments();
   }, [commentValue, commentId]);
-  console.log(commentList);
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='flex items-center justify-between'>
@@ -152,7 +152,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
               })}
           </div>
         </div>
-        <div className='card mt-21 w-200 flex-shrink-0'>
+        <div className='card mt-21 h-165 w-200 flex-shrink-0'>
           <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
           <div className='body2-normal flex items-center justify-start gap-8'>
             <Members members={profile} />

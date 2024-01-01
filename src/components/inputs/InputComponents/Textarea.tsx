@@ -1,5 +1,5 @@
 import { useAtom, useSetAtom } from 'jotai';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { CommentAtom } from '@/store/commentAtom';
 
 function Textarea({
@@ -10,17 +10,26 @@ function Textarea({
   required: boolean;
   children: ReactNode;
 }) {
-  const [commentValue, setCommentValue] = useAtom(CommentAtom);
+  const setCommentValue = useSetAtom(CommentAtom);
+  const [text, setText] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
+    setText(value);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
     setCommentValue({ comment: value });
+    setText('');
   };
 
   return (
     <textarea
       className='textarea'
       onChange={handleChange}
-      value={commentValue.comment}
+      onBlur={handleBlur}
+      value={text}
       required={required}
       {...rest}
     >
