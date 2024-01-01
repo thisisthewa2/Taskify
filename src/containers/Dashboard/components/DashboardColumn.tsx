@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
@@ -10,13 +11,12 @@ import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
 
-function DashboardColumn({
-  title,
-  columnId,
-}: {
+interface Props {
   title: string;
   columnId: string;
-}) {
+}
+
+function DashboardColumn({ title, columnId }: Props) {
   const [visible, setVisible] = useState(true);
   const [currentCursorId, setCurrentCursorId] = useState(0);
   const [list, setList] = useState<CardProps[]>([]);
@@ -31,7 +31,7 @@ function DashboardColumn({
     },
   });
 
-  const { data: cardList, fetch: getCards } = useRequest<CardsProps>({
+  const { data: cardList } = useRequest<CardsProps>({
     deps: [columnId, currentCursorId],
     skip: !currentCursorId,
     options: {
@@ -41,15 +41,8 @@ function DashboardColumn({
     },
   });
 
-  useEffect(() => {
-    if (!initialCardList) return;
-    setList(initialCardList.cards);
-    setCurrentCursorId(initialCardList.cursorId);
-  }, [initialCardList]);
-
-  if (!cardList || !cardList.cards) return;
-
   const handleClick = () => {
+    if (!cardList || !cardList.cards) return;
     setCurrentCursorId(cardList.cursorId);
     setList((prev) => [...prev, ...cardList.cards]);
     if (cardList.cursorId === currentCursorId || cardList.cards.length < size) {
@@ -57,6 +50,20 @@ function DashboardColumn({
       return;
     }
   };
+
+  const containerRef = useInfiniteScroll({
+    handleScroll: handleClick,
+    initialList: initialCardList?.cards,
+    dependency: [initialCardList, cardList],
+  });
+
+  useEffect(() => {
+    if (!initialCardList) return;
+    setList(initialCardList.cards);
+    setCurrentCursorId(initialCardList.cursorId);
+  }, [initialCardList]);
+
+  if (!cardList || !cardList.cards) return;
 
   return (
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
@@ -74,6 +81,11 @@ function DashboardColumn({
             return <Card data={card} key={key} />;
           })}
         {visible && <SeeMore handleClick={handleClick} />}
+        {visible && (
+          <p ref={containerRef} className='hidden pc:inline'>
+            무한 렌더링
+          </p>
+        )}
       </div>
     </div>
   );
@@ -182,7 +194,7 @@ export function DeleteCardButton({
 
 function SeeMore({ handleClick }: { handleClick: () => void }) {
   return (
-    <div className='flex w-full justify-end'>
+    <div className='flex w-full justify-end pc:hidden'>
       <button
         onClick={handleClick}
         className='body2-bold w-fit px-5 text-gray-5 hover:underline'
