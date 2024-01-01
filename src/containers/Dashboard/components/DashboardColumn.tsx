@@ -17,14 +17,16 @@ function DashboardColumn({
   title: string;
   columnId: string;
 }) {
+  const [visible, setVisible] = useState(true);
   const [currentCursorId, setCurrentCursorId] = useState(0);
   const [list, setList] = useState<CardProps[]>([]);
+  const size = 5;
 
   const { data: initialCardList } = useRequest<CardsProps>({
     skip: !columnId,
     options: {
       url: `cards`,
-      params: { columnId: columnId, size: 5 },
+      params: { columnId: columnId, size: size },
       method: 'get',
     },
   });
@@ -34,7 +36,7 @@ function DashboardColumn({
     skip: !currentCursorId,
     options: {
       url: `cards`,
-      params: { columnId: columnId, size: 5, cursorId: currentCursorId },
+      params: { columnId: columnId, size: size, cursorId: currentCursorId },
       method: 'get',
     },
   });
@@ -50,6 +52,10 @@ function DashboardColumn({
   const handleClick = () => {
     setCurrentCursorId(cardList.cursorId);
     setList((prev) => [...prev, ...cardList.cards]);
+    if (cardList.cursorId === currentCursorId || cardList.cards.length < size) {
+      setVisible(false);
+      return;
+    }
   };
 
   return (
@@ -67,7 +73,7 @@ function DashboardColumn({
           list.map((card: CardProps, key: number) => {
             return <Card data={card} key={key} />;
           })}
-        <SeeMore handleClick={handleClick} />
+        {visible && <SeeMore handleClick={handleClick} />}
       </div>
     </div>
   );
