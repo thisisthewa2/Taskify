@@ -1,17 +1,30 @@
 import { useAtom, useAtomValue } from 'jotai';
 import Image from 'next/image';
-import { FormEvent, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  FormEvent,
+  MouseEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import useRequest from '@/hooks/useRequest';
+import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
 import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
+import AddChip from '@/components/chips/AddChip';
 import StateChip from '@/components/chips/StateChip';
 import TagChip from '@/components/chips/TagChip';
 import Comments from '@/components/comment/Comments';
 import Close from '@/components/icons/Close';
 import Kebab from '@/components/icons/Kebab';
 import Input from '@/components/inputs/Input';
+import { IconSettings } from '@/public/svgs';
+import Confirm from '../Confirm';
+import Form from '../Form';
+import Modal from '../Modal';
 
 interface Props {
   onCloseModal: () => void;
@@ -47,6 +60,8 @@ interface CreateCommentType {
 function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
   const [commentId, setCommentId] = useState(0);
+  const [isKebab, setIsKebab] = useState(false);
+  const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
 
   const {
     tags,
@@ -99,71 +114,211 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     }
   };
 
+  const handleKebab = () => {
+    setIsKebab(!isKebab);
+  };
+
+  const handleKebabMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    console.log(111);
+    e.preventDefault();
+    setIsKebab(!isKebab);
+  };
+
+  const handleBlur = () => {
+    console.log(2222);
+    setTimeout(() => {
+      setIsKebab(false);
+    }, 200);
+  };
+
+  const handleReset = () => {
+    onCloseModal();
+    setColumnTitle({ columnTitle: '' });
+  };
+
   useEffect(() => {
     getComments();
   }, [commentValue, commentId]);
-
+  console.log(isKebab);
   return (
-    <form onSubmit={handleSubmit}>
-      <div className='flex items-center justify-between'>
-        <h2 className='heading1-bold text-gray-7'>새로운 일정 관리 Taskify</h2>
-        <div className='flex items-center justify-between gap-24'>
-          <Kebab />
-          <Close onClick={onCloseModal} />
+    <>
+      <form onSubmit={handleSubmit}>
+        <div className='flex items-center justify-between'>
+          <h2 className='heading1-bold text-gray-7'>
+            새로운 일정 관리 Taskify
+          </h2>
+          <div
+            className='flex items-center justify-between gap-24'
+            /* onMouseDown={handleKebabMouseDown} */
+            onClick={handleKebab}
+          >
+            <label onBlur={handleBlur}>
+              <Kebab />
+            </label>
+
+            <Close onClick={onCloseModal} />
+          </div>
         </div>
-      </div>
-      <div className='flex items-start justify-between gap-24'>
-        <div className='w-450'>
-          <div className='mt-24 flex items-center justify-start'>
-            <div className='border-r border-gray-3 pr-20'>
-              <StateChip str={title} />
+        <div className='flex items-start justify-between gap-24'>
+          <div className='w-450'>
+            <div className='mt-24 flex items-center justify-start'>
+              <div className='border-r border-gray-3 pr-20'>
+                <StateChip str={title} />
+              </div>
+              <ul className='flex flex-wrap items-center justify-start gap-6 pl-20'>
+                {tags.map((tag, index) => {
+                  return <TagChip key={index} str={tag} />;
+                })}
+              </ul>
             </div>
-            <ul className='flex flex-wrap items-center justify-start gap-6 pl-20'>
-              {tags.map((tag, index) => {
-                return <TagChip key={index} str={tag} />;
-              })}
-            </ul>
-          </div>
-          <p className='body2-normal my-16 text-gray-7'>{description}</p>
-          {imageUrl && (
-            <Image width={450} height={263} src={imageUrl} alt='이미지' />
-          )}
-          <div className='relative mb-20 mt-24'>
-            <Input
-              type='textarea'
-              title='댓글'
-              required={false}
-              placeholder='댓글 작성하기'
-            />
-            <div className='absolute bottom-12 right-12'>
-              <Button.Secondary size='md'>입력</Button.Secondary>
+            <p className='body2-normal my-16 text-gray-7'>{description}</p>
+            {imageUrl && (
+              <Image width={450} height={263} src={imageUrl} alt='이미지' />
+            )}
+            <div className='relative mb-20 mt-24'>
+              <Input
+                type='textarea'
+                title='댓글'
+                required={false}
+                placeholder='댓글 작성하기'
+              />
+              <div className='absolute bottom-12 right-12'>
+                <Button.Secondary size='md'>입력</Button.Secondary>
+              </div>
+            </div>
+            <div className='flex flex-col items-start justify-start gap-10'>
+              {commentList?.comments &&
+                commentList.comments.map((comment) => {
+                  return (
+                    <Comments
+                      key={comment.id}
+                      comment={comment}
+                      setCommentId={setCommentId}
+                    />
+                  );
+                })}
             </div>
           </div>
-          <div className='flex flex-col items-start justify-start gap-10'>
-            {commentList?.comments &&
-              commentList.comments.map((comment) => {
-                return (
-                  <Comments
-                    key={comment.id}
-                    comment={comment}
-                    setCommentId={setCommentId}
-                  />
-                );
-              })}
+          <div className='card mt-21 h-165 w-200 flex-shrink-0'>
+            <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
+            <div className='body2-normal flex items-center justify-start gap-8'>
+              <Members members={profile} totalCount={0} />
+              <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
+            </div>
+            <h3 className='caption-bold mb-6 mt-20 text-gray-7'>마감일</h3>
+            <div className='caption-bold text-gray-7'>{dueDate}</div>
           </div>
         </div>
-        <div className='card mt-21 h-165 w-200 flex-shrink-0'>
-          <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
-          <div className='body2-normal flex items-center justify-start gap-8'>
-            <Members members={profile} totalCount={0} />
-            <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
-          </div>
-          <h3 className='caption-bold mb-6 mt-20 text-gray-7'>마감일</h3>
-          <div className='caption-bold text-gray-7'>{dueDate}</div>
-        </div>
-      </div>
-    </form>
+      </form>
+      {isKebab && (
+        <KebabButton
+          handleReset={handleReset}
+          columnId={columnId}
+          setIsKebab={setIsKebab}
+        />
+      )}
+    </>
   );
 }
 
 export default CardViewDetail;
+
+interface KebabListType {
+  id: number;
+  name: string;
+}
+
+const KEBABLIST: KebabListType[] = [
+  { id: 1, name: '수정하기' },
+  { id: 2, name: '삭제하기' },
+];
+
+function KebabButton({
+  handleReset,
+  columnId,
+  setIsKebab,
+}: {
+  handleReset: () => void;
+  columnId?: number;
+  setIsKebab: Dispatch<SetStateAction<boolean>>;
+}) {
+  return (
+    <ul className='card flex-center absolute right-60 top-30 h-82 w-93 flex-col p-6 '>
+      {KEBABLIST.map((list) => {
+        return list.id === 1 ? (
+          <AddCardButton list={list} key={list.id} setIsKebab={setIsKebab} />
+        ) : (
+          <DeleteCardButton
+            key={list.id}
+            handleReset={handleReset}
+            columnId={columnId}
+            list={list}
+          />
+        );
+      })}
+    </ul>
+  );
+}
+
+function DeleteCardButton({
+  handleReset,
+  columnId,
+  list,
+}: {
+  handleReset: () => void;
+  columnId?: number;
+  list: KebabListType;
+}) {
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='delete'>
+          <li className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'>
+            {list.name}
+          </li>
+        </Modal.Open>
+        <Modal.Window name='delete'>
+          <Confirm>
+            <Confirm.DeleteConfirm
+              columnId={columnId}
+              onCloseModal={handleReset}
+            />
+          </Confirm>
+        </Modal.Window>
+      </>
+    </Modal>
+  );
+}
+
+function AddCardButton({
+  list,
+  setIsKebab,
+}: {
+  list: KebabListType;
+  setIsKebab: Dispatch<SetStateAction<boolean>>;
+}) {
+  const handleButtonClick = (e: MouseEvent<HTMLLIElement>) => {
+    console.log(11111111233213123);
+    e.preventDefault();
+    setIsKebab(false);
+  };
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens='add'>
+          <li
+            className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'
+            onMouseDown={handleButtonClick}
+          >
+            {list.name}
+          </li>
+        </Modal.Open>
+        <Modal.Window name='add'>
+          <Form>
+            <Form.TodoForm type='create' />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
+  );
+}
