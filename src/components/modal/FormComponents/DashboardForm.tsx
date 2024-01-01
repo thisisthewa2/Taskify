@@ -1,13 +1,13 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { DashboardProps } from '@/pages/api/mock';
-import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
+import InputContainer from '@/components/inputs/InputContainer';
 
 interface Props {
   onCloseModal: () => void;
-  fetch: () => void;
+  fetch?: () => void;
 }
 
 interface FormValues {
@@ -16,7 +16,7 @@ interface FormValues {
 }
 
 function DashboardForm({ onCloseModal, fetch }: Props) {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control, formState } = useForm<FormValues>({
     defaultValues: {
       dashboardName: '',
       selectedColor: '',
@@ -46,7 +46,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
     }
 
     onCloseModal();
-    fetch();
+    fetch?.();
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -85,7 +85,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
         <Button.Secondary size='lg' onClick={handleClick}>
           취소
         </Button.Secondary>
-        <Button size='lg' type='submit'>
+        <Button size='lg' type='submit' disabled={!formState.isValid}>
           생성
         </Button>
       </div>

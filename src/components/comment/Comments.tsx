@@ -71,7 +71,7 @@ function Comments({ comment, setCommentId }: CommentType) {
 
   return (
     <div className='flex w-full justify-start gap-10'>
-      <Members members={profile} />
+      <Members members={profile} totalCount={0} />
       <div className='flex w-full flex-col justify-start pt-8'>
         <div className='flex items-center justify-start gap-8'>
           <h3 className='body2-bold text-gray-7'>{author.nickname}</h3>

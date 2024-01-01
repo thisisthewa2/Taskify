@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { InvitationsProps, MembersProps } from '@/pages/api/mock';
+import { DashboardIdInvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import Table from '@/components/tables';
@@ -26,7 +26,7 @@ function DashboardEdit({ dashboardId }: Props) {
   });
 
   const { data: invitationList, fetch: getInvitationList } =
-    useRequest<InvitationsProps>({
+    useRequest<DashboardIdInvitationsProps>({
       skip: !dashboardId,
       options: {
         url: `dashboards/${dashboardId}/invitations`,

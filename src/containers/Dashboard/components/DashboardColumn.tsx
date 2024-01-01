@@ -4,8 +4,7 @@ import { ReactElement, ReactNode, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
-import DashBoardColorDot from '@/components/DashBoardColorDot';
-import { Button } from '@/components/buttons';
+import DashboardColorDot from '@/components/DashboardColorDot';
 import AddChip from '@/components/chips/AddChip';
 import NumberChip from '@/components/chips/NumberChip';
 import Input from '@/components/inputs/Input';
@@ -71,7 +70,7 @@ function ColumnInfo({
   return (
     <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
       <div className='flex items-center'>
-        <DashBoardColorDot color='primary' />
+        <DashboardColorDot color='primary' />
         <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
         <NumberChip num={totalCount} />
       </div>

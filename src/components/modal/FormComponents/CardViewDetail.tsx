@@ -155,7 +155,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
         <div className='card mt-21 h-165 w-200 flex-shrink-0'>
           <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
           <div className='body2-normal flex items-center justify-start gap-8'>
-            <Members members={profile} />
+            <Members members={profile} totalCount={0} />
             <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
           </div>
           <h3 className='caption-bold mb-6 mt-20 text-gray-7'>마감일</h3>

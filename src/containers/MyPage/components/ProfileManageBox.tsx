@@ -1,12 +1,14 @@
+import axios from 'axios';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { loginAtom } from '@/store/loginAtom';
-import InputContainer from '@/components/InputContainer';
+import { ERROR_MESSAGES, REG_EXP } from '@/containers/Auth/validation';
 import { Button } from '@/components/buttons';
 import ImageDrop from '@/components/image-drop/ImageDrop';
+import InputContainer from '@/components/inputs/InputContainer';
 
 function ProfileManageBox() {
   return (
@@ -52,7 +54,10 @@ function Form() {
       data: newProfile,
     });
 
-    if (error) return;
+    if (error) {
+      return;
+    }
+
     setLoginInfo(newProfile);
   };
 
@@ -76,6 +81,13 @@ function Form() {
             control={control}
             name='nickname'
             placeholder={loginInfo.nickname}
+            rules={{
+              required: ERROR_MESSAGES.email.emailField,
+              pattern: {
+                value: REG_EXP.CHECK_NICKNAME,
+                message: ERROR_MESSAGES.email.emailPattern,
+              },
+            }}
           >
             닉네임
           </InputContainer>

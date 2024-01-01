@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import useRequest from '@/hooks/useRequest';
 import { InvitationProps, MemberProps } from '@/pages/api/mock';
+import Members from '@/components/Members';
+import { Button } from '@/components/buttons';
+import Form from '@/components/modal/Form';
+import Modal from '@/components/modal/Modal';
 import { IconAddBox } from '@/public/svgs';
 import { DashboardInfoProps } from '.';
-import Members from '../Members';
-import { Button } from '../buttons';
-import Form from '../modal/Form';
-import Modal from '../modal/Modal';
 
 function DashboardInfoTable({
   type,
@@ -163,7 +163,7 @@ function AccountInfo({ data, fetch }: Props) {
   return (
     <div className='flex shrink-0 items-center justify-between border-b border-gray-3 py-12 last:border-b-0 tablet:py-16'>
       <div className='flex items-center gap-8'>
-        {'nickname' in data && <Members members={profile} />}
+        {'nickname' in data && <Members members={profile} totalCount={1} />}
         <p className='body1-light'>{text}</p>
       </div>
       <div className='shrink-0'>
