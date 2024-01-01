@@ -19,7 +19,6 @@ function Comments({ comment, setCommentId }: CommentType) {
   const { author, updatedAt, content, id } = comment;
   const time = formatDate(updatedAt);
   const [isEdit, setIsEdit] = useState(false);
-  const [defaultValue, setDefaultValue] = useState('');
 
   const profile = [
     {
@@ -58,7 +57,6 @@ function Comments({ comment, setCommentId }: CommentType) {
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     setCommentValue({ comment: e.target.value });
-    setDefaultValue(e.target.value);
   };
 
   const handleEdit = async () => {
