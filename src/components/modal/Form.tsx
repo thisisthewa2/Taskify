@@ -3,12 +3,16 @@ import { FormComponents } from '@/components/modal/FormComponents';
 
 interface Props {
   onCloseModal?: () => void;
+  onCloseAllModal?: () => void;
   children?: React.ReactNode;
 }
 
-function Form({ onCloseModal, children }: Props) {
+function Form({ onCloseModal, onCloseAllModal, children }: Props) {
   const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child as React.ReactElement<any>, { onCloseModal }),
+    React.cloneElement(child as React.ReactElement<any>, {
+      onCloseModal,
+      onCloseAllModal,
+    }),
   );
   return (
     <div className='relative flex min-h-[12rem] flex-col bg-scroll tablet:min-h-[14rem]'>

@@ -107,12 +107,12 @@ function ManageButton({ title, columnId }: ManageButtonType) {
   return (
     <Modal>
       <>
-        <Modal.Open opens='edit'>
+        <Modal.Open opens={`edit${columnId}`}>
           <button>
             <IconSettings />
           </button>
         </Modal.Open>
-        <Modal.Window name='edit'>
+        <Modal.Window name={`edit${columnId}`}>
           <Form>
             <Form.ColumnForm
               type='edit'
@@ -136,7 +136,7 @@ export function DeleteCardButton({
   return (
     <Modal>
       <>
-        <Modal.Open opens='delete'>
+        <Modal.Open opens={`delete${columnId}`}>
           <button
             type='button'
             className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
@@ -144,7 +144,7 @@ export function DeleteCardButton({
             삭제하기
           </button>
         </Modal.Open>
-        <Modal.Window name='delete'>
+        <Modal.Window name={`delete${columnId}`}>
           <Confirm>
             <Confirm.DeleteConfirm
               columnId={columnId}
