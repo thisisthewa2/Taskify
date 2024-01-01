@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
@@ -17,22 +17,41 @@ function DashboardColumn({
   title: string;
   columnId: string;
 }) {
-  const { data: cardList, fetch: getCards } = useRequest<
-    CardsProps | undefined
-  >({
-    skip: true,
+  const [currentCursorId, setCurrentCursorId] = useState(0);
+  const [list, setList] = useState<CardProps[]>([]);
+
+  const { data: initialCardList } = useRequest<CardsProps>({
+    skip: !columnId,
     options: {
-      url: `cards?size=10&columnId=${columnId}`,
+      url: `cards`,
+      params: { columnId: columnId, size: 5 },
+      method: 'get',
+    },
+  });
+
+  const { data: cardList, fetch: getCards } = useRequest<CardsProps>({
+    deps: [columnId, currentCursorId],
+    skip: !currentCursorId,
+    options: {
+      url: `cards`,
+      params: { columnId: columnId, size: 5, cursorId: currentCursorId },
       method: 'get',
     },
   });
 
   useEffect(() => {
-    if (!columnId) return;
-    getCards();
-  }, [columnId]);
+    if (!initialCardList) return;
+    setList(initialCardList.cards);
+    setCurrentCursorId(initialCardList.cursorId);
+  }, [initialCardList]);
 
-  if (!cardList) return;
+  if (!cardList || !cardList.cards) return;
+
+  const handleClick = () => {
+    setCurrentCursorId(cardList.cursorId);
+    setList((prev) => [...prev, ...cardList.cards]);
+  };
+
   return (
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
       <ColumnInfo
@@ -44,11 +63,11 @@ function DashboardColumn({
         <Modal>
           <AddCardButton />
         </Modal>
-        {cardList &&
-          cardList.totalCount !== 0 &&
-          cardList.cards.map((card: CardProps, key: number) => {
+        {cardList.totalCount !== 0 &&
+          list.map((card: CardProps, key: number) => {
             return <Card data={card} key={key} />;
           })}
+        <SeeMore handleClick={handleClick} />
       </div>
     </div>
   );
@@ -68,7 +87,7 @@ function ColumnInfo({
   return (
     <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
       <div className='flex items-center'>
-        <DashboardColorDot color='primary' />
+        <DashboardColorDot color='#5534DA' />
         <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
         <NumberChip num={totalCount} />
       </div>
@@ -152,5 +171,18 @@ export function DeleteCardButton({
         </Modal.Window>
       </>
     </Modal>
+  );
+}
+
+function SeeMore({ handleClick }: { handleClick: () => void }) {
+  return (
+    <div className='flex w-full justify-end'>
+      <button
+        onClick={handleClick}
+        className='body2-bold w-fit px-5 text-gray-5 hover:underline'
+      >
+        더보기
+      </button>
+    </div>
   );
 }

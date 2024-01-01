@@ -1,13 +1,10 @@
-import { SetStateAction, useAtomValue } from 'jotai';
-import { useParams } from 'next/navigation';
-import { Dispatch, useEffect } from 'react';
+import { useAtomValue } from 'jotai';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import {
   ColumnProps,
   ColumnsProps,
   GetDashboardInfoType,
-  MembersProps,
 } from '@/pages/api/mock';
 import AddChip from '@/components/chips/AddChip';
 import Form from '@/components/modal/Form';
@@ -23,33 +20,29 @@ function Dashboard({ id }: DashboardProps) {
   const { data: columnsResponse, fetch: getColumns } = useRequest<
     ColumnsProps | undefined
   >({
-    skip: true,
+    skip: !id,
     options: {
       url: `columns?dashboardId=${id}`,
       method: 'get',
     },
+    deps: [id, columnTitle],
   });
 
   const { data: dashboardInfo, fetch: getDashboardInfo } = useRequest<
     GetDashboardInfoType | undefined
   >({
-    skip: true,
+    skip: !id,
     options: {
       url: `dashboards/${id}`,
       method: 'get',
     },
+    deps: [id, columnTitle],
   });
-
-  useEffect(() => {
-    if (!id) return;
-    getColumns();
-    getDashboardInfo();
-  }, [id, dashboardInfo?.createdByMe, columnTitle]);
 
   if (!columnsResponse || !columnsResponse.result || !dashboardInfo) return;
 
   return (
-    <div className='flex min-h-screen flex-col pc:flex-row'>
+    <div className='flex min-h-screen min-w-fit flex-col pc:flex-row'>
       {columnsResponse.data.map((column: ColumnProps, key: number) => {
         return (
           <DashboardColumn
