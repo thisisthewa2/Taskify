@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import DashBoardImage from '@/public/pngs/dashboard.png';
+import DashBoardImage from '@/public/webps/dashboard.webp';
 
 function DescriptionSection() {
   return (
-    <div className='mb-90 flex h-full w-full max-w-7xl flex-col rounded-md bg-gray-3 pc:grid pc:grid-cols-2 pc:justify-items-center'>
-      <div className='mx-100 mt-100 w-fit flex-col justify-center tablet:justify-start'>
+    <div className='flex h-[42.875rem] w-11/12 min-w-fit max-w-7xl flex-col justify-center rounded-md bg-gray-3 text-center tablet:h-[60.75rem] tablet:justify-start pc:grid pc:h-[37.5rem] pc:w-4/6 pc:grid-cols-2 pc:justify-items-center'>
+      <div className='mt-100 flex-col justify-center tablet:ms-50 tablet:text-left'>
         <div className='text-18 text-gray-5 tablet:text-24 '>Point1</div>
         <div className='mt-80 whitespace-nowrap text-[36px] font-bold tablet:text-[48px]'>
           일의 우선순위를
@@ -13,10 +13,8 @@ function DescriptionSection() {
           관리하세요
         </div>
       </div>
-      <div className='flex justify-end'>
-        <div className='relative flex h-250 w-296 tablet:mt-120 tablet:h-435 tablet:w-[32.5rem] pc:h-500 pc:w-[37.125rem]'>
-          <Image src={DashBoardImage} alt='Illustration' fill />
-        </div>
+      <div className='relative ml-auto mt-22 flex h-250 w-296 items-end tablet:mt-120 tablet:h-435 tablet:w-[32.5rem] pc:h-500 pc:w-[37.125rem]'>
+        <Image src={DashBoardImage} alt='Illustration' fill />
       </div>
     </div>
   );
