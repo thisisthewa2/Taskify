@@ -23,14 +23,14 @@ function DashboardColumn({ title, columnId }: Props) {
   const [visible, setVisible] = useState(true);
   const [currentCursorId, setCurrentCursorId] = useState(0);
   const [list, setList] = useState<CardProps[]>([]);
-  const size = 5;
+  const SIZE = 5;
 
   const { data: initialCardList } = useRequest<CardsProps>({
     deps: [columnId],
     skip: !columnId,
     options: {
       url: `cards`,
-      params: { columnId: columnId, size: size },
+      params: { columnId: columnId, size: SIZE },
       method: 'get',
     },
   });
@@ -40,7 +40,7 @@ function DashboardColumn({ title, columnId }: Props) {
     skip: !currentCursorId,
     options: {
       url: `cards`,
-      params: { columnId: columnId, size: size, cursorId: currentCursorId },
+      params: { columnId: columnId, size: SIZE, cursorId: currentCursorId },
       method: 'get',
     },
   });
@@ -49,7 +49,7 @@ function DashboardColumn({ title, columnId }: Props) {
     if (!cardList || !cardList.cards) return;
     setCurrentCursorId(cardList.cursorId);
     setList((prev) => [...prev, ...cardList.cards]);
-    if (cardList.cursorId === currentCursorId || cardList.cards.length < size) {
+    if (cardList.cursorId === currentCursorId || cardList.cards.length < SIZE) {
       setVisible(false);
       return;
     }
@@ -64,6 +64,7 @@ function DashboardColumn({ title, columnId }: Props) {
     if (!initialCardList) return;
     setList(initialCardList.cards);
     setCurrentCursorId(initialCardList.cursorId);
+    setVisible(true);
   }, [initialCardList]);
 
   if (!initialCardList || initialCardList.cards === undefined) return;
@@ -102,16 +103,20 @@ function ColumnInfo({
   columnId: number;
 }) {
   return (
-    <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
-      <div className='flex items-center'>
-        <DashboardColorDot color='#5534DA' />
-        <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
-        <NumberChip num={totalCount} />
+    <>
+      <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
+        <div className='flex items-center'>
+          <DashboardColorDot color='#5534DA' />
+          <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
+          <NumberChip num={totalCount} />
+        </div>
+        <ManageButton title={title} columnId={columnId} />
       </div>
-      <ManageButton title={title} columnId={columnId} />
-      <DeleteCardButton columnId={columnId} isHidden={true} />
-      <EditCardButton columnId={columnId} isHidden={false} />
-    </div>
+      <div className='absolute'>
+        <DeleteCardButton columnId={columnId} isHidden={true} />
+        <EditCardButton columnId={columnId} isHidden={false} />
+      </div>
+    </>
   );
 }
 

@@ -17,13 +17,14 @@ const useInfiniteScroll = ({
   skip = false,
   options = {
     root: null,
-    threshold: 0.6,
+    threshold: 0.8,
   },
 }: Props) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (skip) return;
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) handleScroll();
