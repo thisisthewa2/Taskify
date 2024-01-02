@@ -1,5 +1,5 @@
-import searchInvitedDashboards from '@/hooks/searchInvitedDashboards';
 import useRequest from '@/hooks/useRequest';
+import useSearchInvitedDashboards from '@/hooks/useSearchInvitedDashboards';
 import { InvitationProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
@@ -21,6 +21,9 @@ interface SearchProps {
 }
 
 function InvitedDashboardsTable({ data, fetch }: DashboardsProps) {
+  const { searchTerm, handleSearchChange, filteredItems } =
+    useSearchInvitedDashboards(data);
+
   if (data.length === 0) {
     return (
       <div className='rounded-lg bg-white px-16 pt-24'>
@@ -29,9 +32,6 @@ function InvitedDashboardsTable({ data, fetch }: DashboardsProps) {
       </div>
     );
   }
-
-  const { searchTerm, handleSearchChange, filteredItems } =
-    searchInvitedDashboards(data);
 
   return (
     <div className='rounded-lg bg-white px-16 pt-24'>
