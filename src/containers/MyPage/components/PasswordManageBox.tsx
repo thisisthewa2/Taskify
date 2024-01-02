@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
-import InputContainer from '@/components/InputContainer';
+import { ERROR_MESSAGES, REG_EXP } from '@/containers/Auth/validation';
 import { Button } from '@/components/buttons';
+import InputContainer from '@/components/inputs/InputContainer';
 
 function PasswordManageBox() {
   return (
@@ -21,7 +23,7 @@ interface FormValues {
 }
 
 function Form() {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control, setError, reset } = useForm<FormValues>({
     defaultValues: {
       password: '',
       newPassword: '',
@@ -39,13 +41,29 @@ function Form() {
   });
 
   const changePassword: SubmitHandler<FormValues> = async (formData) => {
-    if (formData.newPassword !== formData.newPasswordCheck) return;
+    if (formData.newPassword !== formData.newPasswordCheck) {
+      setError('newPasswordCheck', {
+        type: 'newPasswordChField',
+        message: ERROR_MESSAGES.passwordCh.newPasswordChField,
+      });
+      return;
+    }
 
     const { error } = await fetch({
       data: { password: formData.password, newPassword: formData.newPassword },
     });
 
-    if (error) console.error(error);
+    if (!axios.isAxiosError(error)) {
+      return reset();
+    }
+
+    if (error.response?.status === 400) {
+      setError('password', {
+        type: 'invalid',
+        message: ERROR_MESSAGES.password.passwordToVerify,
+      });
+      return;
+    }
   };
 
   return (
@@ -58,6 +76,9 @@ function Form() {
         control={control}
         name='password'
         placeholder='현재 비밀번호 입력'
+        rules={{
+          required: ERROR_MESSAGES.password.passwordField,
+        }}
       >
         현재 비밀번호
       </InputContainer>
@@ -65,6 +86,13 @@ function Form() {
         control={control}
         name='newPassword'
         placeholder='새 비밀번호 입력'
+        rules={{
+          required: ERROR_MESSAGES.password.passwordField,
+          pattern: {
+            value: REG_EXP.CHECK_PASSWORD,
+            message: ERROR_MESSAGES.password.passwordPattern,
+          },
+        }}
       >
         새 비밀번호
       </InputContainer>

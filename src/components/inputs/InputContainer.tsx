@@ -15,7 +15,7 @@ function InputContainer<T extends FieldValues>({
   placeholder,
   ...controls
 }: Props<T>) {
-  const { field } = useController(controls);
+  const { field, fieldState } = useController(controls);
 
   return (
     <div>
@@ -24,8 +24,11 @@ function InputContainer<T extends FieldValues>({
         id={field.name}
         placeholder={placeholder}
         {...field}
-        className='input mt-10'
+        className={`input mt-10 ${fieldState?.error && 'border-red'}`}
       />
+      <div className='body2-normal mt-5 h-10 text-red'>
+        {fieldState?.error?.message}
+      </div>
     </div>
   );
 }

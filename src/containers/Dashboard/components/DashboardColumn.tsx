@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
-import DashBoardColorDot from '@/components/DashBoardColorDot';
+import DashboardColorDot from '@/components/DashboardColorDot';
 import AddChip from '@/components/chips/AddChip';
 import NumberChip from '@/components/chips/NumberChip';
 import Confirm from '@/components/modal/Confirm';
@@ -41,9 +41,8 @@ function DashboardColumn({
         columnId={columnId}
       />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
-        <Modal>
-          <AddCardButton />
-        </Modal>
+        <AddCardButton />
+
         {cardList &&
           cardList.totalCount !== 0 &&
           cardList.cards.map((card: CardProps, key: number) => {
@@ -68,7 +67,7 @@ function ColumnInfo({
   return (
     <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
       <div className='flex items-center'>
-        <DashBoardColorDot color='primary' />
+        <DashboardColorDot color='primary' />
         <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
         <NumberChip num={totalCount} />
       </div>
@@ -105,12 +104,12 @@ function ManageButton({ title, columnId }: ManageButtonType) {
   return (
     <Modal>
       <>
-        <Modal.Open opens='edit'>
+        <Modal.Open opens={`edit${columnId}`}>
           <button>
             <IconSettings />
           </button>
         </Modal.Open>
-        <Modal.Window name='edit'>
+        <Modal.Window name={`edit${columnId}`}>
           <Form>
             <Form.ColumnForm
               type='edit'
@@ -134,7 +133,7 @@ export function DeleteCardButton({
   return (
     <Modal>
       <>
-        <Modal.Open opens='delete'>
+        <Modal.Open opens={`delete${columnId}`}>
           <button
             type='button'
             className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
@@ -142,7 +141,7 @@ export function DeleteCardButton({
             삭제하기
           </button>
         </Modal.Open>
-        <Modal.Window name='delete'>
+        <Modal.Window name={`delete${columnId}`}>
           <Confirm>
             <Confirm.DeleteConfirm
               columnId={columnId}

@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
-import InputContainer from '@/components/InputContainer';
 import { Button } from '@/components/buttons';
+import InputContainer from '@/components/inputs/InputContainer';
 
 interface FormValue {
   email: string;
@@ -12,10 +12,10 @@ interface FormValue {
 interface Props {
   dashboardId: string;
   onCloseModal: () => void;
-  fetch: () => void;
+  fetch?: () => void;
 }
 
-const errorType: Record<number, string> = {
+const ERROR_MESSAGES = {
   400: '이메일 형식이 올바르지 않습니다.',
   403: '대시보드 초대 권한이 없습니다.',
   404: '대시보드 혹은 해당 멤버가 존재하지 않습니다.',
@@ -33,7 +33,7 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
     },
   });
 
-  const { handleSubmit, control } = useForm<FormValue>({
+  const { handleSubmit, control, setError } = useForm<FormValue>({
     defaultValues: {
       email: '',
     },
@@ -47,12 +47,21 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
     if (data) {
       setErrorMessage('');
       onCloseModal();
-      fetch();
+      fetch?.();
     }
 
     if (!axios.isAxiosError(error)) return;
-    if (error.response?.status) {
-      setErrorMessage(errorType[error.response.status]);
+
+    if (
+      error.response?.status === 400 ||
+      error.response?.status === 403 ||
+      error.response?.status === 404 ||
+      error.response?.status === 409
+    ) {
+      setError('email', {
+        type: 'invalid',
+        message: ERROR_MESSAGES[error.response?.status],
+      });
     }
   };
 
@@ -71,9 +80,6 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
           >
             이메일
           </InputContainer>
-          {errorMessage && (
-            <small className='body2-normal mt-5 text-red'>{errorMessage}</small>
-          )}
         </div>
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
           <Button.Secondary size='lg' onClick={onCloseModal}>

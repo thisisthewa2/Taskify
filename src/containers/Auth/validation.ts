@@ -23,5 +23,6 @@ export const ERROR_MESSAGES = {
   },
   passwordCh: {
     passwordChField: '비밀번호가 일치하지 않습니다.',
+    newPasswordChField: '새 비밀번호가 일치하지 않습니다.',
   },
 };
