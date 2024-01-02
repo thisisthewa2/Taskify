@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { InvitationProps } from '@/pages/api/mock';
 
-const useDebouncedSearchInvitedDashboards = (
+const useSearchInvitedDashboards = (
   data: InvitationProps[] | undefined,
   delay: number = 1000,
 ) => {
@@ -48,4 +48,4 @@ const useDebouncedSearchInvitedDashboards = (
   };
 };
 
-export default useDebouncedSearchInvitedDashboards;
+export default useSearchInvitedDashboards;
