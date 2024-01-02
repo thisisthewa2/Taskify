@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 
 interface Props {
   handleScroll: () => void;
-  initialList: any[] | undefined;
-  dependency: any[] | undefined;
+  deps: any[] | undefined;
+  skip?: boolean;
   options?: {
     root: null | Element;
     rootMargin?: string;
@@ -13,8 +13,8 @@ interface Props {
 
 const useInfiniteScroll = ({
   handleScroll,
-  initialList,
-  dependency,
+  deps,
+  skip = false,
   options = {
     root: null,
     threshold: 0.6,
@@ -23,8 +23,7 @@ const useInfiniteScroll = ({
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (!initialList) return;
-
+    if (skip) return;
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) handleScroll();
@@ -39,7 +38,7 @@ const useInfiniteScroll = ({
         observer.unobserve(containerRef.current);
       }
     };
-  }, dependency);
+  }, deps);
 
   return containerRef;
 };

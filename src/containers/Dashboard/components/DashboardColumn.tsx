@@ -54,8 +54,7 @@ function DashboardColumn({ title, columnId }: Props) {
 
   const containerRef = useInfiniteScroll({
     handleScroll: handleClick,
-    initialList: initialCardList?.cards,
-    dependency: [initialCardList, cardList],
+    deps: [initialCardList, cardList],
   });
 
   useEffect(() => {
