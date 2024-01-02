@@ -6,10 +6,11 @@ import { Button } from '@/components/buttons';
 
 interface Props {
   onCloseModal: () => void;
+  onCloseAllModal: () => void;
   columnId?: string;
 }
 
-function DeleteConfirm({ onCloseModal, columnId }: Props) {
+function DeleteConfirm({ onCloseModal, columnId, onCloseAllModal }: Props) {
   const setColumnTitle = useSetAtom(ColumnsAtom);
 
   const { fetch: deleteColumn } = useRequest({
@@ -21,9 +22,14 @@ function DeleteConfirm({ onCloseModal, columnId }: Props) {
   });
 
   const handleDelete = () => {
-    deleteColumn();
-    onCloseModal();
-    setColumnTitle({ columnTitle: '삭제' });
+    deleteColumn()
+      .then(() => {
+        onCloseAllModal();
+        setColumnTitle({ columnTitle: '' });
+      })
+      .catch((error) => {
+        console.error('컬럼 삭제 실패 : ', error);
+      });
   };
   return (
     <>
