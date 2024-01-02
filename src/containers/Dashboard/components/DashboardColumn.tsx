@@ -102,16 +102,20 @@ function ColumnInfo({
   columnId: number;
 }) {
   return (
-    <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
-      <div className='flex items-center'>
-        <DashboardColorDot color='#5534DA' />
-        <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
-        <NumberChip num={totalCount} />
+    <>
+      <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
+        <div className='flex items-center'>
+          <DashboardColorDot color='#5534DA' />
+          <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
+          <NumberChip num={totalCount} />
+        </div>
+        <ManageButton title={title} columnId={columnId} />
       </div>
-      <ManageButton title={title} columnId={columnId} />
-      <DeleteCardButton columnId={columnId} isHidden={true} />
-      <EditCardButton columnId={columnId} isHidden={false} />
-    </div>
+      <div className='absolute'>
+        <DeleteCardButton columnId={columnId} isHidden={true} />
+        <EditCardButton columnId={columnId} isHidden={false} />
+      </div>
+    </>
   );
 }
 
