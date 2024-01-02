@@ -1,5 +1,10 @@
 import { useAtom } from 'jotai';
-import React, { cloneElement, createContext, useContext } from 'react';
+import React, {
+  cloneElement,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { ModalAtom } from '@/store/modalAtom';
 
@@ -7,7 +12,7 @@ type ModalContextType = {
   openNames: string[];
   close: (name: string) => void;
   closeAll: () => void;
-  open: (name: string) => void;
+  open?: (name: string) => void;
 };
 
 interface ModalProps {
@@ -15,7 +20,7 @@ interface ModalProps {
 }
 
 interface OpenProps extends ModalProps {
-  opens: string;
+  opens?: string;
 }
 
 interface BodyProps extends ModalProps {
@@ -35,19 +40,25 @@ const WINDOW_STYLE = {
 };
 
 function Open({ children, opens: opensWindowName }: OpenProps) {
-  const { open } = useContext(ModalContext);
+  /*  const { open } = useContext(ModalContext); */
 
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
+  return cloneElement(children);
 }
 
 function Window({ children, name }: BodyProps) {
   const { openNames, close, closeAll } = useContext(ModalContext);
+  console.log(openNames);
+  console.log(name);
   if (!openNames.includes(name)) return null;
 
   return createPortal(
     <div>
       <Backdrop />
-      <div className={name === 'card' ? WINDOW_STYLE.card : WINDOW_STYLE.rest}>
+      <div
+        className={
+          name.includes('card') ? WINDOW_STYLE.card : WINDOW_STYLE.rest
+        }
+      >
         <div>
           {cloneElement(children, {
             onCloseModal: () => close(name),
@@ -68,11 +79,13 @@ function Backdrop() {
 
 function Modal({ children }: ModalProps) {
   const [openNames, setOpenNames] = useAtom(ModalAtom);
-  const open = (name: string) => {
+  const [modalName, setModalName] = useState('');
+
+  /*   const open = (name: string) => {
     if (!openNames.openName.includes(name)) {
       setOpenNames({ openName: [...openNames.openName, name] });
     }
-  };
+  }; */
 
   const close = (name: string) => {
     setOpenNames({ openName: openNames.openName.filter((n) => n !== name) });
@@ -84,7 +97,7 @@ function Modal({ children }: ModalProps) {
 
   return (
     <ModalContext.Provider
-      value={{ openNames: openNames.openName, close, closeAll, open }}
+      value={{ openNames: openNames.openName, close, closeAll /* , open */ }}
     >
       {children}
     </ModalContext.Provider>

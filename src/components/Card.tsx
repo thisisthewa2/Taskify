@@ -12,12 +12,22 @@ import TagChip from './chips/TagChip';
 import Input from './inputs/Input';
 import Form from './modal/Form';
 import Modal from './modal/Modal';
+import { useAtom } from 'jotai';
+import { openModal } from '@/store/modalAtom';
 
 function Card({ data, title }: { data: CardProps; title: string }) {
+
+  const [, open] = useAtom(openModal);
+  
   if (!data) return;
+
+  const handleCardViewModal = () => {
+    open(`card${data.id}`)
+  }
+
   return (
     <ViewDetail cardData={data} title={title}>
-      <div className='card flex cursor-pointer flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10'>
+      <div className='card flex cursor-pointer flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10' onClick={handleCardViewModal}>
         {data.imageUrl && <CardImage src={data.imageUrl} />}
         <div className='flex w-full flex-col gap-6 pc:gap-10'>
           <p className='body1-normal'>{data.title}</p>
@@ -144,11 +154,12 @@ interface ViewDetailType {
 }
 
 function ViewDetail({ children, cardData, title }: ViewDetailType) {
+  
   return (
     <Modal>
       <>
-        <Modal.Open opens='card'>{children}</Modal.Open>
-        <Modal.Window name='card'>
+        <Modal.Open opens={`card${cardData.id}`}>{children}</Modal.Open>
+        <Modal.Window name={`card${cardData.id}`}>
           <Form>
             <Form.CardViewDetail cardData={cardData} title={title} />
           </Form>

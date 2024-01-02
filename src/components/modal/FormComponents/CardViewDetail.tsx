@@ -11,6 +11,7 @@ import {
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
+import { closeAllModals, openModal } from '@/store/modalAtom';
 import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
@@ -149,13 +150,11 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
           </h2>
           <div
             className='flex items-center justify-between gap-24'
-            /* onMouseDown={handleKebabMouseDown} */
-            onClick={handleKebab}
+            onBlur={handleBlur}
           >
-            <label onBlur={handleBlur}>
+            <label onClick={handleKebab}>
               <Kebab />
             </label>
-
             <Close onClick={onCloseModal} />
           </div>
         </div>
@@ -246,7 +245,13 @@ function KebabButton({
     <ul className='card flex-center absolute right-60 top-30 h-82 w-93 flex-col p-6 '>
       {KEBABLIST.map((list) => {
         return list.id === 1 ? (
-          <AddCardButton list={list} key={list.id} setIsKebab={setIsKebab} />
+          <EditCardButton
+            list={list}
+            key={list.id}
+            setIsKebab={setIsKebab}
+            columnId={columnId}
+            isHidden={true}
+          />
         ) : (
           <DeleteCardButton
             key={list.id}
@@ -269,15 +274,26 @@ function DeleteCardButton({
   columnId?: number;
   list: KebabListType;
 }) {
+  const [, open] = useAtom(openModal);
+  const [, closeAll] = useAtom(closeAllModals);
+
+  const handleDeleteModal = () => {
+    closeAll();
+
+    open(`delete${columnId}`);
+  };
   return (
     <Modal>
       <>
-        <Modal.Open opens='delete'>
-          <li className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'>
+        <Modal.Open opens={`delete${columnId}`}>
+          <li
+            className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'
+            onClick={handleDeleteModal}
+          >
             {list.name}
           </li>
         </Modal.Open>
-        <Modal.Window name='delete'>
+        <Modal.Window name={`delete${columnId}`}>
           <Confirm>
             <Confirm.DeleteConfirm
               columnId={columnId}
@@ -290,32 +306,48 @@ function DeleteCardButton({
   );
 }
 
-function AddCardButton({
+export function EditCardButton({
   list,
   setIsKebab,
+  columnId,
+  isHidden,
 }: {
-  list: KebabListType;
-  setIsKebab: Dispatch<SetStateAction<boolean>>;
+  list?: KebabListType;
+  setIsKebab?: Dispatch<SetStateAction<boolean>>;
+  columnId?: number;
+  isHidden: boolean;
 }) {
-  const handleButtonClick = (e: MouseEvent<HTMLLIElement>) => {
-    console.log(11111111233213123);
+  /* const handleButtonClick = (e: MouseEvent<HTMLLIElement>) => {
     e.preventDefault();
-    setIsKebab(false);
+    
+  }; */
+  const [, open] = useAtom(openModal);
+  const [, closeAll] = useAtom(closeAllModals);
+  const handleAddModal = () => {
+    if (setIsKebab) {
+      setIsKebab(false);
+    }
+    closeAll();
+    setTimeout(() => {
+      open(`addColumn${columnId}`);
+    }, 4);
   };
   return (
     <Modal>
       <>
-        <Modal.Open opens='add'>
+        <Modal.Open opens={`addColumn${columnId}`}>
           <li
-            className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'
-            onMouseDown={handleButtonClick}
+            className={`flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light ${
+              !isHidden && '-z-base opacity-0'
+            }`}
+            onClick={handleAddModal}
           >
-            {list.name}
+            {list && list.name}
           </li>
         </Modal.Open>
-        <Modal.Window name='add'>
+        <Modal.Window name={`addColumn${columnId}`}>
           <Form>
-            <Form.TodoForm type='create' />
+            <Form.TodoForm type='edit' />
           </Form>
         </Modal.Window>
       </>
