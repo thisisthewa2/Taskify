@@ -73,9 +73,7 @@ function DashboardColumn({ title, columnId }: Props) {
         columnId={columnId}
       />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
-        <Modal>
-          <AddCardButton />
-        </Modal>
+        <AddCardButton />
         {initialCardList.totalCount !== 0 &&
           list.map((card: CardProps, key: number) => {
             return <Card data={card} key={key} />;
@@ -140,12 +138,12 @@ function ManageButton({ title, columnId }: ManageButtonType) {
   return (
     <Modal>
       <>
-        <Modal.Open opens='edit'>
+        <Modal.Open opens={`edit${columnId}`}>
           <button>
             <IconSettings />
           </button>
         </Modal.Open>
-        <Modal.Window name='edit'>
+        <Modal.Window name={`edit${columnId}`}>
           <Form>
             <Form.ColumnForm
               type='edit'
@@ -169,7 +167,7 @@ export function DeleteCardButton({
   return (
     <Modal>
       <>
-        <Modal.Open opens='delete'>
+        <Modal.Open opens={`delete${columnId}`}>
           <button
             type='button'
             className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
@@ -177,7 +175,7 @@ export function DeleteCardButton({
             삭제하기
           </button>
         </Modal.Open>
-        <Modal.Window name='delete'>
+        <Modal.Window name={`delete${columnId}`}>
           <Confirm>
             <Confirm.DeleteConfirm
               columnId={columnId}
