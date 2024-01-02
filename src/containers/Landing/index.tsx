@@ -18,11 +18,11 @@ export default function Landing() {
     return null;
   }
   return (
-    <div className='flex-center flex-col'>
+    <div className='flex-center flex-col gap-90'>
       <MainSection />
       <DescriptionSection />
       <SubDescriptionSection />
-      <div className='text-22 mb-90 font-bold tablet:text-[36px]'>
+      <div className=' text-20 font-bold tablet:text-[36px]'>
         생산성을 높이는 다양한 설정 ⚡
       </div>
       <FeatureContainer />

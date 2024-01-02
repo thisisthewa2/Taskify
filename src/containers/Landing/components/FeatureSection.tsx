@@ -8,11 +8,13 @@ interface FeatureSectionProps {
 
 function FeatureSection({ imageUrl, title, description }: FeatureSectionProps) {
   return (
-    <div className='m-16 flex h-309 w-343 flex-col rounded-md bg-gradient-to-b from-gray-3 to-gray-3/50 py-16'>
-      <div className='flex h-235 items-center justify-center bg-gray-3'>
-        <Image src={imageUrl} alt='Illustration' width={296} height={248} />
+    <div className='m-16 flex h-347 w-343 flex-col rounded-md bg-gradient-to-b from-gray-3 to-gray-3/50 py-26 tablet:h-384 tablet:w-378'>
+      <div className='flex-center h-235 bg-gray-3 tablet:h-260'>
+        <Image src={imageUrl} alt='Illustration' width={300} height={230} />
       </div>
-      <div className='mt-4 px-32 text-left text-18 font-bold'>{title}</div>
+      <div className='mt-10 px-32 text-left text-18 font-bold tablet:mt-16'>
+        {title}
+      </div>
       <div className='px-32 text-left text-16'>{description}</div>
     </div>
   );
