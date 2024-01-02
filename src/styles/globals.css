@@ -213,3 +213,15 @@
 .custom-header {
   font-size: 0.9rem;
 }
+
+/* 스크롤 바 스타일 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border-radius: 0.5rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--gray-4);
+  border-radius: 0.5rem;
+}

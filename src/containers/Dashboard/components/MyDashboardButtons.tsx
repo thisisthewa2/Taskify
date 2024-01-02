@@ -1,6 +1,8 @@
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useState } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { openModal } from '@/store/modalAtom';
 import { DashboardsProps } from '@/pages/api/mock';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import AddChip from '@/components/chips/AddChip';
@@ -53,18 +55,27 @@ function MyDashboardButtons() {
 export default MyDashboardButtons;
 
 function NewDashboardButton({ fetch }: { fetch: () => void }) {
+  const [, open] = useAtom(openModal);
+
+  const handleCreateModal = () => {
+    open('addDashboard');
+  };
+
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
+        <Modal.Open opens='addDashboard'>
           <DashboardButton>
-            <div className='mx-12 flex items-center gap-15'>
+            <div
+              className='mx-12 flex items-center gap-15'
+              onClick={handleCreateModal}
+            >
               새로운 대시보드
               <AddChip />
             </div>
           </DashboardButton>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='addDashboard'>
           <Form>
             <Form.DashboardForm fetch={fetch} />
           </Form>

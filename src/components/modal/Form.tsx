@@ -24,6 +24,7 @@ function Form({ onCloseModal, onCloseAllModal, children }: Props) {
 Form.DashboardForm = FormComponents.DashboardForm;
 Form.TodoForm = FormComponents.TodoForm;
 Form.ColumnForm = FormComponents.ColumnForm;
+Form.CardViewDetail = FormComponents.CardViewDetail;
 Form.InviteForm = FormComponents.InviteForm;
 
 export default Form;

@@ -1,6 +1,8 @@
+import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
+import { closeAllModals, openModal } from '@/store/modalAtom';
 import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
 import DashboardColorDot from '@/components/DashboardColorDot';
@@ -8,12 +10,13 @@ import AddChip from '@/components/chips/AddChip';
 import NumberChip from '@/components/chips/NumberChip';
 import Confirm from '@/components/modal/Confirm';
 import Form from '@/components/modal/Form';
+import { EditCardButton } from '@/components/modal/FormComponents/CardViewDetail';
 import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
 
 interface Props {
   title: string;
-  columnId: string;
+  columnId: number;
 }
 
 function DashboardColumn({ title, columnId }: Props) {
@@ -73,10 +76,10 @@ function DashboardColumn({ title, columnId }: Props) {
         columnId={columnId}
       />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
-        <AddCardButton />
+        <AddCardButton columnId={columnId} />
         {initialCardList.totalCount !== 0 &&
           list.map((card: CardProps, key: number) => {
-            return <Card data={card} key={key} />;
+            return <Card data={card} key={key} title={title} />;
           })}
         {visible && <SeeMore handleClick={handleClick} />}
         {visible && (
@@ -96,7 +99,7 @@ function ColumnInfo({
 }: {
   title: string;
   totalCount: number;
-  columnId: string;
+  columnId: number;
 }) {
   return (
     <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
@@ -106,20 +109,26 @@ function ColumnInfo({
         <NumberChip num={totalCount} />
       </div>
       <ManageButton title={title} columnId={columnId} />
+      <DeleteCardButton columnId={columnId} isHidden={true} />
+      <EditCardButton columnId={columnId} isHidden={false} />
     </div>
   );
 }
 
-function AddCardButton() {
+function AddCardButton({ columnId }: { columnId: number }) {
+  const [, open] = useAtom(openModal);
+  const handleCreateModal = () => {
+    open(`addCard${columnId}`);
+  };
   return (
     <Modal>
       <>
-        <Modal.Open opens='add'>
-          <button className='card flex-center py-9'>
+        <Modal.Open opens={`addCard${columnId}`}>
+          <button className='card flex-center py-9' onClick={handleCreateModal}>
             <AddChip />
           </button>
         </Modal.Open>
-        <Modal.Window name='add'>
+        <Modal.Window name={`addCard${columnId}`}>
           <Form>
             <Form.TodoForm type='create' />
           </Form>
@@ -131,15 +140,20 @@ function AddCardButton() {
 
 interface ManageButtonType {
   title: string;
-  columnId: string;
+  columnId: number;
 }
 
 function ManageButton({ title, columnId }: ManageButtonType) {
+  const [, open] = useAtom(openModal);
+
+  const handleEditModal = () => {
+    open(`edit${columnId}`);
+  };
   return (
     <Modal>
       <>
         <Modal.Open opens={`edit${columnId}`}>
-          <button>
+          <button onClick={handleEditModal}>
             <IconSettings />
           </button>
         </Modal.Open>
@@ -160,17 +174,30 @@ function ManageButton({ title, columnId }: ManageButtonType) {
 export function DeleteCardButton({
   handleReset,
   columnId,
+  isHidden: isNone,
 }: {
-  handleReset: () => void;
-  columnId?: string;
+  handleReset?: () => void;
+  columnId?: number;
+  isHidden: boolean;
 }) {
+  const [, open] = useAtom(openModal);
+  const [, closeAll] = useAtom(closeAllModals);
+
+  const handleDeleteModal = () => {
+    closeAll();
+    open(`delete${columnId}`);
+  };
+
   return (
     <Modal>
       <>
         <Modal.Open opens={`delete${columnId}`}>
           <button
             type='button'
-            className='absolute bottom-0 left-0 text-14 text-gray-4 underline'
+            className={`absolute bottom-0 left-0 text-14 text-gray-4 underline  ${
+              isNone && '-z-base opacity-0'
+            }`}
+            onClick={handleDeleteModal}
           >
             삭제하기
           </button>

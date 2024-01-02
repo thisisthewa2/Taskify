@@ -1,6 +1,7 @@
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
+import { openModal } from '@/store/modalAtom';
 import {
   ColumnProps,
   ColumnsProps,
@@ -60,16 +61,24 @@ function Dashboard({ id }: DashboardProps) {
 export default Dashboard;
 
 function AddColumnButton() {
+  const [, open] = useAtom(openModal);
+
+  const handleEditModal = () => {
+    open('addColumn');
+  };
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
-          <button className='card flex-center m-12 max-w-full gap-10 p-20 tablet:m-20 tablet:h-70 pc:mt-67 pc:w-354 pc:border-r'>
+        <Modal.Open opens='addColumn'>
+          <button
+            className='card flex-center m-12 max-w-full gap-10 p-20 tablet:m-20 tablet:h-70 pc:mt-67 pc:w-354 pc:border-r'
+            onClick={handleEditModal}
+          >
             <p className='subheading-bold'>새로운 컬럼 추가하기</p>
             <AddChip />
           </button>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='addColumn'>
           <Form>
             <Form.ColumnForm />
           </Form>
