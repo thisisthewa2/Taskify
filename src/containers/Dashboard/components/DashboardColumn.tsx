@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
@@ -10,44 +11,77 @@ import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
 
-function DashboardColumn({
-  title,
-  columnId,
-}: {
+interface Props {
   title: string;
   columnId: string;
-}) {
-  const { data: cardList, fetch: getCards } = useRequest<
-    CardsProps | undefined
-  >({
-    skip: true,
+}
+
+function DashboardColumn({ title, columnId }: Props) {
+  const [visible, setVisible] = useState(true);
+  const [currentCursorId, setCurrentCursorId] = useState(0);
+  const [list, setList] = useState<CardProps[]>([]);
+  const size = 5;
+
+  const { data: initialCardList } = useRequest<CardsProps>({
+    deps: [columnId],
+    skip: !columnId,
     options: {
-      url: `cards?size=10&columnId=${columnId}`,
+      url: `cards`,
+      params: { columnId: columnId, size: size },
       method: 'get',
     },
   });
 
-  useEffect(() => {
-    if (!columnId) return;
-    getCards();
-  }, [columnId]);
+  const { data: cardList } = useRequest<CardsProps>({
+    deps: [columnId, currentCursorId],
+    skip: !currentCursorId,
+    options: {
+      url: `cards`,
+      params: { columnId: columnId, size: size, cursorId: currentCursorId },
+      method: 'get',
+    },
+  });
 
-  if (!cardList) return;
+  const handleClick = () => {
+    if (!cardList || !cardList.cards) return;
+    setCurrentCursorId(cardList.cursorId);
+    setList((prev) => [...prev, ...cardList.cards]);
+    if (cardList.cursorId === currentCursorId || cardList.cards.length < size) {
+      setVisible(false);
+      return;
+    }
+  };
+
+  const containerRef = useInfiniteScroll({
+    handleScroll: handleClick,
+    deps: [initialCardList, cardList],
+  });
+
+  useEffect(() => {
+    if (!initialCardList) return;
+    setList(initialCardList.cards);
+    setCurrentCursorId(initialCardList.cursorId);
+  }, [initialCardList]);
+
+  if (!initialCardList || initialCardList.cards === undefined) return;
+
   return (
     <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
       <ColumnInfo
         title={title}
-        totalCount={cardList.totalCount}
+        totalCount={initialCardList.totalCount}
         columnId={columnId}
       />
       <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
         <AddCardButton />
-
-        {cardList &&
-          cardList.totalCount !== 0 &&
-          cardList.cards.map((card: CardProps, key: number) => {
+        {initialCardList.totalCount !== 0 &&
+          list.map((card: CardProps, key: number) => {
             return <Card data={card} key={key} />;
           })}
+        {visible && <SeeMore handleClick={handleClick} />}
+        {visible && (
+          <div ref={containerRef} className='hidden h-10 pc:inline' />
+        )}
       </div>
     </div>
   );
@@ -67,7 +101,7 @@ function ColumnInfo({
   return (
     <div className='flex w-full items-center justify-between py-5 pr-12 tablet:py-20 tablet:pl-8 tablet:pr-20'>
       <div className='flex items-center'>
-        <DashboardColorDot color='primary' />
+        <DashboardColorDot color='#5534DA' />
         <p className='subheading-bold pr-12 tablet:pr-20'>{title}</p>
         <NumberChip num={totalCount} />
       </div>
@@ -151,5 +185,18 @@ export function DeleteCardButton({
         </Modal.Window>
       </>
     </Modal>
+  );
+}
+
+function SeeMore({ handleClick }: { handleClick: () => void }) {
+  return (
+    <div className='flex w-full justify-end pc:hidden'>
+      <button
+        onClick={handleClick}
+        className='body2-bold w-fit px-5 text-gray-5 hover:underline'
+      >
+        더보기
+      </button>
+    </div>
   );
 }

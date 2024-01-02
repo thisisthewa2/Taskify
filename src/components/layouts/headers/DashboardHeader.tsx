@@ -50,7 +50,7 @@ function DashboardHeader({ dashboardId }: Props) {
   }, [dashboardId]);
 
   return (
-    <div className='sticky top-0 flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
+    <div className='sticky top-0 z-nav flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
       <div className='heading2-bold pl-4 pt-4'>{title}</div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
         {dashboardId && (
@@ -103,7 +103,7 @@ function ProfilePopup() {
 
   return (
     <div className='absolute -right-3 top-28 hidden bg-transparent pt-20 group-hover:block'>
-      <div className='shadow-popup flex h-100 w-130 flex-col justify-center overflow-hidden rounded-sm bg-white'>
+      <div className='flex h-100 w-130 flex-col justify-center overflow-hidden rounded-sm bg-white shadow-popup'>
         <ProfilePopupButton onClick={redirectMyPage}>
           마이 페이지
         </ProfilePopupButton>
