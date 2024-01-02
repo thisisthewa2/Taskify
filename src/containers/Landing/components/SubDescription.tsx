@@ -4,7 +4,7 @@ import ModalImage from '@/public/webps/modal.webp';
 function SubDescriptionSection() {
   return (
     <div className='flex h-[42.875rem] w-11/12 min-w-fit  max-w-7xl flex-col justify-center rounded-md bg-gray-3 text-center tablet:h-[60.75rem] tablet:justify-start pc:grid pc:h-[37.5rem] pc:w-4/6 pc:grid-cols-2 pc:justify-items-center'>
-      <div className='mt-100 flex-col justify-center tablet:ms-50 tablet:text-left'>
+      <div className='mt-100 flex-col justify-center tablet:ms-50 tablet:text-left pc:order-last'>
         <div className='text-18 text-gray-5 tablet:text-24 '>Point2</div>
         <div className='mt-80 whitespace-nowrap text-[36px] font-bold tablet:text-[48px]'>
           해야 할 일을

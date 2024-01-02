@@ -7,7 +7,7 @@ function LandingPage() {
     <>
       <Head>
         <link rel='icon' href='/svgs/logo-small.svg' />
-        <title>Taskify 랜딩 페이지</title>
+        <title>Taskify</title>
       </Head>
       <Landing />
     </>
