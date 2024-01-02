@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
@@ -58,11 +59,16 @@ interface CreateCommentType {
   dashboardId: number;
 }
 
+const SIZE = 2;
+
 function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
+  const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
   const [commentId, setCommentId] = useState(0);
   const [isKebab, setIsKebab] = useState(false);
-  const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
+  const [visible, setVisible] = useState(true);
+  const [currentCursorId, setCurrentCursorId] = useState(0);
+  const [list, setList] = useState<CommentsType[]>([]);
 
   const {
     tags,
@@ -83,15 +89,34 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     },
   ];
 
-  const { data: commentList, fetch: getComments } = useRequest<CommentListType>(
-    {
-      skip: true,
-      options: {
-        url: `comments?size=10&cardId=${cardId}`,
-        method: 'get',
-      },
+  /* const { data: initCommentList } = useRequest<CommentListType>({
+    deps: [cardId, commentValue.comment],
+    skip: !cardId,
+    options: {
+      url: `comments`,
+      params: { cardId: cardId, size: SIZE },
+      method: 'get',
     },
+  }); */
+  const PARAMS = {
+    cardId: cardId,
+    size: SIZE,
+  };
+  console.log(
+    currentCursorId ? { ...PARAMS, currentCursorId: currentCursorId } : PARAMS,
   );
+  const { data: commentList } = useRequest<CommentListType>({
+    deps: currentCursorId ? [cardId, currentCursorId] : [cardId],
+    skip: currentCursorId ? !currentCursorId : !cardId,
+    options: {
+      url: `comments`,
+      params: currentCursorId
+        ? { ...PARAMS, currentCursorId: currentCursorId }
+        : PARAMS,
+      method: 'get',
+    },
+  });
+
   const { fetch: createComment } = useRequest<CreateCommentType>({
     skip: true,
     options: {
@@ -104,6 +129,24 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
         dashboardId: dashboardId,
       },
     },
+  });
+
+  const handleClick = () => {
+    if (!commentList || !commentList.comments || !commentList.cursorId) return;
+    /* setCurrentCursorId(commentList.cursorId);
+    setList((prev) => [...prev, ...commentList.comments]); */
+    if (
+      commentList.cursorId === currentCursorId ||
+      commentList.comments.length < SIZE
+    ) {
+      setVisible(false);
+      return;
+    }
+  };
+
+  const containerRef = useInfiniteScroll({
+    handleScroll: handleClick,
+    deps: [commentList],
   });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -119,11 +162,11 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     setIsKebab(!isKebab);
   };
 
-  const handleKebabMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+  /*   const handleKebabMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     console.log(111);
     e.preventDefault();
     setIsKebab(!isKebab);
-  };
+  }; */
 
   const handleBlur = () => {
     console.log(2222);
@@ -138,9 +181,13 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   };
 
   useEffect(() => {
-    getComments();
-  }, [commentValue, commentId]);
-  console.log(isKebab);
+    if (!commentList || !commentList.cursorId) return;
+    /*  setList(initCommentList.comments); */
+    console.log(commentList.cursorId);
+    setCurrentCursorId(commentList.cursorId);
+    setVisible(true);
+  }, [commentList]);
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -196,6 +243,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
                     />
                   );
                 })}
+              {visible && (
+                <div ref={containerRef} className='hidden h-10 pc:inline' />
+              )}
             </div>
           </div>
           <div className='card mt-21 h-165 w-200 flex-shrink-0'>

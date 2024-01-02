@@ -222,6 +222,6 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--gray-4);
+  background: gray;
   border-radius: 0.5rem;
 }
