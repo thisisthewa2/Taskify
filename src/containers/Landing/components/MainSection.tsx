@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/buttons';
 import DeskImage from '@/public/webps/desktop.webp';
+import Link from 'next/link';
 
 function MainSection() {
   return (
@@ -26,7 +27,9 @@ function MainSection() {
           협업을 위한 완벽한 툴
         </div>
       </div>
-      <Button size='lg'>{'   로그인 하기  '}</Button>
+      <Button size='lg'>
+        <Link href='/signin'>{'   로그인 하기  '}</Link>
+      </Button>
     </div>
   );
 }
