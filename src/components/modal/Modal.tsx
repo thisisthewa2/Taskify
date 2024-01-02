@@ -47,8 +47,6 @@ function Open({ children, opens: opensWindowName }: OpenProps) {
 
 function Window({ children, name }: BodyProps) {
   const { openNames, close, closeAll } = useContext(ModalContext);
-  console.log(openNames);
-  console.log(name);
   if (!openNames.includes(name)) return null;
 
   return createPortal(
@@ -73,7 +71,7 @@ function Window({ children, name }: BodyProps) {
 
 function Backdrop() {
   return (
-    <div className='fixed inset-0 flex h-full w-full items-center justify-center bg-black opacity-50' />
+    <div className='fixed inset-0 z-floating flex h-full w-full items-center justify-center bg-black opacity-50' />
   );
 }
 
