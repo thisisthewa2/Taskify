@@ -1,5 +1,7 @@
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useRequest from '@/hooks/useRequest';
+import { openModal } from '@/store/modalAtom';
 import { InvitationProps, MemberProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
@@ -84,13 +86,18 @@ function TableHeader({
 function InvitingButton({ fetch }: { fetch: () => void }) {
   const router = useRouter();
   const { dashboardId } = router.query;
+  const [, open] = useAtom(openModal);
+
+  const handleEditModal = () => {
+    open(`inviting modal${dashboardId}`);
+  };
 
   return (
     <Modal>
       <>
-        <Modal.Open opens='inviting modal'>
+        <Modal.Open opens={`inviting modal${dashboardId}`}>
           <div className='absolute right-0 top-61 tablet:static'>
-            <Button size='sm'>
+            <Button size='sm' onClick={handleEditModal}>
               <div className='h-14 w-19 pr-5'>
                 <IconAddBox
                   width='100%'
@@ -103,7 +110,7 @@ function InvitingButton({ fetch }: { fetch: () => void }) {
             </Button>
           </div>
         </Modal.Open>
-        <Modal.Window name='inviting modal'>
+        <Modal.Window name={`inviting modal${dashboardId}`}>
           <Form>
             <Form.InviteForm dashboardId={dashboardId} fetch={fetch} />
           </Form>

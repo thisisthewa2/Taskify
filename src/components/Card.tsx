@@ -1,23 +1,43 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import { JSXElementConstructor, ReactElement } from 'react';
 import { generateColor } from '@/utils/generateColor';
 import { CardProps } from '@/pages/api/mock';
+import Close from '@/components/icons/Close';
+import Kebab from '@/components/icons/Kebab';
 import { IconCalendar } from '@/public/svgs';
 import { DEFAULT_PROFILE_COLOR } from './Members';
+import { Button } from './buttons';
 import TagChip from './chips/TagChip';
+import Input from './inputs/Input';
+import Form from './modal/Form';
+import Modal from './modal/Modal';
+import { useAtom } from 'jotai';
+import { openModal } from '@/store/modalAtom';
 
-function Card({ data }: { data: CardProps }) {
+function Card({ data, title }: { data: CardProps; title: string }) {
+
+  const [, open] = useAtom(openModal);
+  
   if (!data) return;
+
+  const handleCardViewModal = () => {
+    open(`card${data.id}`)
+  }
+
   return (
-    <div className='card flex flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10'>
-      {data.imageUrl && <CardImage src={data.imageUrl} />}
-      <div className='flex w-full flex-col gap-6 pc:gap-10'>
-        <p className='body1-normal'>{data.title}</p>
-        <div className='flex flex-col gap-6 tablet:flex-row tablet:gap-16 pc:flex-col pc:gap-10'>
-          <Tags tags={data.tags} />
-          <CardInfo date={data.dueDate} assignee={data.assignee} />
+    <ViewDetail cardData={data} title={title}>
+      <div className='card flex cursor-pointer flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10' onClick={handleCardViewModal}>
+        {data.imageUrl && <CardImage src={data.imageUrl} />}
+        <div className='flex w-full flex-col gap-6 pc:gap-10'>
+          <p className='body1-normal'>{data.title}</p>
+          <div className='flex flex-col gap-6 tablet:flex-row tablet:gap-16 pc:flex-col pc:gap-10'>
+            <Tags tags={data.tags} />
+            <CardInfo date={data.dueDate} assignee={data.assignee} />
+          </div>
         </div>
       </div>
-    </div>
+    </ViewDetail>
   );
 }
 
@@ -124,5 +144,27 @@ function DefaultMember({ nickname }: DefaultMember) {
     >
       {initial}
     </div>
+  );
+}
+
+interface ViewDetailType {
+  children: ReactElement<any, string | JSXElementConstructor<any>>;
+  cardData: CardProps;
+  title: string;
+}
+
+function ViewDetail({ children, cardData, title }: ViewDetailType) {
+  
+  return (
+    <Modal>
+      <>
+        <Modal.Open opens={`card${cardData.id}`}>{children}</Modal.Open>
+        <Modal.Window name={`card${cardData.id}`}>
+          <Form>
+            <Form.CardViewDetail cardData={cardData} title={title} />
+          </Form>
+        </Modal.Window>
+      </>
+    </Modal>
   );
 }

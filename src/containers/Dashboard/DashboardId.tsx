@@ -1,13 +1,11 @@
-import { SetStateAction, useAtomValue } from 'jotai';
-import { useParams } from 'next/navigation';
-import { Dispatch, useEffect } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
+import { openModal } from '@/store/modalAtom';
 import {
   ColumnProps,
   ColumnsProps,
   GetDashboardInfoType,
-  MembersProps,
 } from '@/pages/api/mock';
 import AddChip from '@/components/chips/AddChip';
 import Form from '@/components/modal/Form';
@@ -23,33 +21,29 @@ function Dashboard({ id }: DashboardProps) {
   const { data: columnsResponse, fetch: getColumns } = useRequest<
     ColumnsProps | undefined
   >({
-    skip: true,
+    skip: !id,
     options: {
       url: `columns?dashboardId=${id}`,
       method: 'get',
     },
+    deps: [id, columnTitle],
   });
 
   const { data: dashboardInfo, fetch: getDashboardInfo } = useRequest<
     GetDashboardInfoType | undefined
   >({
-    skip: true,
+    skip: !id,
     options: {
       url: `dashboards/${id}`,
       method: 'get',
     },
+    deps: [id, columnTitle],
   });
-
-  useEffect(() => {
-    if (!id) return;
-    getColumns();
-    getDashboardInfo();
-  }, [id, dashboardInfo?.createdByMe, columnTitle]);
 
   if (!columnsResponse || !columnsResponse.result || !dashboardInfo) return;
 
   return (
-    <div className='flex min-h-screen flex-col pc:flex-row'>
+    <div className='flex min-h-screen min-w-fit flex-col pc:flex-row'>
       {columnsResponse.data.map((column: ColumnProps, key: number) => {
         return (
           <DashboardColumn
@@ -67,16 +61,24 @@ function Dashboard({ id }: DashboardProps) {
 export default Dashboard;
 
 function AddColumnButton() {
+  const [, open] = useAtom(openModal);
+
+  const handleEditModal = () => {
+    open('addColumn');
+  };
   return (
     <Modal>
       <>
-        <Modal.Open opens='modal-form'>
-          <button className='card flex-center m-12 max-w-full gap-10 p-20 tablet:m-20 tablet:h-70 pc:mt-67 pc:w-354 pc:border-r'>
+        <Modal.Open opens='addColumn'>
+          <button
+            className='card flex-center m-12 max-w-full gap-10 p-20 tablet:m-20 tablet:h-70 pc:mt-67 pc:w-354 pc:border-r'
+            onClick={handleEditModal}
+          >
             <p className='subheading-bold'>새로운 컬럼 추가하기</p>
             <AddChip />
           </button>
         </Modal.Open>
-        <Modal.Window name='modal-form'>
+        <Modal.Window name='addColumn'>
           <Form>
             <Form.ColumnForm />
           </Form>

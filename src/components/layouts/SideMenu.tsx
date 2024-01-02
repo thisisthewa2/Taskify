@@ -25,7 +25,7 @@ function SideMenu({ dashboardId }: Props) {
   });
 
   return (
-    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-y-scroll border-r border-gray-3 bg-white px-12 py-20 tablet:w-160 pc:w-300'>
+    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 py-20 tablet:w-160 pc:w-300'>
       <div className='w-full pb-60 pl-12'>
         <Logo />
       </div>

@@ -1,9 +1,10 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
+import { openModal } from '@/store/modalAtom';
 import { removeAccessToken } from '@/services/utils/handleToken';
 import { DashboardProps, MembersProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
@@ -50,7 +51,7 @@ function DashboardHeader({ dashboardId }: Props) {
   }, [dashboardId]);
 
   return (
-    <div className='sticky top-0 flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
+    <div className='sticky top-0 z-nav flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
       <div className='heading2-bold pl-4 pt-4'>{title}</div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
         {dashboardId && (
@@ -103,7 +104,7 @@ function ProfilePopup() {
 
   return (
     <div className='absolute -right-3 top-28 hidden bg-transparent pt-20 group-hover:block'>
-      <div className='shadow-popup flex h-100 w-130 flex-col justify-center overflow-hidden rounded-sm bg-white'>
+      <div className='flex h-100 w-130 flex-col justify-center overflow-hidden rounded-sm bg-white shadow-popup'>
         <ProfilePopupButton onClick={redirectMyPage}>
           마이 페이지
         </ProfilePopupButton>
@@ -182,18 +183,23 @@ interface InvitationButtonProps {
 }
 
 function InvitationButton({ dashboardId }: InvitationButtonProps) {
+  const [, open] = useAtom(openModal);
+
+  const handleInviteModal = () => {
+    open(`inviting modal${dashboardId}`);
+  };
   return (
     <Modal>
       <>
-        <Modal.Open opens='inviting modal'>
-          <Button.Outline size='sm'>
+        <Modal.Open opens={`inviting modal${dashboardId}`}>
+          <Button.Outline size='sm' onClick={handleInviteModal}>
             <div className='hidden pr-8 tablet:block'>
               <IconAddBox fill='#787486' />
             </div>
             초대하기
           </Button.Outline>
         </Modal.Open>
-        <Modal.Window name='inviting modal'>
+        <Modal.Window name={`inviting modal${dashboardId}`}>
           <Form>
             <Form.InviteForm dashboardId={dashboardId} />
           </Form>

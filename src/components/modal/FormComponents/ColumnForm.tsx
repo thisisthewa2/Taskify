@@ -12,7 +12,7 @@ interface Props {
   onCloseModal: () => void;
   type: 'create' | 'edit';
   columnName?: string;
-  columnId?: string;
+  columnId?: number;
 }
 
 interface CreateColumnType {
@@ -113,7 +113,11 @@ function ColumnForm({
           )}
         </div>
         {type === 'edit' && (
-          <DeleteCardButton handleReset={handleReset} columnId={columnId} />
+          <DeleteCardButton
+            handleReset={handleReset}
+            columnId={columnId}
+            isHidden={false}
+          />
         )}
 
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
