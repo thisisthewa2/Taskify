@@ -26,9 +26,11 @@ function Layout({ children }: Props) {
       {loginInfo.isLoggedIn ? (
         <div className='flex h-screen w-screen'>
           <SideMenu dashboardId={dashboardId} />
-          <div className='h-full w-full overflow-scroll bg-gray-1'>
+          <div className='overflow-hidden'>
             <DashboardHeader dashboardId={dashboardId} />
-            {children}
+            <div className='h-full w-full overflow-auto bg-gray-1'>
+              {children}
+            </div>
           </div>
         </div>
       ) : (
