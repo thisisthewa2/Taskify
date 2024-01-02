@@ -1,9 +1,10 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
+import { openModal } from '@/store/modalAtom';
 import { removeAccessToken } from '@/services/utils/handleToken';
 import { DashboardProps, MembersProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
@@ -182,18 +183,23 @@ interface InvitationButtonProps {
 }
 
 function InvitationButton({ dashboardId }: InvitationButtonProps) {
+  const [, open] = useAtom(openModal);
+
+  const handleInviteModal = () => {
+    open(`inviting modal${dashboardId}`);
+  };
   return (
     <Modal>
       <>
-        <Modal.Open opens='inviting modal'>
-          <Button.Outline size='sm'>
+        <Modal.Open opens={`inviting modal${dashboardId}`}>
+          <Button.Outline size='sm' onClick={handleInviteModal}>
             <div className='hidden pr-8 tablet:block'>
               <IconAddBox fill='#787486' />
             </div>
             초대하기
           </Button.Outline>
         </Modal.Open>
-        <Modal.Window name='inviting modal'>
+        <Modal.Window name={`inviting modal${dashboardId}`}>
           <Form>
             <Form.InviteForm dashboardId={dashboardId} />
           </Form>
