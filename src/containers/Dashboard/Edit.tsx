@@ -1,6 +1,9 @@
+import { useSetAtom } from 'jotai';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { DashboardIdInvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
@@ -12,6 +15,8 @@ interface Props {
 }
 
 function DashboardEdit({ dashboardId }: Props) {
+  const router = useRouter();
+  const setDashboardUpdate = useSetAtom(dashboardUpdateAtom);
   const [currentMembersPage, setCurrentMembersPage] = useState(1);
   const [currentInvitationPage, setCurrentInvitationPage] = useState(1);
 
@@ -35,6 +40,23 @@ function DashboardEdit({ dashboardId }: Props) {
       },
       deps: [currentInvitationPage, dashboardId],
     });
+
+  const { fetch: deleteDashboard } = useRequest({
+    skip: true,
+    options: {
+      url: `dashboards/${dashboardId}`,
+      method: 'delete',
+    },
+  });
+
+  const handleDeleteDashboard = async () => {
+    const { error } = await deleteDashboard();
+    if (error) {
+      return;
+    }
+    setDashboardUpdate(true);
+    router.push('/dashboard');
+  };
 
   if (!memberList || !invitationList) return;
   const { totalCount: membersTotalCount, members } = memberList;
@@ -65,7 +87,10 @@ function DashboardEdit({ dashboardId }: Props) {
         currentPage={currentInvitationPage}
         fetch={getInvitationList}
       />
-      <button className='button flex-center border-solid-gray subheading-normal mt-28 h-52 bg-gray-1 tablet:h-62 tablet:w-320'>
+      <button
+        onClick={handleDeleteDashboard}
+        className='button flex-center border-solid-gray subheading-normal mt-28 h-52 bg-gray-1 tablet:h-62 tablet:w-320'
+      >
         대시보드 삭제하기
       </button>
     </div>
