@@ -1,5 +1,8 @@
+import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
 import Logo from '@/components/logos/Logo';
@@ -12,7 +15,9 @@ interface Props {
 }
 
 function SideMenu({ dashboardId }: Props) {
-  const { data } = useRequest<DashboardsProps>({
+  const [dashboardUpdate, setDashboardUpdate] = useAtom(dashboardUpdateAtom);
+
+  const { data, fetch } = useRequest<DashboardsProps>({
     options: {
       url: 'dashboards',
       method: 'get',
@@ -23,6 +28,12 @@ function SideMenu({ dashboardId }: Props) {
       },
     },
   });
+
+  useEffect(() => {
+    if (dashboardUpdate === false) return;
+    fetch();
+    setDashboardUpdate(false);
+  }, [dashboardId, dashboardUpdate]);
 
   return (
     <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 py-20 tablet:w-160 pc:w-300'>
