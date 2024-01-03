@@ -20,6 +20,7 @@ export const ERROR_MESSAGES = {
     passwordField: '비밀번호를 입력해주세요.',
     passwordPattern: '8자 이상 입력해 주세요.',
     passwordToVerify: '비밀번호를 확인해주세요.',
+    invalidNewPassword: '기존 비밀번호과 다른 비밀번호를 입력해주세요.',
   },
   passwordCh: {
     passwordChField: '비밀번호가 일치하지 않습니다.',
