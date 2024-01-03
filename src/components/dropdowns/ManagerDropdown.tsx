@@ -1,27 +1,51 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import useRequest from '@/hooks/useRequest';
 import { IconArrowDown, IconCheck } from '@/public/svgs';
 
-/* 데이터를 내려받게되면 이부분 지워도됩니다 */
-const manager = {
-  members: [
-    { userid: 1, email: 'test@naver.com', profile: null, nickname: '배유철' },
-    { userid: 2, email: 'test@naver.com', profile: null, nickname: '배동석' },
-    { userid: 3, email: 'test@naver.com', profile: null, nickname: '안윤진' },
-    { userid: 4, email: 'test@naver.com', profile: null, nickname: '김다은' },
-    { userid: 5, email: 'test@naver.com', profile: null, nickname: '임건우' },
-    { userid: 6, email: 'test@naver.com', profile: null, nickname: '강현지' },
-    { userid: 7, email: 'test@naver.com', profile: null, nickname: '남민섭' },
-  ],
-};
-
+interface Member {
+  createdAt: string;
+  email: string;
+  id: string;
+  isDone: boolean;
+  isOwner: boolean;
+  nickname: string;
+  profileImageUrl: string;
+  updatedAt: string;
+  userId: number;
+}
 function ManagerDropdown() {
-  /* 받은 데이터에 isDone 추가하는 함수입니다(이름 클릭하면 체크 표시되게 끔) */
-  const newMembers = manager.members.map((member) => {
-    return { ...member, isDone: false };
+  const router = useRouter();
+  const { dashboardId } = router.query;
+
+  const { data } = useRequest({
+    skip: false,
+    options: {
+      url: 'members',
+      method: 'get',
+      params: { dashboardId: dashboardId as string },
+    },
   });
-  const [managerList, setManagerList] = useState({ members: newMembers });
+
+  const [managerList, setManagerList] = useState<{ members: Member[] }>({
+    members: [],
+  });
   const [isDrop, setIsDrop] = useState(false); //border 색과 리스트 활성화 상태
-  const [managerName, setmanagerName] = useState('');
+  const [managerName, setManagerName] = useState('');
+
+  useEffect(() => {
+    if (!data) return;
+    const { members } = data as { members: Member[] };
+
+    const newMembers =
+      members.length > 0
+        ? members.map((member: Member) => {
+            return { ...member, isDone: false };
+          })
+        : [];
+
+    setManagerList({ members: newMembers });
+  }, [data]);
 
   /* 화면에 보이는 박스 클릭했을 때 활성화 */
   const handleClickBox = () => {
@@ -36,7 +60,7 @@ function ManagerDropdown() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setIsDrop(true);
-    setmanagerName(value);
+    setManagerName(value);
   };
 
   /* 검색리스트 생성 */
@@ -53,11 +77,11 @@ function ManagerDropdown() {
 
     const { textContent } = e.currentTarget;
     if (textContent) {
-      setmanagerName(textContent);
+      setManagerName(textContent);
     }
 
     const newManagerList = managerList.members.map((manager) => {
-      return manager.userid === id
+      return manager.userId === id
         ? { ...manager, isDone: true }
         : { ...manager, isDone: false };
     });
@@ -115,8 +139,8 @@ function ManagerDropdown() {
               return (
                 <li
                   className='body1-normal flex w-full cursor-pointer items-start justify-start gap-6 rounded-sm hover:bg-gray-2'
-                  key={manager.userid}
-                  onClick={(e) => handleClickList(e, manager.userid)}
+                  key={manager.userId}
+                  onClick={(e) => handleClickList(e, manager.userId)}
                 >
                   {manager.isDone ? (
                     <IconCheck fill='black' />
