@@ -1,7 +1,10 @@
-import { Skeleton } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import useRequest from '@/hooks/useRequest';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
@@ -20,6 +23,8 @@ const INITIAL_SIZE = 15;
 const SIZE = 5;
 
 function SideMenu({ dashboardId }: Props) {
+  const [dashboardUpdate, setDashboardUpdate] = useAtom(dashboardUpdateAtom);
+
   const getDashboards = async ({ pageParam = 1 }) => {
     const { data }: { data: DashboardsProps } = await fetch({
       url: 'dashboards',
@@ -37,6 +42,7 @@ function SideMenu({ dashboardId }: Props) {
     data: dashboards,
     fetchNextPage,
     isFetching,
+    refetch,
   } = useInfiniteQuery({
     initialPageParam: 1,
     queryKey: ['dashboards'],
@@ -49,6 +55,12 @@ function SideMenu({ dashboardId }: Props) {
     handleScroll: fetchNextPage,
     deps: [dashboards],
   });
+
+  useEffect(() => {
+    if (dashboardUpdate === false) return;
+    refetch();
+    setDashboardUpdate(false);
+  }, [dashboardId, dashboardUpdate]);
 
   return (
     <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 pb-70 pt-20 tablet:w-160 pc:w-300'>
