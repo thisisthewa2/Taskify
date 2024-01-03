@@ -12,14 +12,20 @@ import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
-import { IconAddBox, IconCrown, IconSettings } from '@/public/svgs';
+import {
+  IconAddBox,
+  IconCrown,
+  IconMoonDark,
+  IconMoonLight,
+  IconSettings,
+} from '@/public/svgs';
 
 interface Props {
   dashboardId?: string;
 }
 
 function DashboardHeader({ dashboardId }: Props) {
-  const toggleTheme = useSetAtom(themeAtom);
+  const [theme, toggleTheme] = useAtom(themeAtom);
 
   const { data: dashboardInfo, fetch: getDashboardInfo } =
     useRequest<DashboardProps>({
@@ -64,7 +70,9 @@ function DashboardHeader({ dashboardId }: Props) {
         />
       </div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
-        <button onClick={toggleTheme}>DARKMODE</button>
+        <button onClick={toggleTheme}>
+          {theme === 'dark' ? <IconMoonLight /> : <IconMoonDark />}
+        </button>
         {dashboardId && (
           <DashboardInfo
             createdByMe={dashboardInfo?.createdByMe}
