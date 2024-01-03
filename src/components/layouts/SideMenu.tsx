@@ -1,9 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
-import useRequest from '@/hooks/useRequest';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
