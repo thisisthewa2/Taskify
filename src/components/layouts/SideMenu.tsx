@@ -1,5 +1,6 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import useRequest from '@/hooks/useRequest';
+import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
 import Logo from '@/components/logos/Logo';
@@ -11,17 +12,33 @@ interface Props {
   dashboardId?: string;
 }
 
+const SIZE = 10;
+
 function SideMenu({ dashboardId }: Props) {
-  const { data } = useRequest<DashboardsProps>({
-    options: {
+  const getDashboards = async ({ pageParam = 1 }) => {
+    console.log(pageParam);
+    const { data }: { data: DashboardsProps } = await fetch({
       url: 'dashboards',
       method: 'get',
       params: {
         navigationMethod: 'pagination',
-        page: 1,
-        size: 10,
+        page: pageParam,
+        size: SIZE,
       },
-    },
+    });
+    return data;
+  };
+
+  const {
+    data: dashboards,
+    fetchNextPage,
+    isFetching,
+  } = useInfiniteQuery({
+    initialPageParam: 1,
+    queryKey: ['dashboards'],
+    queryFn: getDashboards,
+    getNextPageParam: (lastPage, allPageParams) =>
+      lastPage.dashboards.length < SIZE ? null : allPageParams.length + 1,
   });
 
   return (
@@ -31,17 +48,22 @@ function SideMenu({ dashboardId }: Props) {
       </div>
       <DashboardsHeader />
       <ul className='flex w-full flex-col gap-5'>
-        {data?.dashboards?.map((dashboard) => (
-          <li key={dashboard.id}>
-            <DashboardCard
-              title={dashboard.title}
-              color={dashboard.color}
-              createdByMe={dashboard.createdByMe}
-              id={dashboard.id}
-              selected={dashboard.id === Number(dashboardId)}
-            />
-          </li>
-        ))}
+        <button onClick={() => fetchNextPage()} className='h-20 w-50 bg-purple'>
+          GET DATA
+        </button>
+        {dashboards?.pages.map((dashboardPage) =>
+          dashboardPage.dashboards.map((dashboard) => (
+            <li key={dashboard.id}>
+              <DashboardCard
+                title={dashboard.title}
+                color={dashboard.color}
+                createdByMe={dashboard.createdByMe}
+                id={dashboard.id}
+                selected={dashboard.id === Number(dashboardId)}
+              />
+            </li>
+          )),
+        )}
       </ul>
     </div>
   );
