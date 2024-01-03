@@ -6,6 +6,8 @@ import Logo from '@/components/logos/Logo';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconCrown } from '@/public/svgs';
+import { openModal } from '@/store/modalAtom';
+import { useAtom } from 'jotai';
 
 interface Props {
   dashboardId?: string;
@@ -50,6 +52,10 @@ function SideMenu({ dashboardId }: Props) {
 export default SideMenu;
 
 function DashboardsHeader() {
+  const [, open] = useAtom(openModal);
+  const handleCreateModal = () => {
+    open('addDashboard');
+  };
   return (
     <div className='flex w-full justify-between px-12 pb-18'>
       <p className='caption-bold hidden text-gray-5 tablet:inline'>
@@ -57,12 +63,12 @@ function DashboardsHeader() {
       </p>
       <Modal>
         <>
-          <Modal.Open opens='modal-form'>
-            <div className='cursor-pointer'>
+          <Modal.Open opens='addDashboard'>
+            <div className='cursor-pointer' onClick={handleCreateModal}>
               <IconAddBox fill='gray' viewBox='0 0 21 21' />
             </div>
           </Modal.Open>
-          <Modal.Window name='modal-form'>
+          <Modal.Window name='addDashboard'>
             <Form>
               <Form.DashboardForm />
             </Form>
