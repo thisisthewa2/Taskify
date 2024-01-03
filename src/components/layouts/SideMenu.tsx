@@ -1,58 +1,92 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import useRequest from '@/hooks/useRequest';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
+import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
 import Logo from '@/components/logos/Logo';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconCrown } from '@/public/svgs';
+import DeferredSuspense from '../skeletons/DeferredSuspense';
+import SideMenuSkeleton from '../skeletons/SideMenuSkeleton';
 
 interface Props {
   dashboardId?: string;
 }
 
+const INITIAL_SIZE = 15;
+const SIZE = 5;
+
 function SideMenu({ dashboardId }: Props) {
   const [dashboardUpdate, setDashboardUpdate] = useAtom(dashboardUpdateAtom);
 
-  const { data, fetch } = useRequest<DashboardsProps>({
-    options: {
+  const getDashboards = async ({ pageParam = 1 }) => {
+    const { data }: { data: DashboardsProps } = await fetch({
       url: 'dashboards',
       method: 'get',
       params: {
         navigationMethod: 'pagination',
-        page: 1,
-        size: 10,
+        page: pageParam === 1 ? pageParam : pageParam + 2,
+        size: pageParam === 1 ? INITIAL_SIZE : SIZE,
       },
-    },
+    });
+    return data;
+  };
+
+  const {
+    data: dashboards,
+    fetchNextPage,
+    isFetching,
+    refetch,
+  } = useInfiniteQuery({
+    initialPageParam: 1,
+    queryKey: ['dashboards'],
+    queryFn: getDashboards,
+    getNextPageParam: (lastPage, allPageParams) =>
+      lastPage.dashboards.length < SIZE ? null : allPageParams.length + 1,
+  });
+
+  const containerRef = useInfiniteScroll({
+    handleScroll: fetchNextPage,
+    deps: [dashboards],
   });
 
   useEffect(() => {
     if (dashboardUpdate === false) return;
-    fetch();
+    refetch();
     setDashboardUpdate(false);
   }, [dashboardId, dashboardUpdate]);
 
   return (
-    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 py-20 tablet:w-160 pc:w-300'>
+    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 pb-70 pt-20 tablet:w-160 pc:w-300'>
       <div className='w-full pb-60 pl-12'>
         <Logo />
       </div>
       <DashboardsHeader />
-      <ul className='flex w-full flex-col gap-5'>
-        {data?.dashboards?.map((dashboard) => (
-          <li key={dashboard.id}>
-            <DashboardCard
-              title={dashboard.title}
-              color={dashboard.color}
-              createdByMe={dashboard.createdByMe}
-              id={dashboard.id}
-              selected={dashboard.id === Number(dashboardId)}
-            />
-          </li>
-        ))}
+      <ul className='flex h-full w-full flex-col gap-5 overflow-auto'>
+        {dashboards?.pages.map((dashboardPage) =>
+          dashboardPage.dashboards.map((dashboard) => (
+            <li key={dashboard.id}>
+              <DashboardCard
+                title={dashboard.title}
+                color={dashboard.color}
+                createdByMe={dashboard.createdByMe}
+                id={dashboard.id}
+                selected={dashboard.id === Number(dashboardId)}
+              />
+            </li>
+          )),
+        )}
+
+        <DeferredSuspense
+          fallback={<SideMenuSkeleton />}
+          isFetching={isFetching}
+        />
+        <div ref={containerRef} className='h-50 w-full' />
       </ul>
     </div>
   );
