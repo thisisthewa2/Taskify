@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { themeAtom } from '@/store/colorSchemeAtom';
 import { loginAtom } from '@/store/loginAtom';
 import { openModal } from '@/store/modalAtom';
 import { removeAccessToken } from '@/services/utils/handleToken';
@@ -18,6 +19,8 @@ interface Props {
 }
 
 function DashboardHeader({ dashboardId }: Props) {
+  const toggleTheme = useSetAtom(themeAtom);
+
   const { data: dashboardInfo, fetch: getDashboardInfo } =
     useRequest<DashboardProps>({
       skip: true,
@@ -61,6 +64,7 @@ function DashboardHeader({ dashboardId }: Props) {
         />
       </div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
+        <button onClick={toggleTheme}>DARKMODE</button>
         {dashboardId && (
           <DashboardInfo
             createdByMe={dashboardInfo?.createdByMe}
