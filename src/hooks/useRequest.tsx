@@ -11,7 +11,7 @@ function useRequest<T>({ deps = [], skip = false, options }: Props) {
   const [data, setData] = useState<T>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
-  console.log(deps);
+
   const refetch = useCallback(
     async (args?: axiosOptions) => {
       setIsLoading(true);
