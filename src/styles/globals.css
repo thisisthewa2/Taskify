@@ -86,6 +86,9 @@
   .modal {
     @apply absolute-center z-floating w-[20rem] rounded-lg bg-white p-20 pt-28 tablet:w-[32.5rem] tablet:p-28 tablet:pt-32;
   }
+  .scrollbar {
+    @apply custom-scrollbar;
+  }
 }
 
 @layer utilities {
@@ -225,3 +228,4 @@
   background: gray;
   border-radius: 0.5rem;
 }
+
