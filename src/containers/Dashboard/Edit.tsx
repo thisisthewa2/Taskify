@@ -65,6 +65,9 @@ function DashboardEdit({ dashboardId }: Props) {
         currentPage={currentInvitationPage}
         fetch={getInvitationList}
       />
+      <button className='button flex-center border-solid-gray subheading-normal mt-28 h-52 bg-gray-1 tablet:h-62 tablet:w-320'>
+        대시보드 삭제하기
+      </button>
     </div>
   );
 }
