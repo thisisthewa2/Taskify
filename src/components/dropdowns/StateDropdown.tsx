@@ -55,7 +55,7 @@ function StateDropdown() {
   return (
     <div className='flex w-287 flex-col justify-start gap-10 tablet:w-217'>
       <h2 className='subheading-normal'>상태</h2>
-      <div className='relative' onBlur={handleBlur}>
+      <div className='relative' onBlur={handleBlur} tabIndex={0}>
         <div
           className={` flex h-48 w-full items-center justify-between rounded-md p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
@@ -68,7 +68,7 @@ function StateDropdown() {
         <ul
           className={`border-solid-gray absolute left-0 ${
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'
-          } flex w-full flex-col items-start justify-between gap-13 rounded-md bg-white p-8 transition-all duration-500`}
+          } flex w-full flex-col items-start justify-between gap-13 rounded-md bg-white p-8 transition-all duration-100`}
         >
           {todoList.data.map((todo) => {
             return (
