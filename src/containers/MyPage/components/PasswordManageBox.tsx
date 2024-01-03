@@ -41,9 +41,17 @@ function Form() {
   });
 
   const changePassword: SubmitHandler<FormValues> = async (formData) => {
+    if (formData.password === formData.newPassword) {
+      setError('newPassword', {
+        type: 'invalid',
+        message: ERROR_MESSAGES.password.invalidNewPassword,
+      });
+      return;
+    }
+
     if (formData.newPassword !== formData.newPasswordCheck) {
       setError('newPasswordCheck', {
-        type: 'newPasswordChField',
+        type: 'invalid',
         message: ERROR_MESSAGES.passwordCh.newPasswordChField,
       });
       return;
@@ -76,6 +84,7 @@ function Form() {
         control={control}
         name='password'
         placeholder='현재 비밀번호 입력'
+        type='password'
         rules={{
           required: ERROR_MESSAGES.password.passwordField,
         }}
@@ -86,6 +95,7 @@ function Form() {
         control={control}
         name='newPassword'
         placeholder='새 비밀번호 입력'
+        type='password'
         rules={{
           required: ERROR_MESSAGES.password.passwordField,
           pattern: {
@@ -100,6 +110,7 @@ function Form() {
         control={control}
         name='newPasswordCheck'
         placeholder='새 비밀번호 입력'
+        type='password'
       >
         새 비밀번호 확인
       </InputContainer>
