@@ -1,5 +1,7 @@
+import { Skeleton } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
@@ -7,23 +9,25 @@ import Logo from '@/components/logos/Logo';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconCrown } from '@/public/svgs';
+import DeferredSuspense from '../skeletons/DeferredSuspense';
+import SideMenuSkeleton from '../skeletons/SideMenuSkeleton';
 
 interface Props {
   dashboardId?: string;
 }
 
-const SIZE = 10;
+const INITIAL_SIZE = 15;
+const SIZE = 5;
 
 function SideMenu({ dashboardId }: Props) {
   const getDashboards = async ({ pageParam = 1 }) => {
-    console.log(pageParam);
     const { data }: { data: DashboardsProps } = await fetch({
       url: 'dashboards',
       method: 'get',
       params: {
         navigationMethod: 'pagination',
-        page: pageParam,
-        size: SIZE,
+        page: pageParam === 1 ? pageParam : pageParam + 2,
+        size: pageParam === 1 ? INITIAL_SIZE : SIZE,
       },
     });
     return data;
@@ -41,16 +45,18 @@ function SideMenu({ dashboardId }: Props) {
       lastPage.dashboards.length < SIZE ? null : allPageParams.length + 1,
   });
 
+  const containerRef = useInfiniteScroll({
+    handleScroll: fetchNextPage,
+    deps: [dashboards],
+  });
+
   return (
-    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 py-20 tablet:w-160 pc:w-300'>
+    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 pb-70 pt-20 tablet:w-160 pc:w-300'>
       <div className='w-full pb-60 pl-12'>
         <Logo />
       </div>
       <DashboardsHeader />
-      <ul className='flex w-full flex-col gap-5'>
-        <button onClick={() => fetchNextPage()} className='h-20 w-50 bg-purple'>
-          GET DATA
-        </button>
+      <ul className='flex h-full w-full flex-col gap-5 overflow-auto'>
         {dashboards?.pages.map((dashboardPage) =>
           dashboardPage.dashboards.map((dashboard) => (
             <li key={dashboard.id}>
@@ -64,6 +70,12 @@ function SideMenu({ dashboardId }: Props) {
             </li>
           )),
         )}
+
+        <DeferredSuspense
+          fallback={<SideMenuSkeleton />}
+          isFetching={isFetching}
+        />
+        <div ref={containerRef} className='h-50 w-full' />
       </ul>
     </div>
   );
