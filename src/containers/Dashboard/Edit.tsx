@@ -6,9 +6,9 @@ import useRequest from '@/hooks/useRequest';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { DashboardIdInvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
+import BackButton from '@/components/buttons/BackButton';
 import ColorChip from '@/components/chips/ColorChip';
 import Table from '@/components/tables';
-import { IconArrowBackward } from '@/public/svgs';
 
 interface Props {
   dashboardId: string;
@@ -65,10 +65,7 @@ function DashboardEdit({ dashboardId }: Props) {
   return (
     <div className='flex max-h-fit min-h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
       <Link href='/dashboard/[dashboardId]' as={`/dashboard/${dashboardId}`}>
-        <button className='flex-center body1-normal mb-8 w-80 gap-6'>
-          <IconArrowBackward fill='#333236' />
-          돌아가기
-        </button>
+        <BackButton />
       </Link>
       <TitleManageBox dashboardId={dashboardId} />
       <Table
