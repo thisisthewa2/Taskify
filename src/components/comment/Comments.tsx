@@ -12,7 +12,7 @@ interface CommentType {
   comment: CommentsType;
   setList?: Dispatch<SetStateAction<CommentsType[]>>;
   list?: CommentsType[];
-  setCommentId: Dispatch<SetStateAction<number>>;
+  setCommentId?: Dispatch<SetStateAction<number>>;
 }
 
 function Comments({ comment, setList = () => {}, list = [] }: CommentType) {

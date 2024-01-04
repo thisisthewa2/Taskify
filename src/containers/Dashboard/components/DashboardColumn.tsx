@@ -179,8 +179,6 @@ function ColumnInfo({
 
 function AddCardButton({
   columnId,
-  list,
-  setList,
 }: {
   columnId: number;
   list: CardProps[];
@@ -203,12 +201,7 @@ function AddCardButton({
         </Modal.Open>
         <Modal.Window name={`addCard${columnId}`}>
           <Form>
-            <Form.TodoForm
-              type='create'
-              columnId={columnId}
-              list={list}
-              setList={setList}
-            />
+            <Form.TodoForm type='create' columnId={columnId} />
           </Form>
         </Modal.Window>
       </>

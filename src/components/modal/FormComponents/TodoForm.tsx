@@ -1,12 +1,11 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai/index';
+import { useAtom, useAtomValue } from 'jotai/index';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { CardProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { cardAtom } from '@/store/cardAtom';
-import { CardStateAtom } from '@/store/createCardAtom';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
-import { CardProps } from '@/pages/api/mock';
+import { changedAtom } from '@/containers/Dashboard/DashboardId';
 import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
 import StateDropdown from '@/components/dropdowns/StateDropdown';
@@ -18,16 +17,12 @@ interface Props {
   type: 'create' | 'edit';
   columnId: number;
   cardId?: number;
-  cardData?: CardProps;
-  list?: CardProps[];
-  setList: Dispatch<SetStateAction<CardProps[]>>;
 }
 
 interface FormValues {
   assigneeUserId?: number;
   dashboardId?: number;
   columnId?: number;
-
   title?: string;
   description?: string;
   dueDate?: string;
@@ -35,14 +30,7 @@ interface FormValues {
   imageUrl?: string;
 }
 
-function TodoForm({
-  onCloseModal,
-  type = 'create',
-  columnId,
-  cardId,
-  cardData,
-  setList,
-}: Props) {
+function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
   const card = useAtomValue(cardAtom);
 
   const router = useRouter();
@@ -63,11 +51,6 @@ function TodoForm({
     card && type === 'edit' ? [...card.tags] : [],
   );
   const [values, setValues] = useState<FormValues>(initialValues);
-  const [isCreateCard, setIsCreateCard] = useAtom(CardStateAtom);
-  // const { handleSubmit, control, reset } = useForm<FormValues>({
-  //   defaultValues: {},
-  //   mode: 'onBlur',
-  // });
 
   const handleSetTagList = (newTagList: string[]) => {
     setTagList(newTagList);
@@ -122,6 +105,7 @@ function TodoForm({
   const handleCreateTodo = async () => {
     let hasError = false;
 
+    values.imageUrl = imageUrl.imageUrl;
     try {
       const { data } = await postData({
         data: { ...values },
@@ -129,12 +113,12 @@ function TodoForm({
 
       if (!data) return;
       onCloseModal();
-      setList((prev) => [...prev, data]);
+      setChanged(!changed);
     } catch (error) {
       console.error('Error', error);
     }
   };
-
+  const [changed, setChanged] = useAtom(changedAtom);
   const handleEditTodo = async () => {
     values.imageUrl = imageUrl.imageUrl;
     try {
@@ -144,7 +128,7 @@ function TodoForm({
 
       if (!data) return;
       onCloseModal();
-      setList((prev) => [...prev, data]);
+      setChanged(!changed);
     } catch (error) {
       console.error('Error', error);
     }

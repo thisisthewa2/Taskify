@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { CardProps } from '@/pages/api/mock';
+import { CardProps } from 'src/types';
 
 const initialValues = {
   id: 0,
