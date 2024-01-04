@@ -5,6 +5,7 @@ import { InvitationProps, InvitationsProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import useSearchInvitedDashboards from '@/hooks/useSearchInvitedDashboards';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import fetch from '@/services/utils/fetch';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
@@ -163,6 +164,7 @@ interface TableButtonProps extends InvitedDashboardProps {
 
 function TableButton({ data, className }: TableButtonProps) {
   const setTouchedInvitation = useSetAtom(touchedInvitationAtom);
+  const setDashboardUpdate = useSetAtom(dashboardUpdateAtom);
 
   const { fetch: putData, error } = useRequest<Boolean>({
     skip: true,
@@ -178,6 +180,7 @@ function TableButton({ data, className }: TableButtonProps) {
 
     if (error) console.error('Error:', error);
     setTouchedInvitation(true);
+    setDashboardUpdate(true);
   };
 
   return (

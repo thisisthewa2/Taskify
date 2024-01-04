@@ -13,6 +13,8 @@ import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
 import { closeAllModals, openModal } from '@/store/modalAtom';
+import { CardProps } from '@/pages/api/mock';
+import { changedAtom } from '@/containers/Dashboard/DashboardId';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
 import StateChip from '@/components/chips/StateChip';
@@ -21,7 +23,6 @@ import Comments from '@/components/comment/Comments';
 import Close from '@/components/icons/Close';
 import Kebab from '@/components/icons/Kebab';
 import Input from '@/components/inputs/Input';
-import Confirm from '../Confirm';
 import Form from '../Form';
 import Modal from '../Modal';
 
@@ -174,11 +175,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     <>
       <form onSubmit={handleSubmit}>
         <div className='flex items-center justify-between'>
-          <h2 className='heading1-bold text-gray-7'>
-            새로운 일정 관리 Taskify
-          </h2>
+          <h2 className='heading1-bold text-gray-7'>{cardData.title}</h2>
           <div
-            className='tablet: mr-0 mr-[-0.625rem] mt-[-3.4rem] flex items-center justify-between gap-16 tablet:mt-0 tablet:gap-24'
+            className='mr-[-0.625rem] mt-[-3.4rem] flex items-center justify-between gap-16 tablet:mr-0 tablet:mt-0 tablet:gap-24'
             onBlur={handleBlur}
             tabIndex={0}
           >
@@ -256,6 +255,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
           handleReset={handleReset}
           columnId={columnId}
           setIsKebab={setIsKebab}
+          cardId={cardId}
         />
       )}
     </>
@@ -275,12 +275,13 @@ const KEBABLIST: KebabListType[] = [
 ];
 
 function KebabButton({
-  handleReset,
   columnId,
   setIsKebab,
+  cardId,
 }: {
   handleReset: () => void;
   columnId?: number;
+  cardId: number;
   setIsKebab: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
@@ -295,12 +296,7 @@ function KebabButton({
             isHidden={true}
           />
         ) : (
-          <DeleteCardButton
-            key={list.id}
-            handleReset={handleReset}
-            columnId={columnId}
-            list={list}
-          />
+          <DeleteCardButton key={list.id} list={list} cardId={cardId} />
         );
       })}
     </ul>
@@ -308,43 +304,36 @@ function KebabButton({
 }
 
 function DeleteCardButton({
-  handleReset,
-  columnId,
   list,
+  cardId,
 }: {
-  handleReset: () => void;
-  columnId?: number;
   list: KebabListType;
+  cardId: number;
 }) {
-  const [, open] = useAtom(openModal);
-  const [, closeAll] = useAtom(closeAllModals);
+  const closeAll = useSetAtom(closeAllModals);
+  const [changed, setChanged] = useAtom(changedAtom);
 
-  const handleDeleteModal = () => {
+  const { fetch: deleteCard } = useRequest({
+    skip: true,
+    options: {
+      url: `cards/${cardId}`,
+      method: 'delete',
+    },
+  });
+
+  const handleDeleteCard = async () => {
+    await deleteCard();
     closeAll();
-
-    open(`delete${columnId}`);
+    setChanged(!changed);
   };
+
   return (
-    <Modal>
-      <>
-        <Modal.Open opens={`delete${columnId}`}>
-          <li
-            className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'
-            onClick={handleDeleteModal}
-          >
-            {list.name}
-          </li>
-        </Modal.Open>
-        <Modal.Window name={`delete${columnId}`}>
-          <Confirm>
-            <Confirm.DeleteConfirm
-              columnId={columnId}
-              onCloseModal={handleReset}
-            />
-          </Confirm>
-        </Modal.Window>
-      </>
-    </Modal>
+    <li
+      className='flex-center body2-normal h-32 w-81 cursor-pointer rounded-sm hover:bg-primary-light'
+      onClick={handleDeleteCard}
+    >
+      {list.name}
+    </li>
   );
 }
 
