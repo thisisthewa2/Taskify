@@ -164,7 +164,6 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   };
 
   useEffect(() => {
-    console.log(initCommentList?.comments);
     if (!initCommentList?.comments || !initCommentList.cursorId) return;
     setList(initCommentList.comments);
     setCurrentCursorId(initCommentList.cursorId);
