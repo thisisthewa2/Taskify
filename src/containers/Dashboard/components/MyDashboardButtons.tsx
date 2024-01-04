@@ -70,7 +70,7 @@ function NewDashboardButton({ fetch }: { fetch: () => void }) {
         <Modal.Open opens='addDashboard'>
           <DashboardButton>
             <div
-              className='mx-12 flex items-center gap-15'
+              className='flex-center mx-12 h-full w-full gap-15'
               onClick={handleCreateModal}
             >
               새로운 대시보드
