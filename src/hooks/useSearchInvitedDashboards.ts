@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { InvitationProps, InvitationsProps } from 'src/types';
 import fetch from '@/services/utils/fetch';
-import { InvitationProps, InvitationsProps } from '@/pages/api/mock';
 
 const useSearchInvitedDashboards = (data: InvitationsProps[] | undefined) => {
   const [searchTerm, setSearchTerm] = useState<string>('');

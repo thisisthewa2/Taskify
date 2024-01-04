@@ -1,9 +1,9 @@
 import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { DashboardsProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { openModal } from '@/store/modalAtom';
-import { DashboardsProps } from '@/pages/api/mock';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import AddChip from '@/components/chips/AddChip';
 import Form from '@/components/modal/Form';

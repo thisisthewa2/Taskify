@@ -1,6 +1,6 @@
 import Image from 'next/image';
+import { MembersProps } from 'src/types';
 import { generateColor } from '@/utils/generateColor';
-import { MembersProps } from '@/pages/api/mock';
 
 const INDEX_POSITION = [
   'right-0 flex',

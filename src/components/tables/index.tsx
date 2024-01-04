@@ -1,4 +1,4 @@
-import { InvitationProps, MemberProps } from '@/pages/api/mock';
+import { InvitationProps, MemberProps } from 'src/types';
 import DashboardInfoTable from './DashboardInfoTable';
 import InvitedDashboardsTable from './InvitedDashboardsTable';
 

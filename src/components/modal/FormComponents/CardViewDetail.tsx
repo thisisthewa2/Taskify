@@ -7,12 +7,12 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { CardProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
 import { closeAllModals, openModal } from '@/store/modalAtom';
-import { CardProps } from '@/pages/api/mock';
 import { changedAtom } from '@/containers/Dashboard/DashboardId';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';

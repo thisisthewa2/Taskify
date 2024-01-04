@@ -23,8 +23,6 @@ const ERROR_MESSAGES = {
 };
 
 function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
-  const [errorMessage, setErrorMessage] = useState('');
-
   const { fetch: postInvitation } = useRequest({
     skip: true,
     options: {
@@ -45,7 +43,6 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
     });
 
     if (data) {
-      setErrorMessage('');
       onCloseModal();
       fetch?.();
     }
