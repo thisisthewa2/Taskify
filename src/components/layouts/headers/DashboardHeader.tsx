@@ -9,6 +9,7 @@ import { removeAccessToken } from '@/services/utils/handleToken';
 import { DashboardProps, MembersProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
+import DarkModeButton from '@/components/buttons/DarkModeButton';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconCrown, IconSettings } from '@/public/svgs';
@@ -61,6 +62,7 @@ function DashboardHeader({ dashboardId }: Props) {
         />
       </div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
+        <DarkModeButton />
         {dashboardId && (
           <DashboardInfo
             createdByMe={dashboardInfo?.createdByMe}

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 interface Props {
   handleScroll: () => void;
-  deps: any[] | undefined;
+  deps: unknown[] | undefined;
   skip?: boolean;
   options?: {
     root: null | Element;

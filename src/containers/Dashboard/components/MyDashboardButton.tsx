@@ -1,9 +1,12 @@
+import { useAtomValue } from 'jotai';
+import { themeAtom } from '@/store/colorSchemeAtom';
 import { DashboardProps } from '@/pages/api/mock';
 import DashboardColorDot from '@/components/DashboardColorDot';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import { IconArrowForward, IconCrown } from '@/public/svgs';
 
 function MyDashboardButton({ data }: { data: DashboardProps }) {
+  const theme = useAtomValue(themeAtom);
   const { title, color, createdByMe } = data;
   return (
     <DashboardButton size='lg'>
@@ -15,7 +18,7 @@ function MyDashboardButton({ data }: { data: DashboardProps }) {
             className={createdByMe ? 'inline flex-shrink-0' : 'hidden'}
           />
         </div>
-        <IconArrowForward fill='black' />
+        <IconArrowForward fill={theme === 'light' ? 'black' : 'white'} />
       </div>
     </DashboardButton>
   );
