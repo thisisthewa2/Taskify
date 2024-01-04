@@ -6,10 +6,10 @@ import {
   DropResult,
   Droppable,
 } from 'react-beautiful-dnd';
+import { CardProps, ColumnProps, ColumnsProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { openModal } from '@/store/modalAtom';
-import { CardProps, ColumnProps, ColumnsProps } from '@/pages/api/mock';
 import AddChip from '@/components/chips/AddChip';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';

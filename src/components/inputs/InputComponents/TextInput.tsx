@@ -1,4 +1,4 @@
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { ColumnsAtom } from '@/store/columnsAtom';
 

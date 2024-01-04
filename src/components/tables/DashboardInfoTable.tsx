@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
+import { InvitationProps, MemberProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { openModal } from '@/store/modalAtom';
-import { InvitationProps, MemberProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
 import Form from '@/components/modal/Form';

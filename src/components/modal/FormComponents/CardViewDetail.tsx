@@ -7,12 +7,12 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { CardProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
 import { closeAllModals, openModal } from '@/store/modalAtom';
-import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
 import StateChip from '@/components/chips/StateChip';
@@ -95,17 +95,12 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     },
   });
 
-  
   const { data: commentList } = useRequest<CommentListType>({
     deps: [cardId, currentCursorId],
     skip: !currentCursorId,
     options: {
       url: `comments`,
-      params:
-       { cardId: cardId,
-        size: SIZE,
-        cursorId: currentCursorId
-       },
+      params: { cardId: cardId, size: SIZE, cursorId: currentCursorId },
       method: 'get',
     },
   });
@@ -148,7 +143,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     const { data } = await createComment();
 
     if (data && commentList) {
-      setList((prev) => [data ,...prev]);
+      setList((prev) => [data, ...prev]);
       setCommentValue({ comment: '' });
     }
   };
@@ -183,8 +178,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             새로운 일정 관리 Taskify
           </h2>
           <div
-            className='flex items-center justify-between tablet:gap-24 gap-16 tablet:mt-0 tablet: mr-0 mt-[-3.4rem] mr-[-0.625rem]'
-            onBlur={handleBlur} tabIndex={0}
+            className='tablet: mr-0 mr-[-0.625rem] mt-[-3.4rem] flex items-center justify-between gap-16 tablet:mt-0 tablet:gap-24'
+            onBlur={handleBlur}
+            tabIndex={0}
           >
             <label onClick={handleKebab}>
               <Kebab />
@@ -192,9 +188,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             <Close onClick={onCloseModal} />
           </div>
         </div>
-        <div className='flex tablet:flex-row flex-col-reverse items-start justify-between gap-24'>
-          <div className='tablet:w-450 w-full'>
-            <div className='tablet:mt-24 flex items-center justify-start mt-0'>
+        <div className='flex flex-col-reverse items-start justify-between gap-24 tablet:flex-row'>
+          <div className='w-full tablet:w-450'>
+            <div className='mt-0 flex items-center justify-start tablet:mt-24'>
               <div className='border-r border-gray-3 pr-20'>
                 <StateChip str={title} />
               </div>
@@ -232,20 +228,24 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
                   );
                 })}
               {visible && (
-                <div ref={containerRef} className='w-full h-10 pc:inline' />
+                <div ref={containerRef} className='h-10 w-full pc:inline' />
               )}
             </div>
           </div>
-          <div className='card mt-21 tablet:h-165 tablet:w-200 w-full h-85 flex tablet:flex-col tablet:justify-start flex-row justify-between tablet:flex-shrink-0'>
+          <div className='card mt-21 flex h-85 w-full flex-row justify-between tablet:h-165 tablet:w-200 tablet:flex-shrink-0 tablet:flex-col tablet:justify-start'>
             <div className=' flex flex-col justify-center'>
               <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
               <div className='body2-normal flex items-center justify-start gap-8'>
                 <Members members={profile} totalCount={0} />
-                <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
+                <h2 className='body2-normal text-gray-7'>
+                  {assignee.nickname}
+                </h2>
               </div>
             </div>
-            <div className=' flex flex-col gap-10 justify-start h-63'>
-              <h3 className='caption-bold mb-6 tablet:mt-20 text-gray-7'>마감일</h3>
+            <div className=' flex h-63 flex-col justify-start gap-10'>
+              <h3 className='caption-bold mb-6 text-gray-7 tablet:mt-20'>
+                마감일
+              </h3>
               <div className='caption-bold text-gray-7 '>{dueDate}</div>
             </div>
           </div>
@@ -284,7 +284,7 @@ function KebabButton({
   setIsKebab: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <ul className='card flex-center absolute right-30 top-0 tablet:right-50 tablet:top-30 h-82 w-93 flex-col p-6 '>
+    <ul className='card flex-center absolute right-30 top-0 h-82 w-93 flex-col p-6 tablet:right-50 tablet:top-30 '>
       {KEBABLIST.map((list) => {
         return list.id === 1 ? (
           <EditCardButton

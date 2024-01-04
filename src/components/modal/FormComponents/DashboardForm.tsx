@@ -1,8 +1,8 @@
 import { useSetAtom } from 'jotai';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { DashboardProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
-import { DashboardProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import InputContainer from '@/components/inputs/InputContainer';

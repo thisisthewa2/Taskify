@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import useRequest from '@/hooks/useRequest';
