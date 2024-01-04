@@ -21,6 +21,8 @@ import IconLargeLogo from './large-logo.svg';
 import IconMainLogo from './main-logo.svg';
 import IconAddLogo from './modal-add-logo.svg';
 import IconEditLogo from './modal-edit-logo.svg';
+import IconMoonDark from './moon-dark.svg';
+import IconMoonLight from './moon-light.svg';
 import IconSearch from './search.svg';
 import IconSettings from './settings.svg';
 import IconSmallLogo from './small-logo.svg';
@@ -54,4 +56,6 @@ export {
   IconEditLogo,
   IconLess,
   IconGreater,
+  IconMoonLight,
+  IconMoonDark,
 };

@@ -18,7 +18,7 @@ export default function Landing() {
     return null;
   }
   return (
-    <div className='flex-center flex-col gap-90'>
+    <div className='flex-center flex-col gap-90 bg-white'>
       <MainSection />
       <DescriptionSection />
       <SubDescriptionSection />

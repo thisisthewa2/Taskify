@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import DarkModeButton from '@/components/buttons/DarkModeButton';
 import Logo from '@/components/logos/Logo';
 
 function LandingHeader() {
@@ -17,6 +18,7 @@ function LandingHeader() {
         <Logo />
       </div>
       <div className='flex gap-20 tablet:gap-36'>
+        <DarkModeButton />
         <TransparentButton onClick={handleSignInClick}>
           로그인
         </TransparentButton>
