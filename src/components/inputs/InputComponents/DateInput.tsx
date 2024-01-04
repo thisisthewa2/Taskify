@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import dateFormat from '@/utils/dateFormat';
 import { IconCalendar, IconGreater, IconLess } from '@/public/svgs';
@@ -6,14 +6,25 @@ import { IconCalendar, IconGreater, IconLess } from '@/public/svgs';
 function DateInput({
   required,
   handleSetDate,
+  value: initialValue,
 }: {
   required: boolean;
   handleSetDate: (date: string) => void;
+  value: string;
 }) {
   const handleChange = (e: React.ChangeEvent) => {
     e.preventDefault();
   };
-  const [value, setValue]: [Date | null, Function] = useState(null);
+  const [value, setValue]: [Date | null, Function] = useState<Date | null>(
+    initialValue ? new Date(initialValue) : null,
+  );
+
+  useEffect(() => {
+    if (initialValue) {
+      setValue(new Date(initialValue));
+    }
+  }, [initialValue]);
+
   const YEARS = Array.from(
     { length: new Date().getFullYear() + 1 - 2000 },
     (_, i) => new Date().getFullYear() - i,

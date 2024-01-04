@@ -14,8 +14,10 @@ interface Column {
 
 function StateDropdown({
   handleSetState,
+  stateId,
 }: {
   handleSetState: (value: number) => void;
+  stateId?: number;
 }) {
   const router = useRouter();
   const { dashboardId } = router.query;
@@ -49,12 +51,21 @@ function StateDropdown({
     const newColumns =
       columns.length > 0
         ? columns.map((column: Column) => {
-            return { ...column, isDone: false };
+            return column.id === stateId
+              ? { ...column, isDone: true }
+              : { ...column, isDone: false };
           })
         : [];
 
     setColumnList([...newColumns]);
-    setColumnName(newColumns[0].title);
+    if (stateId) {
+      const selectedColumn = newColumns.find((column) => column.id === stateId);
+
+      setColumnName(selectedColumn ? selectedColumn.title : '');
+    } else {
+      setColumnName(newColumns[0].title);
+      handleSetState(newColumns[0].id);
+    }
   }, [data]);
 
   const handleClickBox = () => {
@@ -67,6 +78,7 @@ function StateDropdown({
     const { textContent } = e.currentTarget;
     if (textContent) {
       setColumnName(textContent);
+      handleSetState(id);
     }
 
     const newColumnList = columnList.map((column) => {

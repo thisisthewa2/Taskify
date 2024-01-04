@@ -44,17 +44,15 @@ function TodoForm({
   setList,
 }: Props) {
   const card = useAtomValue(cardAtom);
-  console.log('card >>', card);
 
   const router = useRouter();
   const dashboardId = router.query.dashboardId ? +router.query.dashboardId : 0;
 
-  const { imageUrl } = useAtomValue(ImageUrlAtom);
+  const [imageUrl, setImageUrl] = useAtom(ImageUrlAtom);
 
   let initialValues: FormValues = {
     columnId,
     dashboardId,
-    imageUrl,
   };
 
   if (type === 'edit') {
@@ -66,10 +64,10 @@ function TodoForm({
   );
   const [values, setValues] = useState<FormValues>(initialValues);
   const [isCreateCard, setIsCreateCard] = useAtom(CardStateAtom);
-  const { handleSubmit, control, reset } = useForm<FormValues>({
-    defaultValues: {},
-    mode: 'onBlur',
-  });
+  // const { handleSubmit, control, reset } = useForm<FormValues>({
+  //   defaultValues: {},
+  //   mode: 'onBlur',
+  // });
 
   const handleSetTagList = (newTagList: string[]) => {
     setTagList(newTagList);
@@ -94,7 +92,10 @@ function TodoForm({
   };
 
   const handleSetState = (newColumnId: number) => {
-    console.log(newColumnId);
+    setValues((preValues) => ({
+      ...preValues,
+      columnId: newColumnId,
+    }));
   };
 
   const title = type === 'edit' ? '할 일 수정' : '할 일 생성';
@@ -113,39 +114,10 @@ function TodoForm({
     options: { url: 'cards/', method: 'post' },
   });
 
-  useEffect(() => {
-    setValues((preValues) => ({
-      ...preValues,
-      imageUrl,
-    }));
-  }, [imageUrl]);
-
-  // const changeTodo: SubmitHandler<FormValues> = async (formData) => {
-  //   const newTodo = {
-  //     assigneeUserId: formData.assigneeUserId ?? '',
-  //     dashboardId: formData.dashboardId ?? '',
-  //     columnId: formData.columnId ?? '',
-  //     title: formData.title ?? '',
-  //     description: formData.description ?? '',
-  //     dueDate: formData.dueDate ?? '',
-  //     tags: formData.tags ?? '',
-  //     imageUrl: imageUrl ?? '',
-  //   };
-  //
-  //   setValues((preValues) => ({
-  //     ...preValues,
-  //     imageUrl,
-  //   }));
-  //
-  //   //
-  //   const { error } = await fetch({
-  //     data: newTodo,
-  //   });
-  //   //
-  //   // if (error) {
-  //   //   return;
-  //   // }
-  // };
+  const { fetch: editData } = useRequest<CardProps>({
+    skip: true,
+    options: { url: `cards/${card.id}`, method: 'put' },
+  });
 
   const handleCreateTodo = async () => {
     let hasError = false;
@@ -163,13 +135,36 @@ function TodoForm({
     }
   };
 
+  const handleEditTodo = async () => {
+    values.imageUrl = imageUrl.imageUrl;
+    try {
+      const { data } = await editData({
+        data: { ...values },
+      });
+
+      if (!data) return;
+      onCloseModal();
+      setList((prev) => [...prev, data]);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
   return (
     <form className='mb-70 flex flex-col gap-30'>
       <h1 className='heading1-bold'>{title}</h1>
       <div className='flex gap-12'>
-        {type === 'edit' && <StateDropdown handleSetState={handleSetState} />}
+        {type === 'edit' && (
+          <StateDropdown
+            stateId={card.columnId}
+            handleSetState={handleSetState}
+          />
+        )}
 
-        <ManagerDropdown handleSetManager={handleSetManager} />
+        <ManagerDropdown
+          handleSetManager={handleSetManager}
+          managerId={card.assignee.id}
+        />
       </div>
       <Input
         type='text'
@@ -206,14 +201,18 @@ function TodoForm({
       />
       <div>
         <label className='text-[18px] font-[500]'>이미지</label>
-        <ImageDrop type={'modal'} columnId={columnId} />
+        <ImageDrop
+          type={'modal'}
+          columnId={columnId}
+          initialImageUrl={card.imageUrl}
+        />
       </div>
       <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
         <Button.Secondary type='button' size='lg' onClick={onCloseModal}>
           취소
         </Button.Secondary>
         {type === 'edit' ? (
-          <Button type='button' size='lg'>
+          <Button type='button' size='lg' onClick={handleEditTodo}>
             수정
           </Button>
         ) : (

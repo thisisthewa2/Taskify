@@ -6,7 +6,7 @@ import { IconArrowDown, IconCheck } from '@/public/svgs';
 interface Member {
   createdAt: string;
   email: string;
-  id: string;
+  id: number;
   isDone: boolean;
   isOwner: boolean;
   nickname: string;
@@ -16,8 +16,10 @@ interface Member {
 }
 function ManagerDropdown({
   handleSetManager,
+  managerId,
 }: {
   handleSetManager: (value: number) => void;
+  managerId: number;
 }) {
   const router = useRouter();
   const { dashboardId } = router.query;
@@ -44,11 +46,20 @@ function ManagerDropdown({
     const newMembers =
       members.length > 0
         ? members.map((member: Member) => {
-            return { ...member, isDone: false };
+            return member.userId === managerId
+              ? { ...member, isDone: true }
+              : { ...member, isDone: false };
           })
         : [];
 
     setManagerList({ members: newMembers });
+
+    if (managerId) {
+      const selectedManager = newMembers.find(
+        (member) => member.userId === managerId,
+      );
+      setManagerName(selectedManager ? selectedManager.nickname : '');
+    }
   }, [data]);
 
   /* 화면에 보이는 박스 클릭했을 때 활성화 */
