@@ -9,7 +9,6 @@ const useSearchInvitedDashboards = (data: InvitationsProps[] | undefined) => {
   );
 
   useEffect(() => {
-    
     if (searchTerm !== '') {
       const getFilteredItems = async (search: string) => {
         if (!search) {
@@ -57,7 +56,6 @@ const useSearchInvitedDashboards = (data: InvitationsProps[] | undefined) => {
   }, [searchTerm]);
 
   const handleSearchChange = (value: string) => {
-    console.log('setSearch', value);
     setSearchTerm(value);
   };
 

@@ -13,41 +13,41 @@ interface SearchProps {
   filteredItems: InvitationProps[] | null;
 }
 
-interface FetchParams {
-  size: number;
-  cursorId?: string | number;
-}
-
-const INITIAL_SIZE = 5;
 const SIZE = 5;
 
 function InvitedDashboardsTable() {
-  const getInvitations = async ({ pageParam }: { pageParam?: string }) => {
-    const { data }: { data: InvitationsProps } = await fetch({
-      url: 'invitations',
-      method: 'get',
-      params: {
-        size: pageParam ? SIZE : INITIAL_SIZE,
-        cursorId: pageParam,
-      },
-    });
-    return data;
+  const getInvitations = async ({ pageParam }: { pageParam?: number }) => {
+    if (pageParam) {
+      const { data }: { data: InvitationsProps } = await fetch({
+        url: 'invitations',
+        method: 'get',
+        params: {
+          size: SIZE,
+          cursorId: pageParam,
+        },
+      });
+      return data;
+    } else {
+      const { data }: { data: InvitationsProps } = await fetch({
+        url: 'invitations',
+        method: 'get',
+        params: {
+          size: SIZE,
+        },
+      });
+      return data;
+    }
   };
 
   const { data: invitations, fetchNextPage } = useInfiniteQuery({
-    initialPageParam: undefined,
     queryKey: ['invitations'],
     queryFn: getInvitations,
-    getNextPageParam: (lastPage) => lastPage.cursorId || undefined,
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.cursorId,
   });
 
   const containerRef = useInfiniteScroll({
-    handleScroll: () => {
-      const nextPageParam =
-        invitations?.pages[invitations?.pages.length - 1]?.cursorId ||
-        undefined;
-      fetchNextPage({ pageParam: nextPageParam });
-    },
+    handleScroll: fetchNextPage,
     deps: [invitations],
   });
 
