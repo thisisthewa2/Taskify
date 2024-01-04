@@ -142,7 +142,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     e.preventDefault();
     const { data } = await createComment();
 
-    if (data && commentList) {
+    if (data) {
       setList((prev) => [data, ...prev]);
       setCommentValue({ comment: '' });
     }
@@ -164,7 +164,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   };
 
   useEffect(() => {
-    if (!initCommentList || !initCommentList.cursorId) return;
+    if (!initCommentList?.comments || !initCommentList.cursorId) return;
     setList(initCommentList.comments);
     setCurrentCursorId(initCommentList.cursorId);
     setVisible(true);
