@@ -426,8 +426,6 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
            <details>
               <summary>사이드메뉴</summary>
                
-           </details>
-    </ul>
   </details>
 
 
