@@ -13,8 +13,9 @@ function MyDashboard() {
   useEffect(() => {
     if (!isLoggedIn) {
       router.push('/signin');
-    }
+    } 
   }, [isLoggedIn]);
+
 
   return (
     <div className='flex max-h-fit min-h-screen w-full max-w-[64rem] flex-col gap-24 p-24 tablet:gap-44 tablet:p-40'>

@@ -6,6 +6,8 @@ import fetch from '@/services/utils/fetch';
 import { InvitationProps, InvitationsProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
 
 interface SearchProps {
   searchTerm: string;
@@ -14,6 +16,8 @@ interface SearchProps {
 }
 
 const SIZE = 5;
+
+const touchedInvitationAtom = atom(false);
 
 function InvitedDashboardsTable() {
   const getInvitations = async ({ pageParam }: { pageParam?: number }) => {
@@ -39,7 +43,11 @@ function InvitedDashboardsTable() {
     }
   };
 
-  const { data: invitations, fetchNextPage } = useInfiniteQuery({
+  const {
+    data: invitations,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery({
     queryKey: ['invitations'],
     queryFn: getInvitations,
     initialPageParam: undefined,
@@ -54,6 +62,23 @@ function InvitedDashboardsTable() {
   const { searchTerm, handleSearchChange, filteredItems } =
     useSearchInvitedDashboards(invitations?.pages);
 
+  let displayInvitations =
+    filteredItems || invitations?.pages.flatMap((page) => page.invitations);
+  if (!searchTerm) {
+    // 검색어가 없을 때 전체 초대 대시보드를 표시
+    displayInvitations = invitations?.pages.flatMap((page) => page.invitations);
+  }
+
+  const [touchedInvitation, setTouchedInvitation] = useAtom(
+    touchedInvitationAtom,
+  );
+
+  useEffect(() => {
+    if (!touchedInvitation) return;
+    refetch();
+    setTouchedInvitation(false);
+  }, [touchedInvitation]);
+
   if (!invitations?.pages) {
     return (
       <div className='rounded-lg bg-white px-16 pt-24'>
@@ -61,13 +86,6 @@ function InvitedDashboardsTable() {
         <Empty />
       </div>
     );
-  }
-
-  let displayInvitations =
-    filteredItems || invitations?.pages.flatMap((page) => page.invitations);
-  if (!searchTerm) {
-    // 검색어가 없을 때 전체 초대 대시보드를 표시
-    displayInvitations = invitations?.pages.flatMap((page) => page.invitations);
   }
 
   return (
@@ -144,6 +162,8 @@ interface TableButtonProps extends InvitedDashboardProps {
 }
 
 function TableButton({ data, className }: TableButtonProps) {
+  const setTouchedInvitation = useSetAtom(touchedInvitationAtom);
+
   const { fetch: putData, error } = useRequest<Boolean>({
     skip: true,
     options: { url: `invitations/${data.id}`, method: 'put' },
@@ -155,8 +175,9 @@ function TableButton({ data, className }: TableButtonProps) {
         inviteAccepted: answer,
       },
     });
+
     if (error) console.error('Error:', error);
-    await putData();
+    setTouchedInvitation(true);
   };
 
   return (

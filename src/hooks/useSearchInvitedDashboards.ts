@@ -26,11 +26,8 @@ const useSearchInvitedDashboards = (data: InvitationsProps[] | undefined) => {
               },
             });
 
-          // Access 'invitations' from the fetched data
           const invitations = filteredData.invitations;
-          console.log('FILTER!!!', invitations);
 
-          // Check if 'invitations' is not an empty array
           if (invitations.length > 0) {
             const filtered = invitations.filter((item) => {
               if (item.dashboard && item.dashboard.title) {
