@@ -13,8 +13,7 @@ export interface DashboardInfoProps {
 
 interface InvitedDashboardsProps {
   type: 'dashboard';
-  data: InvitationProps[];
-  fetch: () => void;
+  data?: InvitationProps[];
 }
 
 type Props = DashboardInfoProps | InvitedDashboardsProps;
@@ -30,10 +29,7 @@ function Table(props: Props) {
       fetch={props.fetch}
     />
   ) : (
-    <InvitedDashboardsTable //초대받은 대시보드
-      data={(props as InvitedDashboardsProps).data}
-      fetch={props.fetch}
-    />
+    <InvitedDashboardsTable />
   );
 }
 

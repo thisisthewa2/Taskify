@@ -1,41 +1,56 @@
 import { useEffect, useState } from 'react';
-import { InvitationProps } from '@/pages/api/mock';
+import fetch from '@/services/utils/fetch';
+import { InvitationProps, InvitationsProps } from '@/pages/api/mock';
 
-const useSearchInvitedDashboards = (
-  data: InvitationProps[] | undefined,
-  delay: number = 1000,
-) => {
+const useSearchInvitedDashboards = (data: InvitationsProps[] | undefined) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredItems, setFilteredItems] = useState<InvitationProps[] | null>(
     null,
   );
 
   useEffect(() => {
-    let debounceTimer: NodeJS.Timeout;
+    if (searchTerm !== '') {
+      const getFilteredItems = async (search: string) => {
+        if (!search) {
+          setFilteredItems(null);
+          return;
+        }
 
-    const getFilteredItems = (search: string, items: InvitationProps[]) => {
-      if (!search) {
-        setFilteredItems(null);
-        return;
-      }
-      const filtered = items.filter((item) =>
-        item.dashboard.title.toLowerCase().includes(search.toLowerCase()),
-      );
-      setFilteredItems(filtered);
-    };
+        try {
+          const { data: filteredData }: { data: InvitationsProps } =
+            await fetch({
+              url: 'invitations',
+              method: 'get',
+              params: {
+                title: search,
+              },
+            });
 
-    if (data && searchTerm) {
-      debounceTimer = setTimeout(() => {
-        getFilteredItems(searchTerm, data);
-      }, delay);
-    } else {
-      setFilteredItems(null);
+          const invitations = filteredData.invitations;
+
+          if (invitations.length > 0) {
+            const filtered = invitations.filter((item) => {
+              if (item.dashboard && item.dashboard.title) {
+                return item.dashboard.title
+                  .toLowerCase()
+                  .includes(search.toLowerCase());
+              }
+              return false;
+            });
+
+            setFilteredItems(filtered);
+          } else {
+            setFilteredItems(null);
+          }
+        } catch (error) {
+          console.error('Error fetching filtered data:', error);
+          setFilteredItems(null);
+        }
+      };
+
+      getFilteredItems(searchTerm);
     }
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [searchTerm, data, delay]); // 디바운싱: 검색어나 데이터가 변경된 경우 마다 타이머 설정, 딜레이 이후 getFilteredItem호출
+  }, [searchTerm]);
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);

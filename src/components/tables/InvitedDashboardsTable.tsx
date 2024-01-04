@@ -1,18 +1,13 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import useSearchInvitedDashboards from '@/hooks/useSearchInvitedDashboards';
-import { InvitationProps } from '@/pages/api/mock';
+import fetch from '@/services/utils/fetch';
+import { InvitationProps, InvitationsProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
-
-interface DashboardsProps {
-  data: InvitationProps[];
-  fetch: () => void;
-}
-
-interface DashboardProps {
-  data: InvitationProps;
-  fetch: () => void;
-}
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
 
 interface SearchProps {
   searchTerm: string;
@@ -20,11 +15,71 @@ interface SearchProps {
   filteredItems: InvitationProps[] | null;
 }
 
-function InvitedDashboardsTable({ data, fetch }: DashboardsProps) {
-  const { searchTerm, handleSearchChange, filteredItems } =
-    useSearchInvitedDashboards(data);
+const SIZE = 5;
 
-  if (data.length === 0) {
+const touchedInvitationAtom = atom(false);
+
+function InvitedDashboardsTable() {
+  const getInvitations = async ({ pageParam }: { pageParam?: number }) => {
+    if (pageParam) {
+      const { data }: { data: InvitationsProps } = await fetch({
+        url: 'invitations',
+        method: 'get',
+        params: {
+          size: SIZE,
+          cursorId: pageParam,
+        },
+      });
+      return data;
+    } else {
+      const { data }: { data: InvitationsProps } = await fetch({
+        url: 'invitations',
+        method: 'get',
+        params: {
+          size: SIZE,
+        },
+      });
+      return data;
+    }
+  };
+
+  const {
+    data: invitations,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ['invitations'],
+    queryFn: getInvitations,
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.cursorId,
+  });
+
+  const containerRef = useInfiniteScroll({
+    handleScroll: fetchNextPage,
+    deps: [invitations],
+  });
+
+  const { searchTerm, handleSearchChange, filteredItems } =
+    useSearchInvitedDashboards(invitations?.pages);
+
+  let displayInvitations =
+    filteredItems || invitations?.pages.flatMap((page) => page.invitations);
+  if (!searchTerm) {
+    // 검색어가 없을 때 전체 초대 대시보드를 표시
+    displayInvitations = invitations?.pages.flatMap((page) => page.invitations);
+  }
+
+  const [touchedInvitation, setTouchedInvitation] = useAtom(
+    touchedInvitationAtom,
+  );
+
+  useEffect(() => {
+    if (!touchedInvitation) return;
+    refetch();
+    setTouchedInvitation(false);
+  }, [touchedInvitation]);
+
+  if (!invitations?.pages) {
     return (
       <div className='rounded-lg bg-white px-16 pt-24'>
         <p className='heading1-bold'>초대받은 대시보드</p>
@@ -42,10 +97,10 @@ function InvitedDashboardsTable({ data, fetch }: DashboardsProps) {
         handleSearchChange={handleSearchChange}
       />
       <TabletTitleUI />
-      {data.map((invitation: InvitationProps, key: number) => {
-        if (filteredItems && !filteredItems.includes(invitation)) return null;
-        return <InvitedDashboard data={invitation} key={key} fetch={fetch} />;
-      })}
+      {displayInvitations?.map((invitation: InvitationProps) => (
+        <InvitedDashboard data={invitation} key={invitation.id} />
+      ))}
+      <div ref={containerRef} className='h-50 w-full' />
     </div>
   );
 }
@@ -62,7 +117,7 @@ function Search({
       <div className='relative'>
         <input
           className='input body1-light h-36 pl-44 tablet:h-40'
-          placeholder='검색'
+          placeholder=''
           type='text'
           value={searchTerm}
           onChange={(e) => handleSearchChange(e.target.value)}
@@ -90,23 +145,25 @@ function Empty() {
   );
 }
 
-function InvitedDashboard({ data, fetch }: DashboardProps) {
+function InvitedDashboard({ data }: InvitedDashboardProps) {
   return (
     <div className='flex flex-col gap-16 border-b border-gray-3 py-16 last:border-b-0 tablet:py-20'>
       <div className='flex gap-16 tablet:flex-col'>
         <MobileTitleUI />
-        <DashboardValue data={data} fetch={fetch} />
+        <DashboardValue data={data} />
       </div>
-      <TableButton data={data} fetch={fetch} className='flex tablet:hidden' />
+      <TableButton data={data} className='flex tablet:hidden' />
     </div>
   );
 }
 
-interface TableButtonProps extends DashboardProps {
+interface TableButtonProps extends InvitedDashboardProps {
   className: string;
 }
 
-function TableButton({ data, fetch, className }: TableButtonProps) {
+function TableButton({ data, className }: TableButtonProps) {
+  const setTouchedInvitation = useSetAtom(touchedInvitationAtom);
+
   const { fetch: putData, error } = useRequest<Boolean>({
     skip: true,
     options: { url: `invitations/${data.id}`, method: 'put' },
@@ -118,8 +175,9 @@ function TableButton({ data, fetch, className }: TableButtonProps) {
         inviteAccepted: answer,
       },
     });
+
     if (error) console.error('Error:', error);
-    await fetch();
+    setTouchedInvitation(true);
   };
 
   return (
@@ -153,7 +211,11 @@ function TabletTitleUI() {
   );
 }
 
-function DashboardValue({ data, fetch }: DashboardProps) {
+interface InvitedDashboardProps {
+  data: InvitationProps;
+}
+
+function DashboardValue({ data }: InvitedDashboardProps) {
   return (
     <div className='flex grid-cols-10 flex-col gap-10 tablet:grid tablet:items-center'>
       <p className='body1-light tablet:col-span-5 tablet:pl-8'>
@@ -163,7 +225,6 @@ function DashboardValue({ data, fetch }: DashboardProps) {
       <TableButton
         className='hidden tablet:col-span-3 tablet:flex'
         data={data}
-        fetch={fetch}
       />
     </div>
   );
