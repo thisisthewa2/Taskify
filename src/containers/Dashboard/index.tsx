@@ -1,10 +1,9 @@
 import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { loginAtom } from '@/store/loginAtom';
 import { InvitationsProps } from '@/pages/api/mock';
-import { DashboardsProps } from '@/pages/api/mock';
 import Table from '@/components/tables';
 import MyDashboardButtons from './components/MyDashboardButtons';
 

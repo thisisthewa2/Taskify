@@ -50,9 +50,6 @@ function DashboardId({ id }: DashboardProps) {
   };
 
   const onDragEnd = async ({ source, destination, type }: DropResult) => {
-    /* fetch 버그 해결 후 삭제 예정 */
-    // console.log('>>> source', source);
-    // console.log('>>> destination', destination);
     if (!destination) return;
 
     if (type === 'column') {
