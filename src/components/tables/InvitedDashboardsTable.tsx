@@ -1,14 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import useSearchInvitedDashboards from '@/hooks/useSearchInvitedDashboards';
-import { setDashboardStateAtom } from '@/store/dashboardState';
 import fetch from '@/services/utils/fetch';
 import { InvitationProps, InvitationsProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
-import InvitedDashboardsWrapper from './InvitedDashboardWrapper';
 
 interface SearchProps {
   searchTerm: string;
@@ -16,11 +13,16 @@ interface SearchProps {
   filteredItems: InvitationProps[] | null;
 }
 
-const INITIAL_SIZE = 3;
+interface FetchParams {
+  size: number;
+  cursorId?: string | number;
+}
+
+const INITIAL_SIZE = 5;
 const SIZE = 5;
 
 function InvitedDashboardsTable() {
-  const getInvitations = async ({ pageParam }) => {
+  const getInvitations = async ({ pageParam }: { pageParam?: string }) => {
     const { data }: { data: InvitationsProps } = await fetch({
       url: 'invitations',
       method: 'get',
@@ -142,7 +144,6 @@ interface TableButtonProps extends InvitedDashboardProps {
 }
 
 function TableButton({ data, className }: TableButtonProps) {
-  const [, setDashboardState] = useAtom(setDashboardStateAtom);
   const { fetch: putData, error } = useRequest<Boolean>({
     skip: true,
     options: { url: `invitations/${data.id}`, method: 'put' },
@@ -156,7 +157,6 @@ function TableButton({ data, className }: TableButtonProps) {
     });
     if (error) console.error('Error:', error);
     await putData();
-    setDashboardState({ isAccepted: true });
   };
 
   return (
