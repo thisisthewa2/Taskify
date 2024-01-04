@@ -75,7 +75,10 @@ function ColumnForm({
       if (!axios.isAxiosError(error)) return;
 
       if (error.response?.status === 400) {
-        setErrorMessage(error.response.data.message);
+        const isEmpty = error.response.data.message.includes('title');
+        setErrorMessage(
+          isEmpty ? '컬럼 이름을 입력해주세요.' : error.response.data.message,
+        );
       } else if (error.response?.status === 404) {
         setErrorMessage(error.response.data.message);
       }
