@@ -6,11 +6,13 @@ function TextInput({
   required,
   children,
   columnName,
+  value,
   ...rest
 }: {
   required: boolean;
   children: ReactNode;
   columnName?: string;
+  value?: string;
 }) {
   const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
   const [text, setText] = useState('');
@@ -31,14 +33,14 @@ function TextInput({
       setColumnTitle({ columnTitle: columnName });
     }
   }, []);
-
+  console.log(value);
   return (
     <input
       className='input'
       onChange={handleChange}
       onBlur={handleBlur}
       required={required}
-      defaultValue={columnTitle.columnTitle && columnTitle.columnTitle}
+      defaultValue={value ?? columnTitle.columnTitle ?? ''}
       {...rest}
     >
       {children}

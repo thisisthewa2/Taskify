@@ -124,7 +124,7 @@ function ManagerDropdown({
       <h2 className='subheading-normal'>담당자</h2>
       <div className='relative' onBlur={handleBlur} tabIndex={0}>
         <div
-          className={`flex h-48 w-full items-center justify-between rounded-md bg-WHITE p-16 ${
+          className={`bg-WHITE flex h-48 w-full items-center justify-between rounded-md p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
           }`}
         >
@@ -136,6 +136,8 @@ function ManagerDropdown({
             value={managerName}
             onChange={handleChange}
             onFocus={handleFocusBox}
+            autoComplete='off'
+            required
           />
           <label onClick={handleClickBox}>
             <IconArrowDown className='cursor-pointer' />
