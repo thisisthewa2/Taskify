@@ -64,6 +64,11 @@ function ColumnForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (columnTitle.columnTitle.length > 13) {
+      console.log(columnTitle.columnTitle);
+      setErrorMessage('13자 이하로 입력해주세요');
+      return;
+    }
     if (title === '새 컬럼 생성') {
       const { data, error } = await createColumn();
       if (data) {

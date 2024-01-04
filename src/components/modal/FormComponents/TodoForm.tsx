@@ -151,7 +151,7 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
 
         <ManagerDropdown
           handleSetManager={handleSetManager}
-          managerId={card.assignee.id}
+          managerId={card.assignee?.id}
         />
       </div>
       <Input
