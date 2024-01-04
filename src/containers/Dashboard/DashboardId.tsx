@@ -22,6 +22,8 @@ interface DashboardProps {
 function DashboardId({ id }: DashboardProps) {
   const [enabled, setEnabled] = useState(false);
   const [columns, setColumns] = useState<ColumnProps[]>([]);
+  const [droppableId, setDroppableId] = useState(0);
+  const [movedInfo, setMovedInfo] = useState<[number, number]>([-1, -1]);
   const [cardId, setCardId] = useState('');
   const [changed, setChanged] = useState(false);
   const { columnTitle } = useAtomValue(ColumnsAtom);
@@ -67,7 +69,11 @@ function DashboardId({ id }: DashboardProps) {
     }
 
     if (type === 'card') {
-      if (destination.droppableId === source.droppableId) return;
+      if (destination.droppableId === source.droppableId) {
+        setDroppableId(Number(destination.droppableId));
+        setMovedInfo([source.index, destination.index]);
+        return;
+      }
       await putCardData({
         data: { columnId: Number(destination.droppableId) },
       });
@@ -112,6 +118,7 @@ function DashboardId({ id }: DashboardProps) {
           >
             {columns.map((column, index) => (
               <DashboardColumn
+                movedInfo={droppableId === column.id ? movedInfo : [-1, -1]}
                 changed={changed}
                 columnId={column.id}
                 title={column.title}

@@ -69,7 +69,6 @@ function ManagerDropdown() {
   };
 
   const handleBlur = () => {
-    console.log(111)
     setTimeout(() => {
       setIsDrop(false);
     }, 200);
@@ -85,7 +84,7 @@ function ManagerDropdown() {
       <h2 className='subheading-normal'>담당자</h2>
       <div className='relative' onBlur={handleBlur} tabIndex={0}>
         <div
-          className={`flex h-48 w-full items-center justify-between rounded-md p-16 ${
+          className={`flex h-48 w-full items-center justify-between rounded-md bg-WHITE p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
           }`}
         >
@@ -99,10 +98,10 @@ function ManagerDropdown() {
             onFocus={handleFocusBox}
           />
           <label onClick={handleClickBox}>
-          <IconArrowDown className='cursor-pointer'  />
+            <IconArrowDown className='cursor-pointer' />
           </label>
         </div>
-        
+
         <ul
           className={`border-solid-gray absolute left-0 ${
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'
