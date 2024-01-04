@@ -3,30 +3,22 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import useRequest from '@/hooks/useRequest';
-import { themeAtom } from '@/store/colorSchemeAtom';
 import { loginAtom } from '@/store/loginAtom';
 import { openModal } from '@/store/modalAtom';
 import { removeAccessToken } from '@/services/utils/handleToken';
 import { DashboardProps, MembersProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
+import DarkModeButton from '@/components/buttons/DarkModeButton';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
-import {
-  IconAddBox,
-  IconCrown,
-  IconMoonDark,
-  IconMoonLight,
-  IconSettings,
-} from '@/public/svgs';
+import { IconAddBox, IconCrown, IconSettings } from '@/public/svgs';
 
 interface Props {
   dashboardId?: string;
 }
 
 function DashboardHeader({ dashboardId }: Props) {
-  const [theme, toggleTheme] = useAtom(themeAtom);
-
   const { data: dashboardInfo, fetch: getDashboardInfo } =
     useRequest<DashboardProps>({
       skip: true,
@@ -70,9 +62,7 @@ function DashboardHeader({ dashboardId }: Props) {
         />
       </div>
       <div className='flex-center body1-normal gap-12 tablet:gap-24'>
-        <button onClick={toggleTheme}>
-          {theme === 'dark' ? <IconMoonLight /> : <IconMoonDark />}
-        </button>
+        <DarkModeButton />
         {dashboardId && (
           <DashboardInfo
             createdByMe={dashboardInfo?.createdByMe}
