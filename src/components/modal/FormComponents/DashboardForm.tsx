@@ -1,5 +1,7 @@
+import { useSetAtom } from 'jotai';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { DashboardProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
@@ -16,6 +18,8 @@ interface FormValues {
 }
 
 function DashboardForm({ onCloseModal, fetch }: Props) {
+  const setDashsboardUpdateAtom = useSetAtom(dashboardUpdateAtom);
+
   const { handleSubmit, control, formState } = useForm<FormValues>({
     defaultValues: {
       dashboardName: '',
@@ -47,6 +51,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
 
     onCloseModal();
     fetch?.();
+    setDashsboardUpdateAtom(true);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

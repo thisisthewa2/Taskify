@@ -1,17 +1,22 @@
+import { useSetAtom } from 'jotai';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { DashboardIdInvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
+import BackButton from '@/components/buttons/BackButton';
 import ColorChip from '@/components/chips/ColorChip';
 import Table from '@/components/tables';
-import { IconArrowBackward } from '@/public/svgs';
 
 interface Props {
   dashboardId: string;
 }
 
 function DashboardEdit({ dashboardId }: Props) {
+  const router = useRouter();
+  const setDashboardUpdate = useSetAtom(dashboardUpdateAtom);
   const [currentMembersPage, setCurrentMembersPage] = useState(1);
   const [currentInvitationPage, setCurrentInvitationPage] = useState(1);
 
@@ -36,6 +41,23 @@ function DashboardEdit({ dashboardId }: Props) {
       deps: [currentInvitationPage, dashboardId],
     });
 
+  const { fetch: deleteDashboard } = useRequest({
+    skip: true,
+    options: {
+      url: `dashboards/${dashboardId}`,
+      method: 'delete',
+    },
+  });
+
+  const handleDeleteDashboard = async () => {
+    const { error } = await deleteDashboard();
+    if (error) {
+      return;
+    }
+    setDashboardUpdate(true);
+    router.push('/dashboard');
+  };
+
   if (!memberList || !invitationList) return;
   const { totalCount: membersTotalCount, members } = memberList;
   const { totalCount: invitationsCount, invitations } = invitationList;
@@ -43,10 +65,7 @@ function DashboardEdit({ dashboardId }: Props) {
   return (
     <div className='flex max-h-fit min-h-screen max-w-[41.25rem] flex-col gap-12 p-20'>
       <Link href='/dashboard/[dashboardId]' as={`/dashboard/${dashboardId}`}>
-        <button className='flex-center body1-normal mb-8 w-80 gap-6'>
-          <IconArrowBackward fill='#333236' />
-          돌아가기
-        </button>
+        <BackButton />
       </Link>
       <TitleManageBox dashboardId={dashboardId} />
       <Table
@@ -65,6 +84,12 @@ function DashboardEdit({ dashboardId }: Props) {
         currentPage={currentInvitationPage}
         fetch={getInvitationList}
       />
+      <button
+        onClick={handleDeleteDashboard}
+        className='button flex-center border-solid-gray subheading-normal mt-28 h-52 bg-gray-1 tablet:h-62 tablet:w-320'
+      >
+        대시보드 삭제하기
+      </button>
     </div>
   );
 }
