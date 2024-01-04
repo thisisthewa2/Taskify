@@ -111,9 +111,9 @@ function ManagerDropdown({
   return (
     <div className='flex w-287 flex-col justify-start gap-10 tablet:w-217 '>
       <h2 className='subheading-normal'>담당자</h2>
-      <div className='relative' onBlur={handleBlur}>
+      <div className='relative' onBlur={handleBlur} tabIndex={0}>
         <div
-          className={`flex h-48 w-full items-center justify-between rounded-md p-16 ${
+          className={`flex h-48 w-full items-center justify-between rounded-md bg-WHITE p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
           }`}
         >
@@ -126,8 +126,11 @@ function ManagerDropdown({
             onChange={handleChange}
             onFocus={handleFocusBox}
           />
-          <IconArrowDown className='cursor-pointer' onClick={handleClickBox} />
+          <label onClick={handleClickBox}>
+            <IconArrowDown className='cursor-pointer' />
+          </label>
         </div>
+
         <ul
           className={`border-solid-gray absolute left-0 ${
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'

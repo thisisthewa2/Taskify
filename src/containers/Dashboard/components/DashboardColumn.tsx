@@ -1,5 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { closeAllModals, openModal } from '@/store/modalAtom';
@@ -16,24 +17,33 @@ import { IconSettings } from '@/public/svgs';
 import { CardStateAtom } from '@/store/createCardAtom';
 
 interface Props {
+  movedInfo: [number, number];
+  changed: boolean;
   title: string;
   columnId: number;
+  index: number;
 }
 
-function DashboardColumn({ title, columnId }: Props) {
+function DashboardColumn({
+  movedInfo,
+  changed,
+  title,
+  columnId,
+  index,
+}: Props) {
   const [visible, setVisible] = useState(true);
   const [currentCursorId, setCurrentCursorId] = useState(0);
   const [list, setList] = useState<CardProps[]>([]);
   const isCreateCard = useAtomValue(CardStateAtom)
-
+  const INITIAL_SIZE = 10;
   const SIZE = 5;
 
-  const { data: initialCardList } = useRequest<CardsProps>({
-    deps: [columnId, isCreateCard.isCreateCard],
+  const { data: initialCardList, fetch } = useRequest<CardsProps>({
+    deps: [columnId, changed, isCreateCard.isCreateCard],
     skip: !columnId,
     options: {
       url: `cards`,
-      params: { columnId: columnId, size: SIZE },
+      params: { columnId: columnId, size: INITIAL_SIZE },
       method: 'get',
     },
   });
@@ -64,33 +74,77 @@ function DashboardColumn({ title, columnId }: Props) {
   });
 
   useEffect(() => {
+    if (movedInfo[0] === -1) {
+      fetch();
+      return;
+    }
+    const _items = JSON.parse(JSON.stringify(list)) as typeof list;
+    const [targetItem] = _items.splice(movedInfo[0], 1);
+    _items.splice(movedInfo[1], 0, targetItem);
+    setList(_items);
+  }, [movedInfo]);
+
+  useEffect(() => {
     if (!initialCardList) return;
     setList(initialCardList.cards);
     setCurrentCursorId(initialCardList.cursorId);
-    setVisible(true);
+    initialCardList.totalCount < INITIAL_SIZE
+      ? setVisible(false)
+      : setVisible(true);
   }, [initialCardList]);
 
   if (!initialCardList || initialCardList.cards === undefined) return;
 
   return (
-    <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
-      <ColumnInfo
-        title={title}
-        totalCount={initialCardList.totalCount}
-        columnId={columnId}
-      />
-      <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
-        <AddCardButton columnId={columnId} list={list} setList={setList}/>
-        {initialCardList.totalCount !== 0 &&
-          list.map((card: CardProps, key: number) => {
-            return <Card data={card} key={key} title={title} />;
-          })}
-        {visible && <SeeMore handleClick={handleClick} />}
-        {visible && (
-          <div ref={containerRef} className='hidden h-10 pc:inline' />
-        )}
-      </div>
-    </div>
+    <Draggable key={columnId} draggableId={String(columnId)} index={index}>
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          className={
+            snapshot.isDragging ? 'bg-opacity-60 shadow-2xl shadow-gray-4' : ''
+          }
+        >
+          <div
+            {...provided.dragHandleProps}
+            className='flex min-h-full w-full flex-col border-gray-2 pc:w-354 pc:border-r'
+          >
+            <ColumnInfo
+              title={title}
+              totalCount={initialCardList.totalCount}
+              columnId={columnId}
+            />
+            <AddCardButton columnId={columnId} list={list} setList={setList}/>
+            <Droppable droppableId={String(columnId)} type='card'>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className='flex grow flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'
+                >
+                  {initialCardList.totalCount !== 0 &&
+                    list.map((card: CardProps, index: number) => {
+                      return (
+                        <Card
+                          data={card}
+                          key={index}
+                          title={title}
+                          index={index}
+                        />
+                      );
+                    })}
+                  {provided.placeholder}
+                  {visible && <SeeMore handleClick={handleClick} />}
+                  {visible && (
+                    <div ref={containerRef} className='hidden h-10 pc:inline' />
+                  )}
+                </div>
+              )}
+            </Droppable>
+          </div>
+        </div>
+      )}
+    </Draggable>
   );
 }
 
@@ -123,7 +177,7 @@ function ColumnInfo({
   );
 }
 
-function AddCardButton({ columnId, list, setList }: { columnId: number, list:CardProps[], setList:()=>void }) {
+function AddCardButton({ columnId, list, setList  }: { columnId: number, list:CardProps[], setList:()=>void }) {
   const [, open] = useAtom(openModal);
   const handleCreateModal = () => {
     open(`addCard${columnId}`);
@@ -132,13 +186,16 @@ function AddCardButton({ columnId, list, setList }: { columnId: number, list:Car
     <Modal>
       <>
         <Modal.Open opens={`addCard${columnId}`}>
-          <button className='card flex-center py-9' onClick={handleCreateModal}>
+          <button
+            className='card flex-center mx-12 mb-10 py-6 tablet:mx-20 tablet:mb-16 tablet:py-9'
+            onClick={handleCreateModal}
+          >
             <AddChip />
           </button>
         </Modal.Open>
         <Modal.Window name={`addCard${columnId}`}>
           <Form>
-            <Form.TodoForm type='create' columnId={columnId} list={list} setList={setList} />
+            <Form.TodoForm type='create' columnId={columnId} list={list} setList={setList}  />
           </Form>
         </Modal.Window>
       </>

@@ -26,6 +26,7 @@
     --gray-5: 120 116 134;
     --gray-6: 75 75 75;
     --gray-7: 51 50 54;
+    --WHITE: 255 255 255;
   }
 
   :root[data-theme='dark'] {
@@ -51,6 +52,7 @@
     --gray-5: 217 217 217;
     --gray-6: 238 238 238;
     --gray-7: 250 250 250;
+    --WHITE: 255 255 255;
   }
 
   body {
@@ -228,4 +230,3 @@
   background: gray;
   border-radius: 0.5rem;
 }
-

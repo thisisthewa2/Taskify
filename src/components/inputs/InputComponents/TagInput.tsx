@@ -38,7 +38,7 @@ function TagInput({
   };
 
   return (
-    <div className='input flex h-auto items-center'>
+    <div className='input flex h-auto items-center bg-WHITE'>
       <div className='flex w-full flex-wrap  gap-8 '>
         {tagList.map((tag, index) => (
           <div className='flex shrink-0' key={index}>

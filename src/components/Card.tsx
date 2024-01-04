@@ -1,21 +1,24 @@
 import { useAtom } from 'jotai';
 import Image from 'next/image';
-import Link from 'next/link';
 import { JSXElementConstructor, ReactElement } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { openModal } from '@/store/modalAtom';
 import { generateColor } from '@/utils/generateColor';
 import { CardProps } from '@/pages/api/mock';
-import Close from '@/components/icons/Close';
-import Kebab from '@/components/icons/Kebab';
 import { IconCalendar } from '@/public/svgs';
 import { DEFAULT_PROFILE_COLOR } from './Members';
-import { Button } from './buttons';
 import TagChip from './chips/TagChip';
-import Input from './inputs/Input';
 import Form from './modal/Form';
 import Modal from './modal/Modal';
 
-function Card({ data, title }: { data: CardProps; title: string }) {
+
+interface Props {
+  data: CardProps;
+  title: string;
+  index: number;
+}
+
+function Card({ data, title, index }: Props) {
   const [, open] = useAtom(openModal);
 
   if (!data) return;
@@ -26,19 +29,26 @@ function Card({ data, title }: { data: CardProps; title: string }) {
 
   return (
     <ViewDetail cardData={data} title={title}>
-      <div
-        className='card flex cursor-pointer flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10'
-        onClick={handleCardViewModal}
-      >
-        {data.imageUrl && <CardImage src={data.imageUrl} />}
-        <div className='flex w-full flex-col gap-6 pc:gap-10'>
-          <p className='body1-normal'>{data.title}</p>
-          <div className='flex flex-col gap-6 tablet:flex-row tablet:gap-16 pc:flex-col pc:gap-10'>
-            <Tags tags={data.tags} />
-            <CardInfo date={data.dueDate} assignee={data.assignee} />
+      <Draggable draggableId={String(data.id)} index={index}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            className='card flex cursor-pointer flex-col gap-6 tablet:flex-row pc:w-314 pc:flex-col pc:gap-10'
+            onClick={handleCardViewModal}
+          >
+            {data.imageUrl && <CardImage src={data.imageUrl} />}
+            <div className='flex w-full flex-col gap-6 pc:gap-10'>
+              <p className='body1-normal'>{data.title}</p>
+              <div className='flex flex-col gap-6 tablet:flex-row tablet:gap-16 pc:flex-col pc:gap-10'>
+                <Tags tags={data.tags} />
+                <CardInfo date={data.dueDate} assignee={data.assignee} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </Draggable>
     </ViewDetail>
   );
 }
@@ -83,9 +93,9 @@ interface CardInfoProps {
 
 function CardInfo({ date, assignee }: CardInfoProps) {
   const profile = {
-    id: assignee?.id,
-    profileImageUrl: assignee?.profileImageUrl || undefined,
-    nickname: assignee?.nickname,
+    id: assignee.id,
+    profileImageUrl: assignee.profileImageUrl || undefined,
+    nickname: assignee.nickname,
   };
 
   return (
@@ -137,7 +147,7 @@ interface DefaultMember {
 }
 
 function DefaultMember({ nickname }: DefaultMember) {
-  const initial = nickname ? nickname[0].toUpperCase() : '';
+  const initial = nickname[0].toUpperCase();
   const color = DEFAULT_PROFILE_COLOR[generateColor(initial)];
 
   return (
