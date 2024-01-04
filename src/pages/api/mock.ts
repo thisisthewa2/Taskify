@@ -29,7 +29,7 @@ export interface GetDashboardInfoType {
 
 export interface InvitationsProps {
   invitations: InvitationProps[] | [];
-  cursorId: null | number;
+  cursorId?: null | number;
 }
 
 export interface DashboardIdInvitationsProps {
