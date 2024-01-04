@@ -1,6 +1,6 @@
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { openModal } from '@/store/modalAtom';
 import { DashboardsProps } from '@/pages/api/mock';
@@ -10,8 +10,10 @@ import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import ArrowButtonPageChange from './ArrowButtonPageChange';
 import MyDashboardButton from './MyDashboardButton';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 
 function MyDashboardButtons() {
+  const dashboardUpdate = useAtomValue(dashboardUpdateAtom);
   const [currentPage, setCurrentPage] = useState(1);
   const { data: dashboardsData, fetch: getDashboardsData } =
     useRequest<DashboardsProps>({
@@ -28,8 +30,9 @@ function MyDashboardButtons() {
     });
 
   useEffect(() => {
+    if (dashboardUpdate === false) return;
     getDashboardsData();
-  }, []);
+  }, [dashboardUpdate]);
 
   if (!dashboardsData ?? !dashboardsData?.dashboards) return;
   const { dashboards, totalCount } = dashboardsData;
