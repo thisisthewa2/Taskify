@@ -62,7 +62,6 @@ function DashboardId({ id }: DashboardProps) {
         destination.index === source.index
       )
         return;
-
       const _items = JSON.parse(JSON.stringify(columns)) as typeof columns;
       const [targetItem] = _items.splice(source.index, 1);
       _items.splice(destination.index, 0, targetItem);
