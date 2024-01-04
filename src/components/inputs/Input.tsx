@@ -12,8 +12,10 @@ export type Props = {
   onInput?: React.ChangeEventHandler<HTMLInputElement>;
   tagList?: string[];
   setTagList?: (tagList: string[]) => void;
+  handleSetDate?: (date: string) => void;
   columnName?: string;
   columnId?: string;
+  name?: string;
 };
 
 function Label({ title, required }: Props) {
@@ -41,7 +43,7 @@ function SelectedInput({
         </InputComponents.TextInput>
       );
     case 'date':
-      return <InputComponents.DateInput required={required} />;
+      return <InputComponents.DateInput required={required} {...rest} />;
     case 'textarea':
       return (
         <InputComponents.Textarea required={required} {...rest}>

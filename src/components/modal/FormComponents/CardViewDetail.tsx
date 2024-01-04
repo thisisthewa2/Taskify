@@ -10,6 +10,7 @@ import {
 import { CardProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
+import { cardAtom } from '@/store/cardAtom';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
 import { closeAllModals, openModal } from '@/store/modalAtom';
@@ -255,6 +256,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
           columnId={columnId}
           setIsKebab={setIsKebab}
           cardId={cardId}
+          cardData={cardData}
         />
       )}
     </>
@@ -277,11 +279,13 @@ function KebabButton({
   columnId,
   setIsKebab,
   cardId,
+  cardData
 }: {
   handleReset: () => void;
   columnId?: number;
   cardId: number;
   setIsKebab: Dispatch<SetStateAction<boolean>>;
+  cardData?: CardProps;
 }) {
   return (
     <ul className='card flex-center absolute right-30 top-0 h-82 w-93 flex-col p-6 tablet:right-50 tablet:top-30 '>
@@ -292,6 +296,7 @@ function KebabButton({
             key={list.id}
             setIsKebab={setIsKebab}
             columnId={columnId}
+            cardData={cardData}
             isHidden={true}
           />
         ) : (
@@ -340,17 +345,22 @@ export function EditCardButton({
   list,
   setIsKebab,
   columnId,
+  cardData,
   isHidden,
 }: {
   list?: KebabListType;
   setIsKebab?: Dispatch<SetStateAction<boolean>>;
   columnId?: number;
+  cardData?: CardProps;
   isHidden: boolean;
 }) {
-  /* const handleButtonClick = (e: MouseEvent<HTMLLIElement>) => {
-    e.preventDefault();
-    
-  }; */
+  const [card, setCard] = useAtom(cardAtom);
+
+  useEffect(() => {
+    if (!cardData) return;
+    setCard(cardData);
+  }, [cardData]);
+
   const [, open] = useAtom(openModal);
   const [, closeAll] = useAtom(closeAllModals);
   const handleAddModal = () => {

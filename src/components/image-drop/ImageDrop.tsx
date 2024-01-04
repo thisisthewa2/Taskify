@@ -1,6 +1,8 @@
 import { useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai/index';
 import Image from 'next/image';
 import useRequest from '@/hooks/useRequest';
+import { cardAtom } from '@/store/cardAtom';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { IconAddLogo, IconEditLogo } from '@/public/svgs';
 
@@ -30,6 +32,8 @@ const DEFINE_IMAGE_PROPERTIES = (columnId?: number) => ({
 });
 
 function ImageDrop({ type, columnId, initialImageUrl }: ImageDropType) {
+  const card = useAtomValue(cardAtom);
+  if (!columnId) columnId = card.columnId;
   const IMAGE_PROPERTIES = DEFINE_IMAGE_PROPERTIES(columnId && columnId);
   const imageFormData = new FormData();
 

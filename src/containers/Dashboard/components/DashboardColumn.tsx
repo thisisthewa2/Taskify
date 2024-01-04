@@ -1,9 +1,10 @@
-import { useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { CardProps, CardsProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
+import { CardStateAtom } from '@/store/createCardAtom';
 import { closeAllModals, openModal } from '@/store/modalAtom';
 import Card from '@/components/Card';
 import DashboardColorDot from '@/components/DashboardColorDot';
@@ -31,13 +32,14 @@ function DashboardColumn({
   index,
 }: Props) {
   const [visible, setVisible] = useState(true);
-  const [list, setList] = useState<CardProps[]>([]);
   const [currentCursorId, setCurrentCursorId] = useState(0);
+  const [list, setList] = useState<CardProps[]>([]);
+  const isCreateCard = useAtomValue(CardStateAtom);
   const INITIAL_SIZE = 10;
   const SIZE = 5;
 
   const { data: initialCardList, fetch } = useRequest<CardsProps>({
-    deps: [columnId, changed],
+    deps: [columnId, changed, isCreateCard.isCreateCard],
     skip: !columnId,
     options: {
       url: `cards`,
@@ -112,7 +114,7 @@ function DashboardColumn({
               totalCount={initialCardList.totalCount}
               columnId={columnId}
             />
-            <AddCardButton columnId={columnId} />
+            <AddCardButton columnId={columnId} list={list} setList={setList} />
             <Droppable droppableId={String(columnId)} type='card'>
               {(provided) => (
                 <div
@@ -175,7 +177,13 @@ function ColumnInfo({
   );
 }
 
-function AddCardButton({ columnId }: { columnId: number }) {
+function AddCardButton({
+  columnId,
+}: {
+  columnId: number;
+  list: CardProps[];
+  setList: Dispatch<SetStateAction<CardProps[]>>;
+}) {
   const [, open] = useAtom(openModal);
   const handleCreateModal = () => {
     open(`addCard${columnId}`);
@@ -193,7 +201,7 @@ function AddCardButton({ columnId }: { columnId: number }) {
         </Modal.Open>
         <Modal.Window name={`addCard${columnId}`}>
           <Form>
-            <Form.TodoForm type='create' />
+            <Form.TodoForm type='create' columnId={columnId} />
           </Form>
         </Modal.Window>
       </>

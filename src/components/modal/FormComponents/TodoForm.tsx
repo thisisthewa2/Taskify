@@ -1,4 +1,11 @@
-import React, { useState } from 'react';
+import { useAtom, useAtomValue } from 'jotai/index';
+import { useRouter } from 'next/router';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { CardProps } from 'src/types';
+import useRequest from '@/hooks/useRequest';
+import { cardAtom } from '@/store/cardAtom';
+import { ImageUrlAtom } from '@/store/imageUrlAtom';
+import { changedAtom } from '@/containers/Dashboard/DashboardId';
 import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
 import StateDropdown from '@/components/dropdowns/StateDropdown';
@@ -8,59 +15,192 @@ import Input from '@/components/inputs/Input';
 interface Props {
   onCloseModal: () => void;
   type: 'create' | 'edit';
+  columnId: number;
+  cardId?: number;
 }
 
-function TodoForm({ onCloseModal, type = 'edit' }: Props) {
-  const [tagList, setTagList] = useState<string[]>([]);
+interface FormValues {
+  assigneeUserId?: number;
+  dashboardId?: number;
+  columnId?: number;
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string;
+}
+
+function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
+  const card = useAtomValue(cardAtom);
+
+  const router = useRouter();
+  const dashboardId = router.query.dashboardId ? +router.query.dashboardId : 0;
+
+  const [imageUrl, setImageUrl] = useAtom(ImageUrlAtom);
+
+  let initialValues: FormValues = {
+    columnId,
+    dashboardId,
+  };
+
+  if (type === 'edit') {
+    initialValues = { ...card };
+  }
+
+  const [tagList, setTagList] = useState<string[]>(
+    card && type === 'edit' ? [...card.tags] : [],
+  );
+  const [values, setValues] = useState<FormValues>(initialValues);
 
   const handleSetTagList = (newTagList: string[]) => {
     setTagList(newTagList);
+    setValues((preValues) => ({
+      ...preValues,
+      tags: newTagList,
+    }));
+  };
+
+  const handleSetDate = (date: string) => {
+    setValues((preValues) => ({
+      ...preValues,
+      dueDate: date,
+    }));
+  };
+
+  const handleSetManager = (assigneeUserId: number) => {
+    setValues((preValues) => ({
+      ...preValues,
+      assigneeUserId,
+    }));
+  };
+
+  const handleSetState = (newColumnId: number) => {
+    setValues((preValues) => ({
+      ...preValues,
+      columnId: newColumnId,
+    }));
   };
 
   const title = type === 'edit' ? '할 일 수정' : '할 일 생성';
+
+  const handleValuesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setValues((preValues) => ({
+      ...preValues,
+      [name]: value,
+    }));
+  };
+
+  const { fetch: postData } = useRequest<CardProps>({
+    skip: true,
+    options: { url: 'cards/', method: 'post' },
+  });
+
+  const { fetch: editData } = useRequest<CardProps>({
+    skip: true,
+    options: { url: `cards/${card.id}`, method: 'put' },
+  });
+
+  const handleCreateTodo = async () => {
+    let hasError = false;
+
+    values.imageUrl = imageUrl.imageUrl;
+    try {
+      const { data } = await postData({
+        data: { ...values },
+      });
+
+      if (!data) return;
+      onCloseModal();
+      setChanged(!changed);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+  const [changed, setChanged] = useAtom(changedAtom);
+  const handleEditTodo = async () => {
+    values.imageUrl = imageUrl.imageUrl;
+    try {
+      const { data } = await editData({
+        data: { ...values },
+      });
+
+      if (!data) return;
+      onCloseModal();
+      setChanged(!changed);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
 
   return (
     <form className='mb-70 flex flex-col gap-30'>
       <h1 className='heading1-bold'>{title}</h1>
       <div className='flex gap-12'>
-        {type === 'edit' && <StateDropdown />}
+        {type === 'edit' && (
+          <StateDropdown
+            stateId={card.columnId}
+            handleSetState={handleSetState}
+          />
+        )}
 
-        <ManagerDropdown />
+        <ManagerDropdown
+          handleSetManager={handleSetManager}
+          managerId={card.assignee.id}
+        />
       </div>
       <Input
         type='text'
         title='제목'
         required={true}
         placeholder='제목을 입력해 주세요'
+        name='title'
+        onInput={handleValuesChange}
+        value={values.title}
       />
       <Input
         type='textarea'
         title='설명'
         required={true}
         placeholder='설명을 입력해 주세요'
+        name='description'
+        onInput={handleValuesChange}
+        value={values.description}
       />
-      <Input type='date' title='마감일' />
+      <Input
+        type='date'
+        title='마감일'
+        name='dueDate'
+        handleSetDate={handleSetDate}
+        value={values.dueDate}
+      />
       <Input
         type='tag'
         title='태그'
         setTagList={handleSetTagList}
         placeholder='입력 후 Enter'
         tagList={tagList}
+        name='tags'
       />
       <div>
         <label className='text-[18px] font-[500]'>이미지</label>
-        <ImageDrop type={'modal'} columnId={4} />
+        <ImageDrop
+          type={'modal'}
+          columnId={columnId}
+          initialImageUrl={card.imageUrl}
+        />
       </div>
       <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
         <Button.Secondary type='button' size='lg' onClick={onCloseModal}>
           취소
         </Button.Secondary>
         {type === 'edit' ? (
-          <Button type='button' size='lg'>
+          <Button type='button' size='lg' onClick={handleEditTodo}>
             수정
           </Button>
         ) : (
-          <Button type='button' size='lg'>
+          <Button type='button' size='lg' onClick={handleCreateTodo}>
             생성
           </Button>
         )}

@@ -10,11 +10,12 @@ import { formatDate } from './formatDate';
 
 interface CommentType {
   comment: CommentsType;
-  setList: Dispatch<SetStateAction<CommentsType[]>>
-  list:CommentsType[]
+  setList?: Dispatch<SetStateAction<CommentsType[]>>;
+  list?: CommentsType[];
+  setCommentId?: Dispatch<SetStateAction<number>>;
 }
 
-function Comments({ comment, setList, list }: CommentType) {
+function Comments({ comment, setList = () => {}, list = [] }: CommentType) {
   const loginInfo = useAtomValue(loginAtom);
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
   const { author, updatedAt, content, id } = comment;
@@ -48,7 +49,7 @@ function Comments({ comment, setList, list }: CommentType) {
 
   const handleDelete = async (commentId: number) => {
     await deleteComment();
-    setList(list.filter(comment => comment.id !== commentId))
+    setList(list.filter((comment) => comment.id !== commentId));
   };
 
   const handleIsEdit = () => {
@@ -64,10 +65,12 @@ function Comments({ comment, setList, list }: CommentType) {
     const { data } = await editComment();
 
     if (data) {
-      const editListIndex = list.findIndex(comment => comment.id === commentId)
+      const editListIndex = list.findIndex(
+        (comment) => comment.id === commentId,
+      );
       list[editListIndex] = data;
       const newList = list;
-      setList([...newList])
+      setList([...newList]);
       setIsEdit(!isEdit);
     }
   };
@@ -90,7 +93,7 @@ function Comments({ comment, setList, list }: CommentType) {
               onBlur={handleBlur}
             />
             <div className='caption-normal flex items-center justify-start gap-12 text-gray-4 underline'>
-              <div className='cursor-pointer' onClick={()=>handleEdit(id)}>
+              <div className='cursor-pointer' onClick={() => handleEdit(id)}>
                 확인
               </div>
               <div className='cursor-pointer' onClick={handleIsEdit}>

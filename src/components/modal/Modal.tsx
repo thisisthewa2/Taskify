@@ -35,7 +35,7 @@ const ModalContext = createContext<ModalContextType>({
 });
 
 const WINDOW_STYLE = {
-  card: 'modal tablet:w-[45.6rem] tablet:h-[48.126rem] overflow-auto scrollbar pt-40 h-[44.25rem] w-[20.4rem]',
+  card: 'modal tablet:w-[45.6rem] tablet:h-[51.875rem] overflow-auto custom-scrollbar',
   rest: 'modal',
 };
 
