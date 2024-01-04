@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import {
   DragDropContext,
@@ -19,13 +19,15 @@ interface DashboardProps {
   id: string;
 }
 
+export const changedAtom = atom(false);
+
 function DashboardId({ id }: DashboardProps) {
   const [enabled, setEnabled] = useState(false);
   const [columns, setColumns] = useState<ColumnProps[]>([]);
   const [droppableId, setDroppableId] = useState(0);
   const [movedInfo, setMovedInfo] = useState<[number, number]>([-1, -1]);
   const [cardId, setCardId] = useState('');
-  const [changed, setChanged] = useState(false);
+  const [changed, setChanged] = useAtom(changedAtom);
   const { columnTitle } = useAtomValue(ColumnsAtom);
 
   const { data: columnsResponse } = useRequest<ColumnsProps>({
@@ -44,7 +46,6 @@ function DashboardId({ id }: DashboardProps) {
       method: 'put',
     },
   });
-
 
   const onDragStart = ({ draggableId, type }: DragStart) => {
     if (type === 'card') {
