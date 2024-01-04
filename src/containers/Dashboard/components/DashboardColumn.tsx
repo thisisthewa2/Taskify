@@ -16,20 +16,27 @@ import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
 
 interface Props {
+  movedInfo: [number, number];
   changed: boolean;
   title: string;
   columnId: number;
   index: number;
 }
 
-function DashboardColumn({ changed, title, columnId, index }: Props) {
+function DashboardColumn({
+  movedInfo,
+  changed,
+  title,
+  columnId,
+  index,
+}: Props) {
   const [visible, setVisible] = useState(true);
   const [list, setList] = useState<CardProps[]>([]);
   const [currentCursorId, setCurrentCursorId] = useState(0);
   const INITIAL_SIZE = 10;
   const SIZE = 5;
 
-  const { data: initialCardList } = useRequest<CardsProps>({
+  const { data: initialCardList, fetch } = useRequest<CardsProps>({
     deps: [columnId, changed],
     skip: !columnId,
     options: {
@@ -63,6 +70,17 @@ function DashboardColumn({ changed, title, columnId, index }: Props) {
     handleScroll: handleClick,
     deps: [initialCardList, cardList],
   });
+
+  useEffect(() => {
+    if (movedInfo[0] === -1) {
+      fetch();
+      return;
+    }
+    const _items = JSON.parse(JSON.stringify(list)) as typeof list;
+    const [targetItem] = _items.splice(movedInfo[0], 1);
+    _items.splice(movedInfo[1], 0, targetItem);
+    setList(_items);
+  }, [movedInfo]);
 
   useEffect(() => {
     if (!initialCardList) return;
@@ -167,7 +185,7 @@ function AddCardButton({ columnId }: { columnId: number }) {
       <>
         <Modal.Open opens={`addCard${columnId}`}>
           <button
-            className='card flex-center mx-12 mb-10 tablet:mx-20 tablet:mb-16'
+            className='card flex-center mx-12 mb-10 py-6 tablet:mx-20 tablet:mb-16 tablet:py-9'
             onClick={handleCreateModal}
           >
             <AddChip />

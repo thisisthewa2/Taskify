@@ -57,7 +57,7 @@ function StateDropdown() {
       <h2 className='subheading-normal'>상태</h2>
       <div className='relative' onBlur={handleBlur} tabIndex={0}>
         <div
-          className={` flex h-48 w-full items-center justify-between rounded-md p-16 ${
+          className={` flex h-48 w-full items-center justify-between rounded-md bg-WHITE p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
           } cursor-pointer`}
           onClick={handleClickBox}
