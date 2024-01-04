@@ -80,9 +80,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
 
   const profile = [
     {
-      id: assignee.id,
-      profileImageUrl: assignee.profileImageUrl || undefined,
-      nickname: assignee.nickname,
+      id: assignee?.id,
+      profileImageUrl: assignee?.profileImageUrl || undefined,
+      nickname: assignee?.nickname,
     },
   ];
 
@@ -235,9 +235,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             <div className=' flex flex-col justify-center'>
               <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
               <div className='body2-normal flex items-center justify-start gap-8'>
-                <Members members={profile} totalCount={0} />
+                {assignee && <Members members={profile} totalCount={0} />}
                 <h2 className='body2-normal text-gray-7'>
-                  {assignee.nickname}
+                  {assignee?.nickname}
                 </h2>
               </div>
             </div>
@@ -279,7 +279,7 @@ function KebabButton({
   columnId,
   setIsKebab,
   cardId,
-  cardData
+  cardData,
 }: {
   handleReset: () => void;
   columnId?: number;

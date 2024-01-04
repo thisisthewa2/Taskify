@@ -170,7 +170,9 @@ https://taskify-project-sigma.vercel.app/
          <details>
             <summary>할 일 생성, 수정</summary>
             <ul>
-            <li>  </li>
+            <li>  
+     jotai 전역 상태관리 사용
+</li>
             </ul>
         </details>
     </ul>
@@ -399,6 +401,10 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
             </details>
             <details>
               <summary>할 일 생성, 수정</summary>
+    
+![할일생성](https://github.com/Peachy-Peachy/Taskify/assets/119280160/b6c35d75-252c-47f2-998d-4437424b870b)
+    
+![할일수정](https://github.com/Peachy-Peachy/Taskify/assets/119280160/eac26b34-3d39-4353-8664-216ca408cb18)
             </details>
         </ul>
   </details>
