@@ -138,6 +138,43 @@ https://taskify-project-sigma.vercel.app/
 </details>
 </ul>
 </details>
+<details>
+    <summary>대시보드</summary>
+    <ul>
+        <details>
+            <summary>DnD</summary>
+            <ul>
+            <li>react-beautiful-dnd 라이브러리 활용</li>
+            <li> 칼럼 간, 카드 간, 서로 다른 칼럼의 카드 간의 이동 가능 </li>
+            <li> 핸들, 드래그, 드롭이 가능한 영역을 각각 지정하고, 드래그 전 후에 이벤트 함수를 통해 작동 </li>
+            </ul>
+        </details>
+        <details>
+            <summary>더보기 버튼</summary>
+            <ul>
+            <li> 세로스크롤 기반의 Mobile, Tablet 사이즈에서 `더보기` 버튼을 통해 카드리스트 확장 </li>
+            </ul>
+        </details>
+           <details>
+            <summary>무한 스크롤</summary>
+            <ul>
+            <li> 가로 스크롤 기반의 PC 사이즈에서 무한스크롤을 통해 카드리스트 확장 </li>
+            </ul>
+        </details>
+        <details>
+            <summary>컬럼 관리</summary>
+            <ul>
+            <li>  </li>
+            </ul>
+        </details>
+         <details>
+            <summary>할 일 생성, 수정</summary>
+            <ul>
+            <li>  </li>
+            </ul>
+        </details>
+    </ul>
+</details>
 </details>
 </details>
 <details>
@@ -203,7 +240,7 @@ Jotai를 사용해 로그인 정보와 다크모드 상태 저장
 <details>
 <summary>모달</summary>
 
-<ul><li> 컴파운드 패턴 적용 </li></ul>
+<ul><li> 컴파운드 패턴을 적용해 모달과 관련된 데이터를 context로 관리하며, 기능의 관심사를 분리 </li></ul>
 
 </details>
 <details>
@@ -286,7 +323,7 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
 
 </details>
 
-### Feature Demonstration GIF
+## Feature Demonstration GIF
 <details>
     <summary>페이지</summary>
      <ul>
@@ -386,6 +423,8 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
       <ul>
            <details>
               <summary>헤더</summary>
+               
+![헤더](https://github.com/Peachy-Peachy/Taskify/assets/119280160/a2bb95f9-7a8c-4d4b-9edb-63e31a50cb12)
            </details>
           <details>
               <summary>모달</summary>
@@ -426,6 +465,8 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
            <details>
               <summary>사이드메뉴</summary>
                
+![사이드메뉴3](https://github.com/Peachy-Peachy/Taskify/assets/119280160/15f5c6dd-e524-49b5-8da4-1cd759053277)
+   
   </details>
 
 
