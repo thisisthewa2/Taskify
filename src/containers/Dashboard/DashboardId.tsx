@@ -45,6 +45,7 @@ function DashboardId({ id }: DashboardProps) {
     },
   });
 
+
   const onDragStart = ({ draggableId, type }: DragStart) => {
     if (type === 'card') {
       setCardId(draggableId);

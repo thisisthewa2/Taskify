@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { openModal } from '@/store/modalAtom';
 import { DashboardsProps } from '@/pages/api/mock';
@@ -13,7 +13,6 @@ import MyDashboardButton from './MyDashboardButton';
 
 function MyDashboardButtons() {
   const [currentPage, setCurrentPage] = useState(1);
-
   const { data: dashboardsData, fetch: getDashboardsData } =
     useRequest<DashboardsProps>({
       deps: [currentPage],
@@ -27,6 +26,10 @@ function MyDashboardButtons() {
         },
       },
     });
+
+  useEffect(() => {
+    getDashboardsData();
+  }, []);
 
   if (!dashboardsData ?? !dashboardsData?.dashboards) return;
   const { dashboards, totalCount } = dashboardsData;
@@ -67,7 +70,7 @@ function NewDashboardButton({ fetch }: { fetch: () => void }) {
         <Modal.Open opens='addDashboard'>
           <DashboardButton>
             <div
-              className='mx-12 flex items-center gap-15'
+              className='flex-center mx-12 h-full w-full gap-15'
               onClick={handleCreateModal}
             >
               새로운 대시보드
