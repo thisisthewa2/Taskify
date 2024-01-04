@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
+import { reduceText } from '@/utils/reduceText';
 import { DashboardIdInvitationsProps, MembersProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import BackButton from '@/components/buttons/BackButton';
@@ -151,19 +152,22 @@ function TitleManageBox({ dashboardId }: Props) {
     getDashboardInfo();
   }, [dashboardId]);
 
+  if (!dashboardInfo) return;
+  const reducedTitle = reduceText(dashboardInfo.title, 22);
+
   return (
     <form
       onSubmit={setDashboardInfo}
       className='flex flex-col gap-30 rounded-lg bg-white px-16 py-32'
     >
       <div className='flex items-center justify-between'>
-        <span className='heading1-bold'>{dashboardInfo?.title}</span>
+        <span className='heading1-bold'>{reducedTitle}</span>
         <ColorChip onSelectColor={handleColorChange} />
       </div>
       <label className='subheading-normal'>
         대시보드 이름
         <input
-          placeholder={dashboardInfo?.title}
+          placeholder={dashboardInfo.title}
           onChange={handleTitleChange}
           value={title}
           className='input mt-10'
