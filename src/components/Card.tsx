@@ -92,20 +92,25 @@ interface CardInfoProps {
 
 function CardInfo({ date, assignee }: CardInfoProps) {
   const profile = {
-    id: assignee.id,
-    profileImageUrl: assignee.profileImageUrl || undefined,
-    nickname: assignee.nickname,
+    id: assignee?.id,
+    profileImageUrl: assignee?.profileImageUrl || undefined,
+    nickname: assignee?.nickname,
   };
 
   return (
     <div className='flex w-full items-center justify-between'>
-      <div className='flex items-center gap-4'>
-        <IconCalendar />
-        <p className='caption-normal h-13 text-gray-5 tablet:h-15'>{date}</p>
-      </div>
-      <div className='h-22 w-22 tablet:h-24 tablet:w-24'>
-        <Member member={profile} />
-      </div>
+      {date && (
+        <div className='flex items-center gap-4'>
+          <IconCalendar />
+          <p className='caption-normal h-13 text-gray-5 tablet:h-15'>{date}</p>
+        </div>
+      )}
+
+      {assignee && (
+        <div className='h-22 w-22 tablet:h-24 tablet:w-24'>
+          <Member member={profile} />
+        </div>
+      )}
     </div>
   );
 }
