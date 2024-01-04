@@ -14,7 +14,11 @@ interface Member {
   updatedAt: string;
   userId: number;
 }
-function ManagerDropdown() {
+function ManagerDropdown({
+  handleSetManager,
+}: {
+  handleSetManager: (value: number) => void;
+}) {
   const router = useRouter();
   const { dashboardId } = router.query;
 
@@ -61,6 +65,7 @@ function ManagerDropdown() {
     const { value } = e.target;
     setIsDrop(true);
     setManagerName(value);
+    handleSetManager(+value);
   };
 
   /* 검색리스트 생성 */
@@ -78,6 +83,7 @@ function ManagerDropdown() {
     const { textContent } = e.currentTarget;
     if (textContent) {
       setManagerName(textContent);
+      handleSetManager(id);
     }
 
     const newManagerList = managerList.members.map((manager) => {
@@ -87,13 +93,11 @@ function ManagerDropdown() {
     });
 
     setManagerList({
-      ...managerList,
       members: newManagerList,
     });
   };
 
   const handleBlur = () => {
-    console.log(111)
     setTimeout(() => {
       setIsDrop(false);
     }, 200);
@@ -107,7 +111,7 @@ function ManagerDropdown() {
   return (
     <div className='flex w-287 flex-col justify-start gap-10 tablet:w-217 '>
       <h2 className='subheading-normal'>담당자</h2>
-      <div className='relative' onBlur={handleBlur} tabIndex={0}>
+      <div className='relative' onBlur={handleBlur}>
         <div
           className={`flex h-48 w-full items-center justify-between rounded-md p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
@@ -122,11 +126,8 @@ function ManagerDropdown() {
             onChange={handleChange}
             onFocus={handleFocusBox}
           />
-          <label onClick={handleClickBox}>
-          <IconArrowDown className='cursor-pointer'  />
-          </label>
+          <IconArrowDown className='cursor-pointer' onClick={handleClickBox} />
         </div>
-        
         <ul
           className={`border-solid-gray absolute left-0 ${
             isDrop ? 'top-50' : 'top-46 z-[-1] opacity-0'

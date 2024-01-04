@@ -1,13 +1,13 @@
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import Image from 'next/image';
 import {
   Dispatch,
   FormEvent,
+  MouseEvent,
   SetStateAction,
   useEffect,
   useState,
 } from 'react';
-import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
@@ -15,12 +15,14 @@ import { closeAllModals, openModal } from '@/store/modalAtom';
 import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
+import AddChip from '@/components/chips/AddChip';
 import StateChip from '@/components/chips/StateChip';
 import TagChip from '@/components/chips/TagChip';
 import Comments from '@/components/comment/Comments';
 import Close from '@/components/icons/Close';
 import Kebab from '@/components/icons/Kebab';
 import Input from '@/components/inputs/Input';
+import { IconSettings } from '@/public/svgs';
 import Confirm from '../Confirm';
 import Form from '../Form';
 import Modal from '../Modal';
@@ -56,15 +58,11 @@ interface CreateCommentType {
   dashboardId: number;
 }
 
-const SIZE = 2;
-
 function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
-  const setColumnTitle = useSetAtom(ColumnsAtom);
+  const [commentId, setCommentId] = useState(0);
   const [isKebab, setIsKebab] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [currentCursorId, setCurrentCursorId] = useState(0);
-  const [list, setList] = useState<CommentsType[]>([]);
+  const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
 
   const {
     tags,
@@ -85,31 +83,15 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     },
   ];
 
-  const { data: initCommentList } = useRequest<CommentListType>({
-    deps: [cardId],
-    skip: !cardId,
-    options: {
-      url: `comments`,
-      params: { cardId: cardId, size: SIZE },
-      method: 'get',
+  const { data: commentList, fetch: getComments } = useRequest<CommentListType>(
+    {
+      skip: true,
+      options: {
+        url: `comments?size=10&cardId=${cardId}`,
+        method: 'get',
+      },
     },
-  });
-
-  
-  const { data: commentList } = useRequest<CommentListType>({
-    deps: [cardId, currentCursorId],
-    skip: !currentCursorId,
-    options: {
-      url: `comments`,
-      params:
-       { cardId: cardId,
-        size: SIZE,
-        cursorId: currentCursorId
-       },
-      method: 'get',
-    },
-  });
-
+  );
   const { fetch: createComment } = useRequest<CreateCommentType>({
     skip: true,
     options: {
@@ -124,31 +106,11 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     },
   });
 
-  const handleClick = () => {
-    if (!commentList || !commentList.comments || !commentList.cursorId) return;
-    setCurrentCursorId(commentList.cursorId);
-    setList((prev) => [...prev, ...commentList.comments]);
-
-    if (
-      commentList.cursorId === currentCursorId ||
-      commentList.comments.length < SIZE
-    ) {
-      setVisible(false);
-      return;
-    }
-  };
-
-  const containerRef = useInfiniteScroll({
-    handleScroll: handleClick,
-    deps: [commentList, initCommentList],
-  });
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { data } = await createComment();
 
-    if (data && commentList) {
-      setList((prev) => [data ,...prev]);
+    if (data) {
       setCommentValue({ comment: '' });
     }
   };
@@ -157,7 +119,14 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     setIsKebab(!isKebab);
   };
 
+  const handleKebabMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    console.log(111);
+    e.preventDefault();
+    setIsKebab(!isKebab);
+  };
+
   const handleBlur = () => {
+    console.log(2222);
     setTimeout(() => {
       setIsKebab(false);
     }, 200);
@@ -169,12 +138,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   };
 
   useEffect(() => {
-    if (!initCommentList || !initCommentList.cursorId) return;
-    setList(initCommentList.comments);
-    setCurrentCursorId(initCommentList.cursorId);
-    setVisible(true);
-  }, [initCommentList]);
-
+    getComments();
+  }, [commentValue, commentId]);
+  console.log(isKebab);
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -183,8 +149,8 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             새로운 일정 관리 Taskify
           </h2>
           <div
-            className='flex items-center justify-between tablet:gap-24 gap-16 tablet:mt-0 tablet: mr-0 mt-[-3.4rem] mr-[-0.625rem]'
-            onBlur={handleBlur} tabIndex={0}
+            className='flex items-center justify-between gap-24'
+            onBlur={handleBlur}
           >
             <label onClick={handleKebab}>
               <Kebab />
@@ -192,9 +158,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             <Close onClick={onCloseModal} />
           </div>
         </div>
-        <div className='flex tablet:flex-row flex-col-reverse items-start justify-between gap-24'>
-          <div className='tablet:w-450 w-full'>
-            <div className='tablet:mt-24 flex items-center justify-start mt-0'>
+        <div className='flex items-start justify-between gap-24'>
+          <div className='w-450'>
+            <div className='mt-24 flex items-center justify-start'>
               <div className='border-r border-gray-3 pr-20'>
                 <StateChip str={title} />
               </div>
@@ -220,34 +186,26 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
               </div>
             </div>
             <div className='flex flex-col items-start justify-start gap-10'>
-              {list.length > 0 &&
-                list.map((comment) => {
+              {commentList?.comments &&
+                commentList.comments.map((comment) => {
                   return (
                     <Comments
                       key={comment.id}
                       comment={comment}
-                      list={list}
-                      setList={setList}
+                      setCommentId={setCommentId}
                     />
                   );
                 })}
-              {visible && (
-                <div ref={containerRef} className='w-full h-10 pc:inline' />
-              )}
             </div>
           </div>
-          <div className='card mt-21 tablet:h-165 tablet:w-200 w-full h-85 flex tablet:flex-col tablet:justify-start flex-row justify-between tablet:flex-shrink-0'>
-            <div className=' flex flex-col justify-center'>
-              <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
-              <div className='body2-normal flex items-center justify-start gap-8'>
-                <Members members={profile} totalCount={0} />
-                <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
-              </div>
+          <div className='card mt-21 h-165 w-200 flex-shrink-0'>
+            <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
+            <div className='body2-normal flex items-center justify-start gap-8'>
+              <Members members={profile} totalCount={0} />
+              <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
             </div>
-            <div className=' flex flex-col gap-10 justify-start h-63'>
-              <h3 className='caption-bold mb-6 tablet:mt-20 text-gray-7'>마감일</h3>
-              <div className='caption-bold text-gray-7 '>{dueDate}</div>
-            </div>
+            <h3 className='caption-bold mb-6 mt-20 text-gray-7'>마감일</h3>
+            <div className='caption-bold text-gray-7'>{dueDate}</div>
           </div>
         </div>
       </form>
@@ -255,6 +213,8 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
         <KebabButton
           handleReset={handleReset}
           columnId={columnId}
+          cardId={cardId}
+          cardData={cardData}
           setIsKebab={setIsKebab}
         />
       )}
@@ -277,14 +237,20 @@ const KEBABLIST: KebabListType[] = [
 function KebabButton({
   handleReset,
   columnId,
+  cardId,
+  cardData,
   setIsKebab,
 }: {
   handleReset: () => void;
   columnId?: number;
+  cardId?: number;
+  cardData?: CardProps;
   setIsKebab: Dispatch<SetStateAction<boolean>>;
 }) {
+  console.log('KebabButton의 cardData >>> ');
+  console.log(cardData);
   return (
-    <ul className='card flex-center absolute right-30 top-0 tablet:right-50 tablet:top-30 h-82 w-93 flex-col p-6 '>
+    <ul className='card flex-center absolute right-60 top-30 h-82 w-93 flex-col p-6 '>
       {KEBABLIST.map((list) => {
         return list.id === 1 ? (
           <EditCardButton
@@ -292,6 +258,8 @@ function KebabButton({
             key={list.id}
             setIsKebab={setIsKebab}
             columnId={columnId}
+            cardId={cardId}
+            cardData={cardData}
             isHidden={true}
           />
         ) : (
@@ -352,13 +320,19 @@ export function EditCardButton({
   list,
   setIsKebab,
   columnId,
+  cardId,
+  cardData,
   isHidden,
 }: {
   list?: KebabListType;
   setIsKebab?: Dispatch<SetStateAction<boolean>>;
   columnId?: number;
+  cardId?: number;
+  cardData?: CardProps;
   isHidden: boolean;
 }) {
+  console.log('EditCardButton의 cardData >>> ');
+  console.log(cardData);
   /* const handleButtonClick = (e: MouseEvent<HTMLLIElement>) => {
     e.preventDefault();
     
@@ -389,7 +363,7 @@ export function EditCardButton({
         </Modal.Open>
         <Modal.Window name={`addColumn${columnId}`}>
           <Form>
-            <Form.TodoForm type='edit' />
+            <Form.TodoForm type='edit' cardData={cardData} cardId={cardId} />
           </Form>
         </Modal.Window>
       </>

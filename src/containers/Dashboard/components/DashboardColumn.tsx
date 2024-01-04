@@ -1,6 +1,5 @@
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { closeAllModals, openModal } from '@/store/modalAtom';
@@ -14,27 +13,27 @@ import Form from '@/components/modal/Form';
 import { EditCardButton } from '@/components/modal/FormComponents/CardViewDetail';
 import Modal from '@/components/modal/Modal';
 import { IconSettings } from '@/public/svgs';
+import { CardStateAtom } from '@/store/createCardAtom';
 
 interface Props {
-  changed: boolean;
   title: string;
   columnId: number;
-  index: number;
 }
 
-function DashboardColumn({ changed, title, columnId, index }: Props) {
+function DashboardColumn({ title, columnId }: Props) {
   const [visible, setVisible] = useState(true);
-  const [list, setList] = useState<CardProps[]>([]);
   const [currentCursorId, setCurrentCursorId] = useState(0);
-  const INITIAL_SIZE = 10;
+  const [list, setList] = useState<CardProps[]>([]);
+  const isCreateCard = useAtomValue(CardStateAtom)
+
   const SIZE = 5;
 
   const { data: initialCardList } = useRequest<CardsProps>({
-    deps: [columnId, changed],
+    deps: [columnId, isCreateCard.isCreateCard],
     skip: !columnId,
     options: {
       url: `cards`,
-      params: { columnId: columnId, size: INITIAL_SIZE },
+      params: { columnId: columnId, size: SIZE },
       method: 'get',
     },
   });
@@ -68,63 +67,30 @@ function DashboardColumn({ changed, title, columnId, index }: Props) {
     if (!initialCardList) return;
     setList(initialCardList.cards);
     setCurrentCursorId(initialCardList.cursorId);
-    initialCardList.totalCount < INITIAL_SIZE
-      ? setVisible(false)
-      : setVisible(true);
+    setVisible(true);
   }, [initialCardList]);
 
   if (!initialCardList || initialCardList.cards === undefined) return;
 
   return (
-    <Draggable key={columnId} draggableId={String(columnId)} index={index}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          className={
-            snapshot.isDragging ? 'bg-opacity-60 shadow-2xl shadow-gray-4' : ''
-          }
-        >
-          <div
-            {...provided.dragHandleProps}
-            className='flex min-h-full w-full flex-col border-gray-2 pc:w-354 pc:border-r'
-          >
-            <ColumnInfo
-              title={title}
-              totalCount={initialCardList.totalCount}
-              columnId={columnId}
-            />
-            <AddCardButton columnId={columnId} />
-            <Droppable droppableId={String(columnId)} type='card'>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className='flex grow flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'
-                >
-                  {initialCardList.totalCount !== 0 &&
-                    list.map((card: CardProps, index: number) => {
-                      return (
-                        <Card
-                          data={card}
-                          key={index}
-                          title={title}
-                          index={index}
-                        />
-                      );
-                    })}
-                  {provided.placeholder}
-                  {visible && <SeeMore handleClick={handleClick} />}
-                  {visible && (
-                    <div ref={containerRef} className='hidden h-10 pc:inline' />
-                  )}
-                </div>
-              )}
-            </Droppable>
-          </div>
-        </div>
-      )}
-    </Draggable>
+    <div className='flex w-full flex-col border-gray-2 pc:w-354 pc:border-r'>
+      <ColumnInfo
+        title={title}
+        totalCount={initialCardList.totalCount}
+        columnId={columnId}
+      />
+      <div className='flex flex-col gap-10 border-b border-gray-2 px-12 pb-12 tablet:gap-16 tablet:px-20 tablet:pb-20 pc:border-b-0'>
+        <AddCardButton columnId={columnId} list={list} setList={setList}/>
+        {initialCardList.totalCount !== 0 &&
+          list.map((card: CardProps, key: number) => {
+            return <Card data={card} key={key} title={title} />;
+          })}
+        {visible && <SeeMore handleClick={handleClick} />}
+        {visible && (
+          <div ref={containerRef} className='hidden h-10 pc:inline' />
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -157,7 +123,7 @@ function ColumnInfo({
   );
 }
 
-function AddCardButton({ columnId }: { columnId: number }) {
+function AddCardButton({ columnId, list, setList }: { columnId: number, list:CardProps[], setList:()=>void }) {
   const [, open] = useAtom(openModal);
   const handleCreateModal = () => {
     open(`addCard${columnId}`);
@@ -166,16 +132,13 @@ function AddCardButton({ columnId }: { columnId: number }) {
     <Modal>
       <>
         <Modal.Open opens={`addCard${columnId}`}>
-          <button
-            className='card flex-center mx-12 mb-10 tablet:mx-20 tablet:mb-16'
-            onClick={handleCreateModal}
-          >
+          <button className='card flex-center py-9' onClick={handleCreateModal}>
             <AddChip />
           </button>
         </Modal.Open>
         <Modal.Window name={`addCard${columnId}`}>
           <Form>
-            <Form.TodoForm type='create' />
+            <Form.TodoForm type='create' columnId={columnId} list={list} setList={setList} />
           </Form>
         </Modal.Window>
       </>

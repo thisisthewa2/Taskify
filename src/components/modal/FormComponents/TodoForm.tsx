@@ -1,19 +1,72 @@
-import React, { useState } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai/index';
+import { useRouter } from 'next/router';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Simulate } from 'react-dom/test-utils';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
+import { CardStateAtom } from '@/store/createCardAtom';
+import { ImageUrlAtom } from '@/store/imageUrlAtom';
+import { CardProps } from '@/pages/api/mock';
+import { ERROR_MESSAGES, REG_EXP } from '@/containers/Auth/validation';
 import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
 import StateDropdown from '@/components/dropdowns/StateDropdown';
 import ImageDrop from '@/components/image-drop/ImageDrop';
 import Input from '@/components/inputs/Input';
+import InputContainer from '@/components/inputs/InputContainer';
 
 interface Props {
   onCloseModal: () => void;
   type: 'create' | 'edit';
+  columnId: number;
+  cardId?: number;
+  cardData?: CardProps;
+  list?: CardProps[];
+  setList: Dispatch<SetStateAction<CardProps[]>>;
 }
 
-function TodoForm({ onCloseModal, type = 'create' }: Props) {
+interface FormValues {
+  assigneeUserId?: number;
+  dashboardId?: number;
+  columnId?: number;
+
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string;
+}
+
+function TodoForm({
+  onCloseModal,
+  type = 'create',
+  columnId,
+  cardId,
+  cardData,
+  setList,
+}: Props) {
+  console.log('cardId : ' + cardId);
+  console.log('type : ' + type);
+  console.log('cardData >>> ');
+  console.log(JSON.stringify(cardData));
+
+  const router = useRouter();
+  const dashboardId = router.query.dashboardId ? +router.query.dashboardId : 0;
+
+  const { imageUrl } = useAtomValue(ImageUrlAtom);
+  let initialValues: FormValues = {
+    columnId,
+    dashboardId,
+    imageUrl,
+  };
+
   const [tagList, setTagList] = useState<string[]>([]);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState<FormValues>(initialValues);
+  const [isCreateCard, setIsCreateCard] = useAtom(CardStateAtom);
+  const { handleSubmit, control, reset } = useForm<FormValues>({
+    defaultValues: {},
+    mode: 'onBlur',
+  });
 
   const handleSetTagList = (newTagList: string[]) => {
     setTagList(newTagList);
@@ -26,8 +79,19 @@ function TodoForm({ onCloseModal, type = 'create' }: Props) {
   const handleSetDate = (date: string) => {
     setValues((preValues) => ({
       ...preValues,
-      date: date,
+      dueDate: date,
     }));
+  };
+
+  const handleSetManager = (assigneeUserId: number) => {
+    setValues((preValues) => ({
+      ...preValues,
+      assigneeUserId,
+    }));
+  };
+
+  const handleSetState = (newColumnId: number) => {
+    console.log(newColumnId);
   };
 
   const title = type === 'edit' ? '할 일 수정' : '할 일 생성';
@@ -41,40 +105,68 @@ function TodoForm({ onCloseModal, type = 'create' }: Props) {
     }));
   };
 
-  const { fetch: postData } = useRequest({
+  const { fetch: postData } = useRequest<CardProps>({
     skip: true,
     options: { url: 'cards/', method: 'post' },
   });
 
+  useEffect(() => {
+    setValues((preValues) => ({
+      ...preValues,
+      imageUrl,
+    }));
+  }, [imageUrl]);
+
+  // const changeTodo: SubmitHandler<FormValues> = async (formData) => {
+  //   const newTodo = {
+  //     assigneeUserId: formData.assigneeUserId ?? '',
+  //     dashboardId: formData.dashboardId ?? '',
+  //     columnId: formData.columnId ?? '',
+  //     title: formData.title ?? '',
+  //     description: formData.description ?? '',
+  //     dueDate: formData.dueDate ?? '',
+  //     tags: formData.tags ?? '',
+  //     imageUrl: imageUrl ?? '',
+  //   };
+  //
+  //   setValues((preValues) => ({
+  //     ...preValues,
+  //     imageUrl,
+  //   }));
+  //
+  //   //
+  //   const { error } = await fetch({
+  //     data: newTodo,
+  //   });
+  //   //
+  //   // if (error) {
+  //   //   return;
+  //   // }
+  // };
+
   const handleCreateTodo = async () => {
     let hasError = false;
-    console.log(values);
-    // try {
-    //   await postData({
-    //     data: {
-    //       assigneeUserId: 269,
-    //       dashboardId: 497,
-    //       columnId: 1587,
-    //       title: 'header1생성',
-    //       description: 'header1을 생성합니다.',
-    //       dueDate: '2023-12-28 22:30',
-    //       tags: tagList,
-    //     },
-    //   });
-    //
-    //   onCloseModal();
-    // } catch (error) {
-    //   console.error('Error', error);
-    // }
+
+    try {
+      const { data } = await postData({
+        data: values,
+      });
+
+      if (!data) return;
+      onCloseModal();
+      setList((prev) => [...prev, data]);
+    } catch (error) {
+      console.error('Error', error);
+    }
   };
 
   return (
     <form className='mb-70 flex flex-col gap-30'>
       <h1 className='heading1-bold'>{title}</h1>
       <div className='flex gap-12'>
-        {type === 'edit' && <StateDropdown />}
+        {type === 'edit' && <StateDropdown handleSetState={handleSetState} />}
 
-        <ManagerDropdown name='assigneeUserId' onInput={handleValuesChange} />
+        <ManagerDropdown handleSetManager={handleSetManager} />
       </div>
       <Input
         type='text'
@@ -91,6 +183,7 @@ function TodoForm({ onCloseModal, type = 'create' }: Props) {
         placeholder='설명을 입력해 주세요'
         name='description'
         onInput={handleValuesChange}
+        value={values.description}
       />
       <Input
         type='date'
@@ -108,7 +201,7 @@ function TodoForm({ onCloseModal, type = 'create' }: Props) {
       />
       <div>
         <label className='text-[18px] font-[500]'>이미지</label>
-        <ImageDrop type={'modal'} columnId={4} name='imageUrl' />
+        <ImageDrop type={'modal'} columnId={columnId} />
       </div>
       <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
         <Button.Secondary type='button' size='lg' onClick={onCloseModal}>
