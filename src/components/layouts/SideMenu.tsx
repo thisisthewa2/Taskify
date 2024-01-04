@@ -1,9 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { themeAtom } from '@/store/colorSchemeAtom';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
+import { openModal } from '@/store/modalAtom';
 import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
@@ -11,7 +13,6 @@ import Logo from '@/components/logos/Logo';
 import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import { IconAddBox, IconCrown } from '@/public/svgs';
-import { openModal } from '@/store/modalAtom';
 import DeferredSuspense from '../skeletons/DeferredSuspense';
 import SideMenuSkeleton from '../skeletons/SideMenuSkeleton';
 
@@ -134,11 +135,15 @@ function DashboardCard({
   id,
   selected = false,
 }: DashboardCardProps) {
+  const theme = useAtomValue(themeAtom);
+
   return (
     <Link
       href={`/dashboard/${id}`}
-      className={`flex-center h-40 w-full rounded-sm hover:bg-primary-light tablet:h-45 tablet:justify-start ${
-        selected && `bg-primary-light`
+      className={`flex-center h-40 w-full rounded-sm tablet:h-45 tablet:justify-start ${
+        theme === 'light'
+          ? `hover:bg-primary-light ${selected ? 'bg-primary-light' : ''}`
+          : `hover:bg-gray-1 ${selected ? 'bg-gray-1' : ''}`
       }`}
     >
       <DashBoardColorDot color={color} />
