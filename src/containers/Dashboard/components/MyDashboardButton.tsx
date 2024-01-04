@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
+import { DashboardProps } from 'src/types';
 import { themeAtom } from '@/store/colorSchemeAtom';
 import { reduceText } from '@/utils/reduceText';
-import { DashboardProps } from '@/pages/api/mock';
 import DashboardColorDot from '@/components/DashboardColorDot';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import { IconArrowForward, IconCrown } from '@/public/svgs';

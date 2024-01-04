@@ -1,8 +1,8 @@
 import { useSetAtom } from 'jotai';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { DashboardProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
-import { DashboardProps } from '@/pages/api/mock';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import InputContainer from '@/components/inputs/InputContainer';
@@ -18,7 +18,7 @@ interface FormValues {
 }
 
 function DashboardForm({ onCloseModal, fetch }: Props) {
-  const setDashsboardUpdateAtom = useSetAtom(dashboardUpdateAtom);
+  const setDashboardUpdateAtom = useSetAtom(dashboardUpdateAtom);
 
   const { handleSubmit, control, formState } = useForm<FormValues>({
     defaultValues: {
@@ -51,7 +51,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
 
     onCloseModal();
     fetch?.();
-    setDashsboardUpdateAtom(true);
+    setDashboardUpdateAtom(true);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -70,6 +70,7 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
           control={control}
           name='dashboardName'
           placeholder='이름을 입력해 주세요'
+          rules={{ required: '이름을 입력해 주세요' }}
         >
           대시보드 이름
         </InputContainer>

@@ -2,13 +2,13 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { DashboardProps, DashboardsProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { themeAtom } from '@/store/colorSchemeAtom';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { openModal } from '@/store/modalAtom';
 import { reduceText } from '@/utils/reduceText';
 import fetch from '@/services/utils/fetch';
-import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
 import Logo from '@/components/logos/Logo';
 import Form from '@/components/modal/Form';
@@ -70,7 +70,7 @@ function SideMenu({ dashboardId }: Props) {
         <Logo />
       </div>
       <DashboardsHeader />
-      <ul className='flex h-full w-full flex-col gap-5 overflow-y-auto overflow-x-hidden'>
+      <ul className='custom-scrollbar flex h-full w-full flex-col gap-5 overflow-y-auto overflow-x-hidden'>
         {dashboards?.pages.map((dashboardPage) =>
           dashboardPage.dashboards.map((dashboard) => (
             <li key={dashboard.id}>

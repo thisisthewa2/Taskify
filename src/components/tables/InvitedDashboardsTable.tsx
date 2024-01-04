@@ -1,12 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
+import { InvitationProps, InvitationsProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import useSearchInvitedDashboards from '@/hooks/useSearchInvitedDashboards';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import fetch from '@/services/utils/fetch';
-import { InvitationProps, InvitationsProps } from '@/pages/api/mock';
 import { IconSearch, IconUnsubscribe } from '@/public/svgs';
 import { Button } from '../buttons';
 

@@ -2,15 +2,14 @@ import { useAtom } from 'jotai';
 import Image from 'next/image';
 import { JSXElementConstructor, ReactElement } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { CardProps } from 'src/types';
 import { openModal } from '@/store/modalAtom';
 import { generateColor } from '@/utils/generateColor';
-import { CardProps } from '@/pages/api/mock';
 import { IconCalendar } from '@/public/svgs';
 import { DEFAULT_PROFILE_COLOR } from './Members';
 import TagChip from './chips/TagChip';
 import Form from './modal/Form';
 import Modal from './modal/Modal';
-
 
 interface Props {
   data: CardProps;

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { IconEmail, IconFacebook, IconInstagram } from '@/public/svgs';
+import { IconEmail } from '@/public/svgs';
 import Facebook from '../buttons/Facebook';
 import Instagram from '../icons/Instagram';
 

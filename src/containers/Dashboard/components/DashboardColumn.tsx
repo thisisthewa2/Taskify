@@ -1,11 +1,11 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { CardProps, CardsProps } from 'src/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { CardStateAtom } from '@/store/createCardAtom';
 import { closeAllModals, openModal } from '@/store/modalAtom';
-import { CardProps, CardsProps } from '@/pages/api/mock';
 import Card from '@/components/Card';
 import DashboardColorDot from '@/components/DashboardColorDot';
 import AddChip from '@/components/chips/AddChip';
