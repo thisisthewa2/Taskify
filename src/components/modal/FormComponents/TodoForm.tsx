@@ -1,19 +1,17 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai/index';
 import { useRouter } from 'next/router';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Simulate } from 'react-dom/test-utils';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
+import { cardAtom } from '@/store/cardAtom';
 import { CardStateAtom } from '@/store/createCardAtom';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { CardProps } from '@/pages/api/mock';
-import { ERROR_MESSAGES, REG_EXP } from '@/containers/Auth/validation';
 import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
 import StateDropdown from '@/components/dropdowns/StateDropdown';
 import ImageDrop from '@/components/image-drop/ImageDrop';
 import Input from '@/components/inputs/Input';
-import InputContainer from '@/components/inputs/InputContainer';
 
 interface Props {
   onCloseModal: () => void;
@@ -45,22 +43,27 @@ function TodoForm({
   cardData,
   setList,
 }: Props) {
-  console.log('cardId : ' + cardId);
-  console.log('type : ' + type);
-  console.log('cardData >>> ');
-  console.log(JSON.stringify(cardData));
+  const card = useAtomValue(cardAtom);
+  console.log('card >>', card);
 
   const router = useRouter();
   const dashboardId = router.query.dashboardId ? +router.query.dashboardId : 0;
 
   const { imageUrl } = useAtomValue(ImageUrlAtom);
+
   let initialValues: FormValues = {
     columnId,
     dashboardId,
     imageUrl,
   };
 
-  const [tagList, setTagList] = useState<string[]>([]);
+  if (type === 'edit') {
+    initialValues = { ...card };
+  }
+
+  const [tagList, setTagList] = useState<string[]>(
+    card && type === 'edit' ? [...card.tags] : [],
+  );
   const [values, setValues] = useState<FormValues>(initialValues);
   const [isCreateCard, setIsCreateCard] = useAtom(CardStateAtom);
   const { handleSubmit, control, reset } = useForm<FormValues>({
@@ -149,7 +152,7 @@ function TodoForm({
 
     try {
       const { data } = await postData({
-        data: values,
+        data: { ...values },
       });
 
       if (!data) return;
@@ -175,6 +178,7 @@ function TodoForm({
         placeholder='제목을 입력해 주세요'
         name='title'
         onInput={handleValuesChange}
+        value={values.title}
       />
       <Input
         type='textarea'
@@ -190,6 +194,7 @@ function TodoForm({
         title='마감일'
         name='dueDate'
         handleSetDate={handleSetDate}
+        value={values.dueDate}
       />
       <Input
         type='tag'

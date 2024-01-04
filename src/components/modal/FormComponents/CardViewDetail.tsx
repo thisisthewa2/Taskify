@@ -9,9 +9,10 @@ import {
   useState,
 } from 'react';
 import useRequest from '@/hooks/useRequest';
+import { cardAtom } from '@/store/cardAtom';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
-import { closeAllModals, openModal } from '@/store/modalAtom';
+import { ModalAtom, closeAllModals, openModal } from '@/store/modalAtom';
 import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
@@ -247,8 +248,6 @@ function KebabButton({
   cardData?: CardProps;
   setIsKebab: Dispatch<SetStateAction<boolean>>;
 }) {
-  console.log('KebabButton의 cardData >>> ');
-  console.log(cardData);
   return (
     <ul className='card flex-center absolute right-60 top-30 h-82 w-93 flex-col p-6 '>
       {KEBABLIST.map((list) => {
@@ -331,12 +330,13 @@ export function EditCardButton({
   cardData?: CardProps;
   isHidden: boolean;
 }) {
-  console.log('EditCardButton의 cardData >>> ');
-  console.log(cardData);
-  /* const handleButtonClick = (e: MouseEvent<HTMLLIElement>) => {
-    e.preventDefault();
-    
-  }; */
+  const [card, setCard] = useAtom(cardAtom);
+
+  useEffect(() => {
+    if (!cardData) return;
+    setCard(cardData);
+  }, [cardData]);
+
   const [, open] = useAtom(openModal);
   const [, closeAll] = useAtom(closeAllModals);
   const handleAddModal = () => {
