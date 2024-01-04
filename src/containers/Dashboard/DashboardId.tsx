@@ -1,6 +1,11 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
-import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  DragStart,
+  DropResult,
+  Droppable,
+} from 'react-beautiful-dnd';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { openModal } from '@/store/modalAtom';
@@ -15,14 +20,13 @@ interface DashboardProps {
 }
 
 function DashboardId({ id }: DashboardProps) {
-  // const [columns, setColumns] = useState<any>([]);
   const [enabled, setEnabled] = useState(false);
   const [columns, setColumns] = useState<ColumnProps[]>([]);
   const [cardId, setCardId] = useState('');
   const [changed, setChanged] = useState(false);
   const { columnTitle } = useAtomValue(ColumnsAtom);
 
-  const { data: columnsResponse } = useRequest<ColumnsProps | undefined>({
+  const { data: columnsResponse } = useRequest<ColumnsProps>({
     skip: !id,
     options: {
       url: `columns?dashboardId=${id}`,
@@ -39,21 +43,16 @@ function DashboardId({ id }: DashboardProps) {
     },
   });
 
-  const onDragStart = ({ draggableId, type }: DropResult) => {
+  const onDragStart = ({ draggableId, type }: DragStart) => {
     if (type === 'card') {
       setCardId(draggableId);
-      setChanged(!changed);
     }
   };
 
-  const onDragEnd = ({
-    source,
-    destination,
-    draggableId,
-    type,
-  }: DropResult) => {
-    console.log('>>> source', source);
-    console.log('>>> destination', destination);
+  const onDragEnd = async ({ source, destination, type }: DropResult) => {
+    /* fetch 버그 해결 후 삭제 예정 */
+    // console.log('>>> source', source);
+    // console.log('>>> destination', destination);
     if (!destination) return;
 
     if (type === 'column') {
@@ -71,9 +70,10 @@ function DashboardId({ id }: DashboardProps) {
 
     if (type === 'card') {
       if (destination.droppableId === source.droppableId) return;
-      putCardData({
+      await putCardData({
         data: { columnId: Number(destination.droppableId) },
       });
+      setChanged(!changed);
     }
   };
 
