@@ -11,15 +11,14 @@ import TagChip from './chips/TagChip';
 import Form from './modal/Form';
 import Modal from './modal/Modal';
 
-function Card({
-  data,
-  title,
-  index,
-}: {
+
+interface Props {
   data: CardProps;
   title: string;
   index: number;
-}) {
+}
+
+function Card({ data, title, index }: Props) {
   const [, open] = useAtom(openModal);
 
   if (!data) return;

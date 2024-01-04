@@ -23,7 +23,7 @@ function MyDashboardButtons() {
         params: {
           navigationMethod: 'pagination',
           page: currentPage,
-          size: 5, //currentPage === 1 ? 5 : 6,
+          size: 5,
         },
       },
     });
