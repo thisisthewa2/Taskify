@@ -1,13 +1,13 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import Image from 'next/image';
 import {
   Dispatch,
   FormEvent,
-  MouseEvent,
   SetStateAction,
   useEffect,
   useState,
 } from 'react';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { CommentAtom } from '@/store/commentAtom';
@@ -15,14 +15,12 @@ import { closeAllModals, openModal } from '@/store/modalAtom';
 import { CardProps } from '@/pages/api/mock';
 import Members from '@/components/Members';
 import { Button } from '@/components/buttons';
-import AddChip from '@/components/chips/AddChip';
 import StateChip from '@/components/chips/StateChip';
 import TagChip from '@/components/chips/TagChip';
 import Comments from '@/components/comment/Comments';
 import Close from '@/components/icons/Close';
 import Kebab from '@/components/icons/Kebab';
 import Input from '@/components/inputs/Input';
-import { IconSettings } from '@/public/svgs';
 import Confirm from '../Confirm';
 import Form from '../Form';
 import Modal from '../Modal';
@@ -58,11 +56,15 @@ interface CreateCommentType {
   dashboardId: number;
 }
 
+const SIZE = 2;
+
 function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
-  const [commentId, setCommentId] = useState(0);
+  const setColumnTitle = useSetAtom(ColumnsAtom);
   const [isKebab, setIsKebab] = useState(false);
-  const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
+  const [visible, setVisible] = useState(true);
+  const [currentCursorId, setCurrentCursorId] = useState(0);
+  const [list, setList] = useState<CommentsType[]>([]);
 
   const {
     tags,
@@ -83,15 +85,31 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     },
   ];
 
-  const { data: commentList, fetch: getComments } = useRequest<CommentListType>(
-    {
-      skip: true,
-      options: {
-        url: `comments?size=10&cardId=${cardId}`,
-        method: 'get',
-      },
+  const { data: initCommentList } = useRequest<CommentListType>({
+    deps: [cardId],
+    skip: !cardId,
+    options: {
+      url: `comments`,
+      params: { cardId: cardId, size: SIZE },
+      method: 'get',
     },
-  );
+  });
+
+  
+  const { data: commentList } = useRequest<CommentListType>({
+    deps: [cardId, currentCursorId],
+    skip: !currentCursorId,
+    options: {
+      url: `comments`,
+      params:
+       { cardId: cardId,
+        size: SIZE,
+        cursorId: currentCursorId
+       },
+      method: 'get',
+    },
+  });
+
   const { fetch: createComment } = useRequest<CreateCommentType>({
     skip: true,
     options: {
@@ -106,11 +124,31 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     },
   });
 
+  const handleClick = () => {
+    if (!commentList || !commentList.comments || !commentList.cursorId) return;
+    setCurrentCursorId(commentList.cursorId);
+    setList((prev) => [...prev, ...commentList.comments]);
+
+    if (
+      commentList.cursorId === currentCursorId ||
+      commentList.comments.length < SIZE
+    ) {
+      setVisible(false);
+      return;
+    }
+  };
+
+  const containerRef = useInfiniteScroll({
+    handleScroll: handleClick,
+    deps: [commentList, initCommentList],
+  });
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { data } = await createComment();
 
-    if (data) {
+    if (data && commentList) {
+      setList((prev) => [data ,...prev]);
       setCommentValue({ comment: '' });
     }
   };
@@ -119,14 +157,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
     setIsKebab(!isKebab);
   };
 
-  const handleKebabMouseDown = (e: MouseEvent<HTMLDivElement>) => {
-    console.log(111);
-    e.preventDefault();
-    setIsKebab(!isKebab);
-  };
-
   const handleBlur = () => {
-    console.log(2222);
     setTimeout(() => {
       setIsKebab(false);
     }, 200);
@@ -138,8 +169,11 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   };
 
   useEffect(() => {
-    getComments();
-  }, [commentValue, commentId]);
+    if (!initCommentList || !initCommentList.cursorId) return;
+    setList(initCommentList.comments);
+    setCurrentCursorId(initCommentList.cursorId);
+    setVisible(true);
+  }, [initCommentList]);
 
   return (
     <>
@@ -186,16 +220,20 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
               </div>
             </div>
             <div className='flex flex-col items-start justify-start gap-10'>
-              {commentList?.comments &&
-                commentList.comments.map((comment) => {
+              {list.length > 0 &&
+                list.map((comment) => {
                   return (
                     <Comments
                       key={comment.id}
                       comment={comment}
-                      setCommentId={setCommentId}
+                      list={list}
+                      setList={setList}
                     />
                   );
                 })}
+              {visible && (
+                <div ref={containerRef} className='w-full h-10 pc:inline' />
+              )}
             </div>
           </div>
           <div className='card mt-21 tablet:h-165 tablet:w-200 w-full h-85 flex tablet:flex-col tablet:justify-start flex-row justify-between tablet:flex-shrink-0'>
@@ -246,7 +284,7 @@ function KebabButton({
   setIsKebab: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <ul className='card flex-center absolute right-45 top-0 tablet:right-60 tablet:top-30 h-82 w-93 flex-col p-6 '>
+    <ul className='card flex-center absolute right-30 top-0 tablet:right-50 tablet:top-30 h-82 w-93 flex-col p-6 '>
       {KEBABLIST.map((list) => {
         return list.id === 1 ? (
           <EditCardButton
