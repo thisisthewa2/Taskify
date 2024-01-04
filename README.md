@@ -289,6 +289,7 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
 ### Feature Demonstration GIF
 <details>
     <summary>페이지</summary>
+     <ul>
   <details>
   <summary>랜딩페이지</summary>
   
@@ -302,39 +303,132 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
   </details>
   <details>
   <summary>로그인</summary>
-  
+      
+  ![로그인](https://github.com/Peachy-Peachy/Taskify/assets/119280160/92ec67f0-8380-4293-bc70-e9d4c577e94c)
+
   </details>
    <details>
   <summary>나의 대시보드 </summary>
+       <ul>
   <details>
   <summary>참여중인 대시보드 </summary>
+      
   ![참여중인대시보드](https://github.com/Peachy-Peachy/Taskify/assets/119280160/09d19da6-77bb-4610-9917-27f96b464b15)
   </details>
   <details>
-  <summary>새로운 대시보드 생성 </summary>
+  <summary> 새로운 대시보드 생성 </summary>
+      
   ![새로운대시보드](https://github.com/Peachy-Peachy/Taskify/assets/119280160/916b69d2-161b-4031-98a1-97b64f52732b)
 
   </details>
    <details>
   <summary>초대받은 대시보드 </summary>
+       <ul>
 <details>
   <summary>초대 목록 무한스크롤 </summary>
+    
 ![초대목록 무한스크롤](https://github.com/Peachy-Peachy/Taskify/assets/119280160/0c772086-7f7c-40d8-a3e1-3c3da93262fa)
 
   </details>
   <details>
   <summary>초대 거절, 수락 </summary>
+      
 ![초대수락거절](https://github.com/Peachy-Peachy/Taskify/assets/119280160/753c29a4-c78d-4a63-a296-5b3911484977)
 
   </details>
   <details>
   <summary>초대 목록 검색</summary>
+      
 ![초대목록검색2](https://github.com/Peachy-Peachy/Taskify/assets/119280160/b403fa85-229a-4c3c-b256-215160619956)
 
   </details>
+  </ul>
+  </ul>
+  </details>
+   <details>
+      <summary>대시보드</summary>
+        <ul>
+            <details>
+              <summary>DnD</summary>
+            </details>
+            <details>
+              <summary>더보기 버튼</summary>
+            </details>
+            <details>
+              <summary>무한 스크롤</summary>
+            </details>
+            <details>
+              <summary>컬럼관리</summary>
+            </details>
+            <details>
+              <summary>할 일 생성, 수정</summary>
+            </details>
+        </ul>
+  </details>
+  <details>
+      <summary>마이 페이지</summary>
+      <ul>
+           <details>
+              <summary>프로필 수정 및 비밀번호 변경</summary>
+               
+![프로필변경2](https://github.com/Peachy-Peachy/Taskify/assets/119280160/f7412c42-6dbd-4a1b-99e4-88c00050225d)
+
+![비밀번호변경](https://github.com/Peachy-Peachy/Taskify/assets/119280160/768878f6-e59b-4cd9-b89f-9e3d6bd1db89)
+
+          </details>
+      </ul>
   </details>
   </details>
+  </ul>
 </details>
+  <details>
+      <summary>공통 컴포넌트</summary>
+      <ul>
+           <details>
+              <summary>헤더</summary>
+           </details>
+          <details>
+              <summary>모달</summary>
+              <ul>
+                  <li>
+                  <bold>대시보드 생성하기</bold>
+                  
+![대시보드생성하기](https://github.com/Peachy-Peachy/Taskify/assets/119280160/336ad772-2423-4b9c-8b16-3f5e3b5ad0d5)</li>
+                <li>
+                <bold>칼럼 생성</bold>
+                
+![칼럼생성](https://github.com/Peachy-Peachy/Taskify/assets/119280160/1804ccc8-b915-424a-a9be-bd177b208b4d)</li>
+ 
+<li>
+    <bold>칼럼 생성 초과</bold>
+    
+![칼럼생성초과](https://github.com/Peachy-Peachy/Taskify/assets/119280160/5c9af165-866d-4cf8-a7ba-d2de03b303c1)
+</li>
+ 
+<li>
+    <bold>칼럼 수정</bold>
+    
+    
+![칼럼수정](https://github.com/Peachy-Peachy/Taskify/assets/119280160/a0165998-7cff-47bd-8bf0-f633ae95eac4)
+ </li>
+ <li>
+     
+<bold>대시보드 초대하기</bold>  
+     ![대시보드초대](https://github.com/Peachy-Peachy/Taskify/assets/119280160/d5ae7f13-dab6-4559-9d06-b566234a39c0)
+ </li>
+ <li>
+     <bold>대시보드 초대하기 (없는 이메일)</bold>
+     
+![대시보드초대에러](https://github.com/Peachy-Peachy/Taskify/assets/119280160/3de007fb-e705-4dcb-ac58-001c37677a93)
+ </li>
+ </ul>
+           </details>
+           <details>
+              <summary>사이드메뉴</summary>
+               
+           </details>
+    </ul>
+  </details>
 
 
 
