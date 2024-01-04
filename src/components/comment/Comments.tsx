@@ -64,8 +64,10 @@ function Comments({ comment, setList, list }: CommentType) {
     const { data } = await editComment();
 
     if (data) {
-      const newList =list.filter(comment => comment.id !== commentId)
-      setList([...newList, data].sort((a,b) => b.id - a.id))
+      const editListIndex = list.findIndex(comment => comment.id === commentId)
+      list[editListIndex] = data;
+      const newList = list;
+      setList([...newList])
       setIsEdit(!isEdit);
     }
   };
