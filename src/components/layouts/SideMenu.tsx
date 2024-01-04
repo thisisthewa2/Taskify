@@ -6,6 +6,7 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { themeAtom } from '@/store/colorSchemeAtom';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { openModal } from '@/store/modalAtom';
+import { reduceText } from '@/utils/reduceText';
 import fetch from '@/services/utils/fetch';
 import { DashboardProps, DashboardsProps } from '@/pages/api/mock';
 import DashBoardColorDot from '@/components/DashboardColorDot';
@@ -64,12 +65,12 @@ function SideMenu({ dashboardId }: Props) {
   }, [dashboardId, dashboardUpdate]);
 
   return (
-    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 pb-70 pt-20 tablet:w-160 pc:w-300'>
+    <div className='flex h-full w-67 flex-shrink-0 flex-col items-center overflow-hidden border-r border-gray-3 bg-white px-12 pb-75 pt-20 tablet:w-160 pc:w-300'>
       <div className='w-full pb-60 pl-12'>
         <Logo />
       </div>
       <DashboardsHeader />
-      <ul className='flex h-full w-full flex-col gap-5 overflow-auto'>
+      <ul className='flex h-full w-full flex-col gap-5 overflow-y-auto overflow-x-hidden'>
         {dashboards?.pages.map((dashboardPage) =>
           dashboardPage.dashboards.map((dashboard) => (
             <li key={dashboard.id}>
@@ -137,6 +138,9 @@ function DashboardCard({
 }: DashboardCardProps) {
   const theme = useAtomValue(themeAtom);
 
+  const reducedTitlePc = reduceText(title, 11);
+  const reducedTitleTablet = reduceText(title, 4);
+
   return (
     <Link
       href={`/dashboard/${id}`}
@@ -148,8 +152,9 @@ function DashboardCard({
     >
       <DashBoardColorDot color={color} />
       <div className='hidden items-center pr-12 tablet:flex'>
-        <p className='heading3-normal pc:heading2-normal px-6 text-gray-5'>
-          {title}
+        <p className='heading3-normal pc:heading2-normal break-keep px-6 text-gray-5'>
+          <span className='hidden pc:inline'>{reducedTitlePc}</span>
+          <span className='pc:hidden'>{reducedTitleTablet}</span>
         </p>
         <IconCrown
           className={createdByMe ? 'inline flex-shrink-0' : 'hidden'}

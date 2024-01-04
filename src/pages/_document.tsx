@@ -4,6 +4,7 @@ export default function Document() {
   return (
     <Html lang='ko' data-theme='light'>
       <Head>
+        <link id='favicon' rel='icon' href='/svgs/small-logo.svg' />
         <meta
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width'
