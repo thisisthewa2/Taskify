@@ -1,9 +1,11 @@
 import { useAtom, useAtomValue } from 'jotai/index';
+import { useSetAtom } from 'jotai/react';
 import { useRouter } from 'next/router';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { CardProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { cardAtom } from '@/store/cardAtom';
+import { ColumnsAtom } from '@/store/columnsAtom';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
 import { changedAtom } from '@/containers/Dashboard/DashboardId';
 import { Button } from '@/components/buttons';
@@ -32,6 +34,7 @@ interface FormValues {
 
 function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
   const card = useAtomValue(cardAtom);
+  const setColumnTitle = useSetAtom(ColumnsAtom);
 
   const router = useRouter();
   const dashboardId = router.query.dashboardId ? +router.query.dashboardId : 0;
@@ -114,6 +117,7 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
       if (!data) return;
       onCloseModal();
       setChanged(!changed);
+      setColumnTitle({ columnTitle: '' });
     } catch (error) {
       console.error('Error', error);
     }
