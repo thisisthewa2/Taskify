@@ -140,7 +140,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   useEffect(() => {
     getComments();
   }, [commentValue, commentId]);
-  console.log(isKebab);
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -149,8 +149,8 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             새로운 일정 관리 Taskify
           </h2>
           <div
-            className='flex items-center justify-between gap-24'
-            onBlur={handleBlur}
+            className='flex items-center justify-between tablet:gap-24 gap-16 tablet:mt-0 tablet: mr-0 mt-[-3.4rem] mr-[-0.625rem]'
+            onBlur={handleBlur} tabIndex={0}
           >
             <label onClick={handleKebab}>
               <Kebab />
@@ -158,9 +158,9 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             <Close onClick={onCloseModal} />
           </div>
         </div>
-        <div className='flex items-start justify-between gap-24'>
-          <div className='w-450'>
-            <div className='mt-24 flex items-center justify-start'>
+        <div className='flex tablet:flex-row flex-col-reverse items-start justify-between gap-24'>
+          <div className='tablet:w-450 w-full'>
+            <div className='tablet:mt-24 flex items-center justify-start mt-0'>
               <div className='border-r border-gray-3 pr-20'>
                 <StateChip str={title} />
               </div>
@@ -198,14 +198,18 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
                 })}
             </div>
           </div>
-          <div className='card mt-21 h-165 w-200 flex-shrink-0'>
-            <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
-            <div className='body2-normal flex items-center justify-start gap-8'>
-              <Members members={profile} totalCount={0} />
-              <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
+          <div className='card mt-21 tablet:h-165 tablet:w-200 w-full h-85 flex tablet:flex-col tablet:justify-start flex-row justify-between tablet:flex-shrink-0'>
+            <div className=' flex flex-col justify-center'>
+              <h3 className='caption-bold mb-6 text-gray-7'>담당자</h3>
+              <div className='body2-normal flex items-center justify-start gap-8'>
+                <Members members={profile} totalCount={0} />
+                <h2 className='body2-normal text-gray-7'>{assignee.nickname}</h2>
+              </div>
             </div>
-            <h3 className='caption-bold mb-6 mt-20 text-gray-7'>마감일</h3>
-            <div className='caption-bold text-gray-7'>{dueDate}</div>
+            <div className=' flex flex-col gap-10 justify-start h-63'>
+              <h3 className='caption-bold mb-6 tablet:mt-20 text-gray-7'>마감일</h3>
+              <div className='caption-bold text-gray-7 '>{dueDate}</div>
+            </div>
           </div>
         </div>
       </form>
@@ -242,7 +246,7 @@ function KebabButton({
   setIsKebab: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <ul className='card flex-center absolute right-60 top-30 h-82 w-93 flex-col p-6 '>
+    <ul className='card flex-center absolute right-45 top-0 tablet:right-60 tablet:top-30 h-82 w-93 flex-col p-6 '>
       {KEBABLIST.map((list) => {
         return list.id === 1 ? (
           <EditCardButton

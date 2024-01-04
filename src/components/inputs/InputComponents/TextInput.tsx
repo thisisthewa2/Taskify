@@ -1,5 +1,5 @@
 import { useAtom, useSetAtom } from 'jotai';
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { ColumnsAtom } from '@/store/columnsAtom';
 
 function TextInput({
@@ -13,10 +13,17 @@ function TextInput({
   columnName?: string;
 }) {
   const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
+  const [text, setText] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    setText(value);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     setColumnTitle({ columnTitle: value });
+    setText('');
   };
 
   useEffect(() => {
@@ -29,8 +36,9 @@ function TextInput({
     <input
       className='input'
       onChange={handleChange}
+      onBlur={handleBlur}
       required={required}
-      value={columnTitle.columnTitle}
+      defaultValue={columnTitle.columnTitle && columnTitle.columnTitle}
       {...rest}
     >
       {children}

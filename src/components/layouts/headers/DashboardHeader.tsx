@@ -52,8 +52,8 @@ function DashboardHeader({ dashboardId }: Props) {
   }, [dashboardId]);
 
   return (
-    <div className='sticky top-0 z-nav flex h-60 w-full items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:pr-80'>
-      <div className='heading2-bold flex items-center gap-8 pl-4 pt-4'>
+    <div className='sticky top-0 z-nav flex h-60 w-full flex-row-reverse items-center justify-between border-b border-solid border-gray-3 bg-white pl-24 pr-12 tablet:h-70 tablet:px-40 pc:flex-row pc:pr-80'>
+      <div className='heading2-bold hidden items-center gap-8 pl-4 pt-4 pc:flex'>
         {title}
         <IconCrown
           className={
