@@ -19,11 +19,13 @@ function ManagerDropdown({
   managerId,
   managerName,
   setManagerName,
+  type,
 }: {
   handleSetManager: (value: number) => void;
   managerId: number;
   managerName: string;
   setManagerName: Dispatch<React.SetStateAction<string>>;
+  type: string;
 }) {
   const router = useRouter();
   const { dashboardId } = router.query;
@@ -57,7 +59,7 @@ function ManagerDropdown({
 
     setManagerList({ members: newMembers });
 
-    if (managerId) {
+    if (managerId && type === 'edit') {
       const selectedManager = newMembers.find(
         (member) => member.userId === managerId,
       );

@@ -112,7 +112,10 @@ function TodoForm({ type = 'create', columnId }: Props) {
     setColumnTitle({ columnTitle: '' });
     setCard({ ...card, imageUrl: '' });
     setImageUrl({ imageUrl: '' });
+    setManagerName('');
   };
+
+  const [changed, setChanged] = useAtom(changedAtom);
 
   const handleCreateTodo = async () => {
     values.imageUrl = imageUrl.imageUrl;
@@ -128,7 +131,7 @@ function TodoForm({ type = 'create', columnId }: Props) {
       console.error('Error', error);
     }
   };
-  const [changed, setChanged] = useAtom(changedAtom);
+
   const handleEditTodo = async () => {
     values.imageUrl = card.imageUrl;
 
@@ -161,6 +164,7 @@ function TodoForm({ type = 'create', columnId }: Props) {
           managerId={card.assignee?.id}
           managerName={managerName}
           setManagerName={setManagerName}
+          type={type}
         />
       </div>
       <Input
