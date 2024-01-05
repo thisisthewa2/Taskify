@@ -33,7 +33,7 @@ interface FormValues {
 }
 
 function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
-  const card = useAtomValue(cardAtom);
+  const [card, setCard] = useAtom(cardAtom);
   const setColumnTitle = useSetAtom(ColumnsAtom);
 
   const router = useRouter();
@@ -118,6 +118,7 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
       onCloseModal();
       setChanged(!changed);
       setColumnTitle({ columnTitle: '' });
+      setCard({ ...card, imageUrl: '' });
     } catch (error) {
       console.error('Error', error);
     }
@@ -136,6 +137,12 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
     } catch (error) {
       console.error('Error', error);
     }
+  };
+
+  const handleReset = () => {
+    onCloseModal();
+    setColumnTitle({ columnTitle: '' });
+    setImageUrl({ imageUrl: '' });
   };
 
   return (
@@ -196,7 +203,7 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
         />
       </div>
       <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
-        <Button.Secondary type='button' size='lg' onClick={onCloseModal}>
+        <Button.Secondary type='button' size='lg' onClick={handleReset}>
           취소
         </Button.Secondary>
         {type === 'edit' ? (
