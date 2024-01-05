@@ -33,7 +33,7 @@ function TextInput({
       setColumnTitle({ columnTitle: columnName });
     }
   }, []);
-  console.log(value);
+
   return (
     <input
       className='input'
