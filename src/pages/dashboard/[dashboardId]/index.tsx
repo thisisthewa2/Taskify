@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Dashboard from '@/containers/Dashboard/DashboardId';
-import Test from '@/containers/Dashboard/DashboardId';
 
 function DashboardPage() {
   const router = useRouter();

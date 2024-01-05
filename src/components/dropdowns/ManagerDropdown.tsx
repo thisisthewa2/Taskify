@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { IconArrowDown, IconCheck } from '@/public/svgs';
 
@@ -17,9 +17,13 @@ interface Member {
 function ManagerDropdown({
   handleSetManager,
   managerId,
+  managerName,
+  setManagerName,
 }: {
   handleSetManager: (value: number) => void;
   managerId: number;
+  managerName: string;
+  setManagerName: Dispatch<React.SetStateAction<string>>;
 }) {
   const router = useRouter();
   const { dashboardId } = router.query;
@@ -37,7 +41,6 @@ function ManagerDropdown({
     members: [],
   });
   const [isDrop, setIsDrop] = useState(false); //border 색과 리스트 활성화 상태
-  const [managerName, setManagerName] = useState('');
 
   useEffect(() => {
     if (!data) return;
@@ -124,7 +127,7 @@ function ManagerDropdown({
       <h2 className='subheading-normal'>담당자</h2>
       <div className='relative' onBlur={handleBlur} tabIndex={0}>
         <div
-          className={`bg-WHITE flex h-48 w-full items-center justify-between rounded-md p-16 ${
+          className={`flex h-48 w-full items-center justify-between rounded-md bg-WHITE p-16 ${
             isDrop ? 'border-solid-primary' : 'border-solid-gray'
           }`}
         >
@@ -133,7 +136,7 @@ function ManagerDropdown({
             type='text'
             name='manager'
             placeholder='이름을 입력해주세요'
-            value={managerName}
+            defaultValue={managerName ?? ''}
             onChange={handleChange}
             onFocus={handleFocusBox}
             autoComplete='off'

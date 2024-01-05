@@ -27,7 +27,6 @@ import Form from '../Form';
 import Modal from '../Modal';
 
 interface Props {
-  onCloseModal: () => void;
   cardData: CardProps;
   title: string;
 }
@@ -59,7 +58,8 @@ interface CreateCommentType {
 
 const SIZE = 2;
 
-function CardViewDetail({ onCloseModal, cardData, title }: Props) {
+function CardViewDetail({ cardData, title }: Props) {
+  const [, closeAll] = useAtom(closeAllModals);
   const [commentValue, setCommentValue] = useAtom(CommentAtom);
   const setColumnTitle = useSetAtom(ColumnsAtom);
   const [isKebab, setIsKebab] = useState(false);
@@ -160,7 +160,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
   };
 
   const handleReset = () => {
-    onCloseModal();
+    closeAll();
     setColumnTitle({ columnTitle: '' });
   };
 
@@ -184,7 +184,7 @@ function CardViewDetail({ onCloseModal, cardData, title }: Props) {
             <label onClick={handleKebab}>
               <Kebab />
             </label>
-            <Close onClick={onCloseModal} />
+            <Close onClick={closeAll} />
           </div>
         </div>
         <div className='flex flex-col-reverse items-start justify-between gap-24 tablet:flex-row'>
@@ -354,15 +354,15 @@ export function EditCardButton({
   cardData?: CardProps;
   isHidden: boolean;
 }) {
-  const [card, setCard] = useAtom(cardAtom);
+  const [, setCard] = useAtom(cardAtom);
+  const [, open] = useAtom(openModal);
+  const [, closeAll] = useAtom(closeAllModals);
 
   useEffect(() => {
     if (!cardData) return;
     setCard(cardData);
   }, [cardData]);
 
-  const [, open] = useAtom(openModal);
-  const [, closeAll] = useAtom(closeAllModals);
   const handleAddModal = () => {
     if (setIsKebab) {
       setIsKebab(false);

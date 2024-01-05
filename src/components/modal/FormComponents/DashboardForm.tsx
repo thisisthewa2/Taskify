@@ -1,14 +1,14 @@
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { DashboardProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
+import { closeAllModals } from '@/store/modalAtom';
 import { Button } from '@/components/buttons';
 import ColorChip from '@/components/chips/ColorChip';
 import InputContainer from '@/components/inputs/InputContainer';
 
 interface Props {
-  onCloseModal: () => void;
   fetch?: () => void;
 }
 
@@ -17,8 +17,9 @@ interface FormValues {
   selectedColor: string;
 }
 
-function DashboardForm({ onCloseModal, fetch }: Props) {
+function DashboardForm({ fetch }: Props) {
   const setDashboardUpdateAtom = useSetAtom(dashboardUpdateAtom);
+  const [, closeAll] = useAtom(closeAllModals);
 
   const { handleSubmit, control, formState } = useForm<FormValues>({
     defaultValues: {
@@ -49,14 +50,14 @@ function DashboardForm({ onCloseModal, fetch }: Props) {
       return;
     }
 
-    onCloseModal();
+    closeAll();
     fetch?.();
     setDashboardUpdateAtom(true);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    onCloseModal();
+    closeAll();
   };
 
   return (

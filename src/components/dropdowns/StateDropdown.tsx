@@ -31,17 +31,8 @@ function StateDropdown({
     },
   });
 
-  /* 받은 데이터에 isDone 추가하는 함수입니다(이름 클릭하면 체크 표시되게 끔) */
-  // const newColumns = columns.data.map((column, index) => {
-  //   if (index === 0) {
-  //     return { ...column, isDone: true };
-  //   }
-  //   return { ...column, isDone: false };
-  // });
-
   const [columnList, setColumnList] = useState<Column[]>([]);
   const [isDrop, setIsDrip] = useState(false);
-  // const [columnName, setColumnName] = useState(columnList.data[0].title);
   const [columnName, setColumnName] = useState('');
 
   useEffect(() => {

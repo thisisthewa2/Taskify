@@ -243,11 +243,9 @@ function ManageButton({ title, columnId }: ManageButtonType) {
 }
 
 export function DeleteCardButton({
-  handleReset,
   columnId,
   isHidden: isNone,
 }: {
-  handleReset?: () => void;
   columnId?: number;
   isHidden: boolean;
 }) {
@@ -275,10 +273,7 @@ export function DeleteCardButton({
         </Modal.Open>
         <Modal.Window name={`delete${columnId}`}>
           <Confirm>
-            <Confirm.DeleteConfirm
-              columnId={columnId}
-              onCloseModal={handleReset}
-            />
+            <Confirm.DeleteConfirm columnId={columnId} />
           </Confirm>
         </Modal.Window>
       </>

@@ -1,8 +1,9 @@
 import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardsProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
+import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 import { openModal } from '@/store/modalAtom';
 import DashboardButton from '@/components/buttons/DashboardButton';
 import AddChip from '@/components/chips/AddChip';
@@ -10,7 +11,6 @@ import Form from '@/components/modal/Form';
 import Modal from '@/components/modal/Modal';
 import ArrowButtonPageChange from './ArrowButtonPageChange';
 import MyDashboardButton from './MyDashboardButton';
-import { dashboardUpdateAtom } from '@/store/dashboardUpdateAtom';
 
 function MyDashboardButtons() {
   const dashboardUpdate = useAtomValue(dashboardUpdateAtom);

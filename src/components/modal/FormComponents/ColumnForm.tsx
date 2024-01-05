@@ -1,15 +1,15 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import useRequest from '@/hooks/useRequest';
 import { ColumnsAtom } from '@/store/columnsAtom';
+import { closeAllModals } from '@/store/modalAtom';
 import { DeleteCardButton } from '@/containers/Dashboard/components/DashboardColumn';
 import { Button } from '@/components/buttons';
 import Input from '@/components/inputs/Input';
 
 interface Props {
-  onCloseModal: () => void;
   type: 'create' | 'edit';
   columnName?: string;
   columnId?: number;
@@ -25,15 +25,12 @@ interface EditColumnType {
   dashboardId: string;
 }
 
-function ColumnForm({
-  onCloseModal,
-  type = 'create',
-  columnName,
-  columnId,
-}: Props) {
+function ColumnForm({ type = 'create', columnName, columnId }: Props) {
+  const [, closeAll] = useAtom(closeAllModals);
   const [errorMessage, setErrorMessage] = useState('');
   const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
   const { dashboardId } = useParams();
+
   const title = type === 'edit' ? '컬럼 관리' : '새 컬럼 생성';
 
   const { fetch: createColumn } = useRequest<CreateColumnType>({
@@ -58,49 +55,45 @@ function ColumnForm({
   });
 
   const handleReset = () => {
-    onCloseModal();
+    closeAll();
     setColumnTitle({ columnTitle: '' });
+  };
+
+  const handleDataAndError = (
+    data: CreateColumnType | EditColumnType,
+    error: unknown,
+  ) => {
+    if (data) {
+      closeAll();
+      setColumnTitle({ columnTitle: '' });
+      return;
+    }
+
+    if (!axios.isAxiosError(error)) return;
+
+    if (error.response?.status === 400) {
+      const isEmpty = error.response.data.message.includes('title');
+      setErrorMessage(
+        isEmpty ? '컬럼 이름을 입력해주세요.' : error.response.data.message,
+      );
+    } else if (error.response?.status === 404) {
+      setErrorMessage(error.response.data.message);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (columnTitle.columnTitle.length > 13) {
       setErrorMessage('13자 이하로 입력해주세요');
       return;
     }
     if (title === '새 컬럼 생성') {
       const { data, error } = await createColumn();
-      if (data) {
-        onCloseModal();
-        setColumnTitle({ columnTitle: '' });
-        return;
-      }
-
-      if (!axios.isAxiosError(error)) return;
-
-      if (error.response?.status === 400) {
-        const isEmpty = error.response.data.message.includes('title');
-        setErrorMessage(
-          isEmpty ? '컬럼 이름을 입력해주세요.' : error.response.data.message,
-        );
-      } else if (error.response?.status === 404) {
-        setErrorMessage(error.response.data.message);
-      }
+      handleDataAndError(data, error);
     } else {
       const { data, error } = await editColumn();
-      if (data) {
-        onCloseModal();
-        setColumnTitle({ columnTitle: '' });
-        return;
-      }
-
-      if (!axios.isAxiosError(error)) return;
-
-      if (error.response?.status === 400) {
-        setErrorMessage(error.response.data.message);
-      } else if (error.response?.status === 404) {
-        setErrorMessage(error.response.data.message);
-      }
+      handleDataAndError(data, error);
     }
   };
 
@@ -120,11 +113,7 @@ function ColumnForm({
           )}
         </div>
         {type === 'edit' && (
-          <DeleteCardButton
-            handleReset={handleReset}
-            columnId={columnId}
-            isHidden={false}
-          />
+          <DeleteCardButton columnId={columnId} isHidden={false} />
         )}
 
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>

@@ -2,17 +2,12 @@ import React from 'react';
 import { ConfirmComponents } from '@/components/modal/ConfirmComponents';
 
 interface Props {
-  onCloseModal?: () => void;
-  onCloseAllModal?: () => void;
   children?: React.ReactNode;
 }
 
-function Confirm({ onCloseModal, onCloseAllModal, children }: Props) {
+function Confirm({ children }: Props) {
   const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child as React.ReactElement<any>, {
-      onCloseModal,
-      onCloseAllModal,
-    }),
+    React.cloneElement(child as React.ReactElement<any>),
   );
 
   return (
