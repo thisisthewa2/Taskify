@@ -34,7 +34,9 @@ function SigninContainer() {
     mode: 'onBlur',
   });
 
-  const { email: isEmail, password: isPassword } = formState.dirtyFields;
+  const { isDirty, isValid } = formState;
+
+  const isSignin = isDirty && isValid;
 
   const { fetch } = useRequest({
     skip: true,
@@ -136,7 +138,7 @@ function SigninContainer() {
               )}
             />
           </div>
-          <Button size='full' disabled={!(isEmail && isPassword)}>
+          <Button size='full' disabled={!isSignin}>
             로그인
           </Button>
         </form>
