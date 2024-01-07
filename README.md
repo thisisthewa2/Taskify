@@ -337,8 +337,8 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
   </details>
   <details>
   <summary>회원가입</summary>
-  
-  
+      
+![회원가입](https://github.com/Peachy-Peachy/Taskify/assets/119280160/635cb542-9272-45e2-bbab-5787d6e1bf84)
   </details>
   <details>
   <summary>로그인</summary>
@@ -391,26 +391,20 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
               <summary>DnD</summary>
                 
 ![디앤디](https://github.com/Peachy-Peachy/Taskify/assets/119280160/607c1b9a-305f-495c-8cb3-db0ffa7e428d)
-      
             </details>
-          
-            <details>
+          <details>
               <summary>더보기 버튼</summary>
-              ![더보기버튼](https://github.com/Peachy-Peachy/Taskify/assets/119280160/8e16dad1-dce8-4b5f-8f83-98acab3c7019)
-
-            </details>
-          
-            <details>
+              ![더보기버튼](https://github.com/Peachy-Peachy/Taskify/assets/119280160/8e16dad1-dce8-4b5f-8f83-98acab3c7019) </details>
+          <details>
               <summary>무한 스크롤</summary>
-              
-            </details>
+              ![대시보드무한스크롤](https://github.com/Peachy-Peachy/Taskify/assets/119280160/8821116a-73d4-4d67-b84b-189e8bc96a9e)
+                </details>
             <details>
               <summary>컬럼관리</summary>
 ![컬럼관리](https://github.com/Peachy-Peachy/Taskify/assets/119280160/5679791c-467e-4984-bcd3-edeefb67d5c4)
 
-            </details>
-            
-            <details>
+ </details>
+                        <details>
               <summary>할 일 생성, 수정</summary>
     
 ![할일생성](https://github.com/Peachy-Peachy/Taskify/assets/119280160/b6c35d75-252c-47f2-998d-4437424b870b)
@@ -429,7 +423,7 @@ _app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
 
 ![비밀번호변경](https://github.com/Peachy-Peachy/Taskify/assets/119280160/768878f6-e59b-4cd9-b89f-9e3d6bd1db89)
 
-          </details>
+</details>
       </ul>
   </details>
   </details>
