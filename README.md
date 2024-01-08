@@ -140,7 +140,8 @@ https://taskify-project-sigma.vercel.app/
         <details>
             <summary>컬럼 관리</summary>
             <ul>
-            <li>  </li>
+            <li> 컬럼 생성, 수정, 삭제 기능
+            <li> 작성한 데이터 jotai 전역 상태 관리 사용 </li>
             </ul>
         </details>
          <details>
