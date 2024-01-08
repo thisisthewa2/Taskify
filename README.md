@@ -60,30 +60,6 @@ https://taskify-project-sigma.vercel.app/
       <img src="https://img.shields.io/badge/React Hook Form-EC5990?style=for-the-badge&logo=ReactHookForm&logoColor=white">
 </p>
 
-## Convention
-### 개발 방식
-- `console.log` pr 올릴 때 꼭 지우기 (테스트 파일 지워서 올리기)
-- 주석 최소한으로 하기
-    - 함수 위에 필요한 경우 작성하기
-    - 헷갈리는 데이터 구조 (목 데이터)
-- 컴포넌트는 **함수 선언식**으로 쓰고, 유틸 함수는 **화살표 함수**로 쓰기
-- 프리티어 설정
-    - `‘` 사용
-    - tab spacing 2
-    - import 순서 정렬
-        - 기준 마련하기
-        - 정렬 단축키도 따로 있음
-- ESLint
-    - default 설정
-    - 특정 문제가 발생할시 디스코드에 알리고 관련 설정 끄기
-- 함수 이름 동사로 작성하기
-    - `handleClick`
-- 타입 any 사용 지양
-- 컴포넌트.js 에서는 **컴포넌트만 export default**
-유틸함수.js 에서는 상관없음
-    - 컴포넌트는 앞에 export 안 붙이기
-- 가능한 한 컴포넌트에서 div 3번까지만 쓰기 (depth)
-- 선언 순서 (최대한 노력하기)
 
 ## **Feature**
 
