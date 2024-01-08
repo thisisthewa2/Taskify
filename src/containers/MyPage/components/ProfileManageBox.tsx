@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';

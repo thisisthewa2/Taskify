@@ -1,18 +1,10 @@
-import { useAtom } from 'jotai';
-import React, {
-  cloneElement,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { useAtomValue } from 'jotai';
+import React, { cloneElement, createContext, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { ModalAtom } from '@/store/modalAtom';
 
 type ModalContextType = {
   openNames: string[];
-  close: (name: string) => void;
-  closeAll: () => void;
-  open?: (name: string) => void;
 };
 
 interface ModalProps {
@@ -29,9 +21,6 @@ interface BodyProps extends ModalProps {
 
 const ModalContext = createContext<ModalContextType>({
   openNames: [],
-  open: () => {},
-  close: () => {},
-  closeAll: () => {},
 });
 
 const WINDOW_STYLE = {
@@ -39,14 +28,13 @@ const WINDOW_STYLE = {
   rest: 'modal',
 };
 
-function Open({ children, opens: opensWindowName }: OpenProps) {
-  /*  const { open } = useContext(ModalContext); */
-
+function Open({ children }: OpenProps) {
   return cloneElement(children);
 }
 
 function Window({ children, name }: BodyProps) {
-  const { openNames, close, closeAll } = useContext(ModalContext);
+  const { openNames } = useContext(ModalContext);
+
   if (!openNames.includes(name)) return null;
 
   return createPortal(
@@ -57,12 +45,7 @@ function Window({ children, name }: BodyProps) {
           name.includes('card') ? WINDOW_STYLE.card : WINDOW_STYLE.rest
         }
       >
-        <div>
-          {cloneElement(children, {
-            onCloseModal: () => close(name),
-            onCloseAllModal: closeAll,
-          })}
-        </div>
+        <div>{cloneElement(children)}</div>
       </div>
     </div>,
     document.body,
@@ -76,27 +59,10 @@ function Backdrop() {
 }
 
 function Modal({ children }: ModalProps) {
-  const [openNames, setOpenNames] = useAtom(ModalAtom);
-  const [modalName, setModalName] = useState('');
-
-  /*   const open = (name: string) => {
-    if (!openNames.openName.includes(name)) {
-      setOpenNames({ openName: [...openNames.openName, name] });
-    }
-  }; */
-
-  const close = (name: string) => {
-    setOpenNames({ openName: openNames.openName.filter((n) => n !== name) });
-  };
-
-  const closeAll = () => {
-    setOpenNames({ openName: [] });
-  };
+  const openNames = useAtomValue(ModalAtom);
 
   return (
-    <ModalContext.Provider
-      value={{ openNames: openNames.openName, close, closeAll /* , open */ }}
-    >
+    <ModalContext.Provider value={{ openNames: openNames.openName }}>
       {children}
     </ModalContext.Provider>
   );

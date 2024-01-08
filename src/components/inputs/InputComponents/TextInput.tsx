@@ -15,7 +15,7 @@ function TextInput({
   value?: string;
 }) {
   const [columnTitle, setColumnTitle] = useAtom(ColumnsAtom);
-  const [text, setText] = useState('');
+  const [, setText] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;

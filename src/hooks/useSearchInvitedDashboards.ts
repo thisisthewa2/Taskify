@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { InvitationProps, InvitationsProps } from 'src/types';
 import fetch from '@/services/utils/fetch';
 
-const useSearchInvitedDashboards = (data: InvitationsProps[] | undefined) => {
+const useSearchInvitedDashboards = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredItems, setFilteredItems] = useState<InvitationProps[] | null>(
     null,

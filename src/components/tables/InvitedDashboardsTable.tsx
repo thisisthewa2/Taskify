@@ -61,7 +61,7 @@ function InvitedDashboardsTable() {
   });
 
   const { searchTerm, handleSearchChange, filteredItems } =
-    useSearchInvitedDashboards(invitations?.pages);
+    useSearchInvitedDashboards();
 
   let displayInvitations =
     filteredItems || invitations?.pages.flatMap((page) => page.invitations);

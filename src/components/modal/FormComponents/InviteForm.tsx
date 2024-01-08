@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useAtom } from 'jotai';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useRequest from '@/hooks/useRequest';
+import { closeAllModals } from '@/store/modalAtom';
 import { Button } from '@/components/buttons';
 import InputContainer from '@/components/inputs/InputContainer';
 
@@ -11,7 +12,6 @@ interface FormValue {
 
 interface Props {
   dashboardId: string;
-  onCloseModal: () => void;
   fetch?: () => void;
 }
 
@@ -22,7 +22,9 @@ const ERROR_MESSAGES = {
   409: '이미 대시보드에 초대된 멤버입니다.',
 };
 
-function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
+function InviteForm({ dashboardId, fetch }: Props) {
+  const [, closeAll] = useAtom(closeAllModals);
+
   const { fetch: postInvitation } = useRequest({
     skip: true,
     options: {
@@ -43,7 +45,7 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
     });
 
     if (data) {
-      onCloseModal();
+      closeAll();
       fetch?.();
     }
 
@@ -79,7 +81,7 @@ function InviteForm({ dashboardId, onCloseModal, fetch }: Props) {
           </InputContainer>
         </div>
         <div className='absolute bottom-0 flex gap-10 tablet:right-0'>
-          <Button.Secondary size='lg' onClick={onCloseModal}>
+          <Button.Secondary size='lg' onClick={closeAll}>
             취소
           </Button.Secondary>
           <Button size='lg'>생성</Button>

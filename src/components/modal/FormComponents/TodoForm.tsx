@@ -1,12 +1,13 @@
-import { useAtom, useAtomValue } from 'jotai/index';
+import { useAtom } from 'jotai/index';
 import { useSetAtom } from 'jotai/react';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { CardProps } from 'src/types';
 import useRequest from '@/hooks/useRequest';
 import { cardAtom } from '@/store/cardAtom';
 import { ColumnsAtom } from '@/store/columnsAtom';
 import { ImageUrlAtom } from '@/store/imageUrlAtom';
+import { closeAllModals } from '@/store/modalAtom';
 import { changedAtom } from '@/containers/Dashboard/DashboardId';
 import { Button } from '@/components/buttons';
 import ManagerDropdown from '@/components/dropdowns/ManagerDropdown';
@@ -15,7 +16,6 @@ import ImageDrop from '@/components/image-drop/ImageDrop';
 import Input from '@/components/inputs/Input';
 
 interface Props {
-  onCloseModal: () => void;
   type: 'create' | 'edit';
   columnId: number;
   cardId?: number;
@@ -32,9 +32,11 @@ interface FormValues {
   imageUrl?: string;
 }
 
-function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
+function TodoForm({ type = 'create', columnId }: Props) {
   const [card, setCard] = useAtom(cardAtom);
+  const [, closeAll] = useAtom(closeAllModals);
   const setColumnTitle = useSetAtom(ColumnsAtom);
+  const [managerName, setManagerName] = useState('');
 
   const router = useRouter();
   const dashboardId = router.query.dashboardId ? +router.query.dashboardId : 0;
@@ -105,9 +107,17 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
     options: { url: `cards/${card.id}`, method: 'put' },
   });
 
-  const handleCreateTodo = async () => {
-    let hasError = false;
+  const handleReset = () => {
+    closeAll();
+    setColumnTitle({ columnTitle: '' });
+    setCard({ ...card, imageUrl: '' });
+    setImageUrl({ imageUrl: '' });
+    setManagerName('');
+  };
 
+  const [changed, setChanged] = useAtom(changedAtom);
+
+  const handleCreateTodo = async () => {
     values.imageUrl = imageUrl.imageUrl;
     try {
       const { data } = await postData({
@@ -115,34 +125,27 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
       });
 
       if (!data) return;
-      onCloseModal();
+      handleReset();
       setChanged(!changed);
-      setColumnTitle({ columnTitle: '' });
-      setCard({ ...card, imageUrl: '' });
     } catch (error) {
       console.error('Error', error);
     }
   };
-  const [changed, setChanged] = useAtom(changedAtom);
+
   const handleEditTodo = async () => {
-    values.imageUrl = imageUrl.imageUrl;
+    values.imageUrl = card.imageUrl;
+
     try {
       const { data } = await editData({
         data: { ...values },
       });
 
       if (!data) return;
-      onCloseModal();
+      handleReset();
       setChanged(!changed);
     } catch (error) {
       console.error('Error', error);
     }
-  };
-
-  const handleReset = () => {
-    onCloseModal();
-    setColumnTitle({ columnTitle: '' });
-    setImageUrl({ imageUrl: '' });
   };
 
   return (
@@ -159,6 +162,9 @@ function TodoForm({ onCloseModal, type = 'create', columnId }: Props) {
         <ManagerDropdown
           handleSetManager={handleSetManager}
           managerId={card.assignee?.id}
+          managerName={managerName}
+          setManagerName={setManagerName}
+          type={type}
         />
       </div>
       <Input
