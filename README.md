@@ -68,88 +68,84 @@ https://taskify-project-sigma.vercel.app/
 <summary>페이지</summary>
 <ul>
 <details>
-<summary>회원가입</summary>
+<summary>회원가입 & 로그인</summary>
 <ul>
-<li> react-hook-form을 사용 </li>
-<li> useForm의 controller를 사용하여 각 input의 역할을 구분 </li>
-<li> 유효성 검사를 통해 에러메세지 전달 </li>
-<li> 모든 유효성 검사를 통과하면 회원가입 버튼이 활성화 </li>
-    </ul>
-</details>
-
-<details>
-<summary>로그인</summary>
-<ul>
-<li> react-hook-form을 사용 </li>
-<li> useForm의 controller를 사용하여 각 input의 역할을 구분 </li>
-<li> 유효성 검사를 통해 에러메세지 전달 </li>
-<li> 모든 유효성 검사를 통과하면 로그인 버튼이 활성화 </li>
-    </ul>
-</details>
-
-<details>
-<summary>나의 대시보드</summary>
-<ul>
-<details>
-<summary>참여중인 대시보드</summary>
-
-<ul><li>페이지네이션 기반 UI 구축. 클릭 시 각 대시보드로 이동</li></ul> 
-</details>
-
-<details>
-<summary>새로운 대시보드 생성</summary>
-
-<ul><li>모달 통해 폼 제출 시 post 요청</li></ul>
-</details>
-
-<details>
-<summary>초대받은 대시보드</summary>
-<details>
-<summary>초대 거절 / 수락</summary>
-    <ul><li>초대 거절 / 수락 시 초대목록에서 삭제, 사이드메뉴와 참여중인 대시보드에 반영</li></ul> 
-</details>
-<details>
-    <summary>초대 목록 검색</summary>
-    <ul><li>커스텀 훅 **useSearchInvitedDashboards** 을 사용해 get 요청을 통해 필터링된 초대목록만 보이게 함</li></ul>
-</details>
+    <li><b>react-hook-form</b> 라이브러리를 사용하였습니다. useForm의 controller를 사용하여 각 폼의 역할을 구분해서 유효성 검사를 통과하지 못하면 에러메세지 전달하고 모든 유효성 검사를 통과하면 회원가입/로그인 버튼이 활성화됩니다. 이후 <b>useRequest</b> 커스텀 훅을 사용하여 데이터를 요청합니다.</li>
+    <li>  회원가입 기능에서는 이메일, 닉네임, 비밀번호, 비밀번호 확인 그리고 이용약관 동의를 사용하여 회원가입 할 수 있게 하고 로그인 기능에서는 이메일, 비밀번호를 사용하여 로그인할 수 있도록 합니다 </li>
 </ul>
 </details>
+
+<details>
+    <summary>나의 대시보드</summary>
+    <ul>
+        <li>참여중인 대시보드
+            <ul>
+                <li>onClick 이벤트 함수로 현재 페이지를 변경하고, 각 페이지에 해당하는 데이터를 <b>useRequest</b> 커스텀 훅으로 요청합니다.</li>
+                <li>페이지네이션 UI를 구축하였습니다, 각 대시보드 클릭 시 해당 대시보드로 이동합니다.</li>
+            </ul>    
+        </li>
+        <li>새로운 대시보드 생성
+            <ul>
+                <li>모달을 통해 폼 제출 시 커스텀훅 <b>useRequest</b>를 사용해 post 요청하게 했습니다.</li>
+                <li>대시보드 생성 시 참여중인 대시보드와 사이드메뉴에 새로운 대시보드 추가하도록 했습니다.</li>
+            </ul>
+        </li>
+        <li>초대받은 대시보드
+            <ul>
+                <li>초대 거절 / 수락
+                    <ul>
+                        <li>초대 거절 / 수락 시 커스텀 훅 <b>useRequest</b> 을 사용해 put요청하도록 했습니다.</li>
+                        <li>초대 거절 / 수락 시 즉시 초대목록에서 삭제, 참여중인 대시보드와 사이드메뉴에 반영하도록 했습니다.</li>
+                    </ul>
+                </li>
+                <li>초대 목록 검색
+                    <ul>
+                        <li><b>useInfiniteScroll</b> 커스텀 훅을 사용하여 무한스크롤을 구현했습니다.</li>
+                        <li>스크롤이 브라우저 최하단에 도달하면 초대목록을 더 불러옵니다.</li>
+                    </ul>
+                </li>
+                <li>무한스크롤
+                    <ul>
+                        <li><b>useInfiniteScroll</b> 커스텀 훅을 사용하여 무한스크롤을 구현했습니다.</li>
+                        <li>스크롤이 브라우저 최하단에 도달하면 초대목록을 더 불러옵니다.</li>
+                    </ul>
+                </li>            
+            </ul>
+        </li>
+    </ul>
+</details>
+
 <details>
     <summary>대시보드</summary>
-    <ul>
-        <details>
-            <summary>DnD</summary>
+        <ul>
+            <li>DnD</li>
+                <ul>
+                    <li><b>react-beautiful-dnd</b> 라이브러리를 활용하여  핸들, 드래그, 드롭이 가능한 영역을 각각 지정하고, 드래그 전 후에 이벤트 함수를 통해 동작을 제어합니다.</li>
+                    <li> 칼럼 간, 카드 간, 서로 다른 칼럼의 카드 간의 이동이 가능합니다. </li>
+                </ul>
+            <li>더보기 버튼</li>
             <ul>
-            <li>react-beautiful-dnd 라이브러리 활용</li>
-            <li> 칼럼 간, 카드 간, 서로 다른 칼럼의 카드 간의 이동 가능 </li>
-            <li> 핸들, 드래그, 드롭이 가능한 영역을 각각 지정하고, 드래그 전 후에 이벤트 함수를 통해 작동 </li>
+                <li><b>useState</b> 훅을 통해 이벤트 함수 작동 시 기존 데이터와 새로 불러온 데이터를 병합한 새 리스트를 저장합니다. </li>
+                <li>세로스크롤 기반의 Mobile, Tablet 사이즈에서 더보기 버튼을 통해 카드리스트가 확장됩니다.</li>
             </ul>
-        </details>
-        <details>
-            <summary>더보기 버튼</summary>
+            <li>무한 스크롤</li>
             <ul>
-            <li> 세로스크롤 기반의 Mobile, Tablet 사이즈에서 `더보기` 버튼을 통해 카드리스트 확장 </li>
+            <li><b>useInfiniteScroll</b> 커스텀 훅을 사용하여 스크롤이 브라우저 최하단 요소에 도달했을 시 작동할 함수를 넘겨줍니다. </li>
+            <li>가로 스크롤 기반의 PC 사이즈에서, 스크롤이 브라우저 최하단 요소에 도달했을 때 카드리스트가 확장됩니다.</li>
             </ul>
-        </details>
-           <details>
-            <summary>무한 스크롤</summary>
+        <li>컬럼 관리</li>
             <ul>
-            <li> 가로 스크롤 기반의 PC 사이즈에서 무한스크롤을 통해 카드리스트 확장 </li>
+            <li><b>useRequest</b> 커스텀 훅을 사용하여 데이터를 요청하였고 응답을 받으면 데이터를 jotai로 전역 상태 관리하였습니다.</li>
+            <li> 대시보드 내에서 새로운 컬럼 생성, 이미 존재하는 컬럼 이름 변경 그리고 컬럼 삭제할 수 있습니다. </li>
             </ul>
-        </details>
-        <details>
-            <summary>컬럼 관리</summary>
-            <ul>
-            <li> 컬럼 생성, 수정, 삭제 기능
-            <li> 작성한 데이터 jotai 전역 상태 관리 사용 </li>
-            </ul>
-        </details>
-         <details>
-            <summary>할 일 생성, 수정</summary>
+            <li>할 일 생성, 수정</li>
             <ul>
             <li>  
-     jotai 전역 상태관리 사용
-</li>
+                 커스텀한 이미지 업로드 기능은 사용자가 선택한 이미지를 formData 객체에 추가하고, 이벤트 핸들러를 통해 <b>useRequest</b> 커스텀 훅으로 서버에 업로드 됩니다. 응답으로는 새 이미지 데이터를 받습니다.
+            </li>
+            <li>
+                jotai 전역 상태관리를 사용해 페이지와 모달간에 전달하는 props를 줄였습니다.
+            </li>
             </ul>
         </details>
     </ul>
@@ -162,47 +158,33 @@ https://taskify-project-sigma.vercel.app/
   <details>
 <summary>api 연결</summary>
       
-### useRequest
+<ul>
+    <li>useRequest</li>
+<ul>
+<li><b>axios</b> 라이브러리를 사용하여 instance를 생성해 data를 fetch 합니다.</li>
+<li>url과 params 등을 파라미터로 받아 fetch 해온 데이터 또는 오류, 그리고 isLoading 변수를 리턴합니다.</li>
+</ul>
 
-- 프로젝트 내부에서 보내는 모든 api 요청을 useRequest이라는 커스텀 훅으로 통일시켜 관심사의 분리 적용
-- 파라미터로 받은 주소로 데이터 요청을 보내어 받은 데이터 또는 오류를 리턴
-- 요청이 진행되고 있음을 알 수 있는 isLoading 변수를 같이 리턴해주어 스켈레톤 UI 등에 사용할 수 있도록 구현
-
-### axios interceptor
-
-- axios interceptor을 활용하여 매번 요청을 보낼 때 access token을 넣어주지 않아도 access token을 갖고 있다면 자동으로 요청에 추가되도록 구현
+<li> axios interceptor </li>
+<ul><li><b>axios</b> 라이브러리의 instance interceptor를 활용했습니다.</li>
+    <li>매번 요청을 보낼 때 access token을 넣어주지 않아도 access token을 갖고 있다면 자동으로 요청의 헤더에 추가되도록 하였습니다.</li>
+</ul>
+</ul>
 </details>
 
 <details>
 <summary>무한스크롤</summary>
 
-### useInfiniteScroll
+<ul><li>useInfiniteScroll</li>
 
-- `Intersection Observer API` 사용
-- 서비스 내 다수의 페이지에서 무한스크롤 기능을 활용하고 있어 커스텀 훅을 통해 observe와 unobserve 상태를 관리하도록 함
-- 무한스크롤 작동 시 실행 될 함수를 보내 `containerRef` 를 리턴받기 때문에, 무한스크롤이 작동될 곳에 위치시켜 작동
-
+<ul><li><b>Intersection Observer API</b>를 사용하여 실행 될 함수를 보내고 containerRef 를 리턴받아 스크롤이 일어날 구역에 ref로 추가합니다.</li>
+<li>서비스 내 다수의 페이지에서 무한스크롤 기능을 활용하고 있어 커스텀 훅을 통해 observe와 unobserve 상태를 관리하도록 하였습니다.</li>
+</ul>
 </details>
 </details>
 </ul>
     </ul>
     </details>
-<details>    
-<summary>전역 상태 관리 및 환경 변수 관리</summary>
-<ul>
-<details>
-<summary>전역 상태관리 (Jotai)</summary>
-
-Jotai를 사용해 로그인 정보와 다크모드 상태 저장
-
-</details>
-
-<details>
-<summary>환경변수 관리 (.env)</summary>
-
-.env: API url (.gitgnore 미포함)
-</ul>
-</details>
 
 </details>
 </details>
@@ -210,93 +192,63 @@ Jotai를 사용해 로그인 정보와 다크모드 상태 저장
 <summary>공통 컴포넌트</summary>
 <ul>
 <details>
-<summary>헤더</summary>
-
-<ul><li> 각 페이지 및 접근 권한에 따라 보이는 헤더가 다르도록 구현</li></ul>
-
-</details>
-
-<details>
 <summary>모달</summary>
-
-<ul><li> 컴파운드 패턴을 적용해 모달과 관련된 데이터를 context로 관리하며, 기능의 관심사를 분리 </li></ul>
+<ul>
+    <li><b>Compound Pattern</b>을 적용해 모달과 관련된 데이터를 context, jotai로 관리하며, 기능의 관심사를 분리하여 구현했습니다. </li>
+    <li>모달 위에서 모달을 또 여는 경우, 두번째 모달이 열릴 때 첫번째 모달이 닫히도록 구현했습니다.</li>
+</ul>
 
 </details>
 <details>
 <summary>사이드메뉴</summary>
-
-사이드 메뉴에서는 무한 스크롤 및 스켈레톤 UI를 적용했습니다.
-</ul>
-<details>
-<summary>무한 스크롤</summary>
 <ul>
-<li> useInfiniteScroll 훅 사용 </li>
-<li> react query 라이브러리에서 제공하는 useInfiniteQuery를 통해 데이터 fetch </li>
-</ul>
-</details>
-
-<details>
-<summary>스켈레톤 UI</summary>
+<li>무한 스크롤</li>
 <ul>
-<li> 다음 대시보드가 로딩될 동안 보여줄 스켈레톤 UI 구현</li>
-<li> 로딩 시간이 짧을 시 스켈레톤 UI가 짧게 나타났다가 사라지는 현상을 방지하기 위해 로딩 시간이 300ms 이상일 때만 스켈레톤 UI가 나타나도록 함</li>
+<li><b>useInfiniteScroll</b>훅을 사용하고, <b>react query</b> 라이브러리 <b>useInfiniteQuery</b>를 통해 데이터 fetch합니다. </li>
+<li> 스크롤이 브라우저 최하단 요소에 도달했을 때 자동으로 다음 대시보드들을 불러옵니다. </li>
+</ul>
+<li>스켈레톤 UI</li>
+<ul>
+<li> <b>Material UI</b> 라이브러리를 사용해 스켈레톤 UI를 만들고, <b>useRequest</b> 훅을 통해 표시 여부를 확인합니다.</li>
+<li> 다음 대시보드가 로딩될 동안 스켈레톤 UI를 보여줍니다. 로딩 시간이 짧을 시 스켈레톤 UI가 짧게 나타났다가 사라지는 현상을 방지하기 위해 로딩 시간이 300ms 이상일 때만 스켈레톤 UI가 나타나도록 구현했습니다.</li>
+</ul>
 </ul>
 </details>
-
-</details>
-
 </details>
 <details>
 <summary>기타</summary>
 <ul>
 <details>
 <summary>디자인 시스템</summary>
-
-프로젝트에서 tailwind를 더욱 효과적으로 사용할 수 있도록 프로젝트를 시작하기 전에 디자인 시스템을 미리 구축하였습니다.
-
-<details>
-<summary><h3>폰트</h3></summary>
-
-프로젝트 내부에서 사용되는 폰트 크기를 총 6가지, 폰트 굵기를 총 3가지로 한정지어 디자인 시스템을 다음과 같이 구성하였습니다. 이를 통해 폰트 스타일을 작성할 때 `heading1-normal`과 같은 방식으로 스타일을 줄 수 있도록 하였습니다.
-
-- heading1 (24px)
-- heading2 (20px)
-- subheading (18px)
-- body1 (16px)
-- body2 (14px)
-- caption (12px)
-
-- light (400)
-- normal (500)
-- bold (700)
-
+<ul>
+    <li>폰트</li>
+    <ul>
+        <li>프로젝트에서 사용되는 폰트 크기를 총 6가지, 폰트 굵기를 총 3가지로 한정지어 heading1-normal 과 같은 방식으로 폰트 스타일을 하나의 클래스로 줄 수 있도록 했습니다.</li>
+        <li>tailwind.config.ts 파일에서 폰트 크기 및 굵기에 대한 custom theme을 설정하고 global.css에서 utility layer로 폰트 클래스를 선언하여 사용했습니다.</li>
+<ul>
+<li>heading1 (24px)</li>
+<li>heading2 (20px)</li>
+<li>subheading (18px)</li>
+<li>body1 (16px)</li>
+<li>body2 (14px)</li>
+<li>caption (12px)</li>
+<li>light (400)</li>
+<li>normal (500)</li>
+<li>bold (700)</li>
+</ul>
+    </ul>
+<li>컬러 팔레트</li>
+    <ul>
+        <li>프로젝트에서 사용되는 색상들을 custom theme으로 설정하여 사용했습니다.</li>
+        <li>global.css에서 base layer에 지정해둔 컬러 값들이 data-theme에 따라 다르게 들어가도록 설정하여 추가적인 스타일 코드 없이 다크 모드를 구현했습니다.</li>
+    </ul>
+<li>컴포넌트</li>
+<ul><li>프로젝트에서 주로 사용되는 컴포넌트들의 스타일을 global.css에서 component layer에 선언해두어 사용하였습니다.</li></ul>
+</ul>
 </details>
-
-<details>
-<summary><h3>컬러 팔레트</h3></summary>
-
-프로젝트에서 사용되는 모든 컬러들을 미리 `global.css`에 선언해두어 tailwind의 default color들을 덮어씌워 사용했습니다. 이때 html에 `data-theme` attribute가 dark일 때 각 컬러 변수에 저장되어 있는 컬러 값을 변경 시켜 추가적인 코드 없이 다크 모드를 구현할 수 있도록 했습니다.
-</details>
-
-<details>
-<summary><h3>컴포넌트</h3></summary>
-
-프로젝트에서 주로 사용되는 컴포넌트들의 스타일을 tailwind의 컴포넌트 레이어 클래스로 선언해두어 사용하였습니다. 이를 통해 중복되는 스타일 코드를 방지하고, 프로젝트에서 스타일이 통일성이 있도록 했습니다.
-
-- input
-- text-area
-- button
-- box
-- card
-- modal
-
-</details>
-
-</details>
-
 <details>
 <summary>레이아웃</summary>
-_app.tsx에서 공통 레이아웃을 주어 레이아웃 적용
+<ul><li>_app.tsx에서 공통 레이아웃을 주어 레이아웃 적용했습니다.</li></ul>
 </ul>
 </details>
 
