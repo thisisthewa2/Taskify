@@ -1,5 +1,15 @@
-function Home() {
-  return <div>Taskify</div>;
+import Head from 'next/head';
+import Landing from '@/containers/Landing';
+
+function LandingPage() {
+  return (
+    <>
+      <Head>
+        <title>Taskify</title>
+      </Head>
+      <Landing />
+    </>
+  );
 }
 
-export default Home;
+export default LandingPage;

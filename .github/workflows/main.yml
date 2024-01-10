@@ -48,9 +48,12 @@ jobs:
     needs: build 
 
     steps:
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-project-id: prj_XK6KQLtWtjR9ouOTkvMd20CpLVUP
-          vercel-org-id: team_A6BvLDp0gBNcoUryMvgasJxJ
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v20
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-project-id: prj_gDksydNB1dlEWNljOCJFVmYXycKo
+        vercel-org-id: team_H4RGLINTm59gEZONbbqWGUiY
