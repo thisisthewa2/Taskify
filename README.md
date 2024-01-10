@@ -3,7 +3,7 @@
 - 개발 기간: 12/18 ~ 1/5
 
 ## Deploy
-https://taskify-project-sigma.vercel.app/
+https://taskify-sand-two.vercel.app/
 
 ## Team
 <table width="600px">
